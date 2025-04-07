@@ -72,8 +72,10 @@
       }
       
       .content {
-        margin: 1rem auto;
+        margin: 0.8rem auto;
         padding: 1rem;
+        width: 95%;
+        max-width: none;
       }
       
       .theme-toggle {
@@ -84,30 +86,10 @@
       }
       
       .scroll-indicator {
-        bottom: 30px;
-        right: 30px;
-        width: 50px;
-        height: 50px;
-        background: var(--header-footer-bg);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        cursor: pointer;
-        opacity: 0;
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      }
-      
-      .scroll-indicator.visible {
-        opacity: 0.8;
-      }
-      
-      .scroll-indicator:hover {
-        opacity: 1;
-        transform: translateY(-5px);
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
       }
       
       .project-cards {
@@ -117,10 +99,119 @@
       .project-card {
         flex: 1 1 100%;
         padding: 12px;
+        margin-bottom: 10px;
       }
       
       header {
-        padding: 1.5rem 1rem;
+        padding: 1.2rem 1rem;
+      }
+      
+      header p {
+        font-size: 0.9rem;
+        margin: 0.5rem 0 0;
+      }
+      
+      section h2 {
+        font-size: 1.5rem;
+      }
+      
+      /* Better touch targets */
+      .links a {
+        padding: 8px 12px;
+        margin: 5px;
+        display: inline-block;
+      }
+      
+      /* Adjust gallery for mobile */
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .gallery-item {
+        margin-bottom: 15px;
+      }
+      
+      .filter-controls {
+        gap: 5px;
+      }
+      
+      .filter-btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+      }
+      
+      /* Keyboard shortcuts on mobile */
+      .keyboard-shortcuts {
+        max-width: 100%;
+        padding: 5px 10px;
+        bottom: 10px;
+      }
+      
+      .shortcut-group {
+        margin: 3px 0;
+      }
+      
+      .key {
+        padding: 1px 3px;
+        margin: 0 1px;
+        font-size: 0.7rem;
+      }
+      
+      /* More compact sections on mobile */
+      section {
+        margin-bottom: 1.5rem;
+      }
+      
+      section p {
+        margin: 0.7rem 0;
+      }
+      
+      /* Better mobile readability */
+      ul, ol {
+        padding-left: 1rem;
+      }
+      
+      /* Adjust footer for mobile */
+      footer {
+        padding: 1.5rem 0;
+        font-size: 0.8rem;
+      }
+    }
+    
+    /* Extra small devices */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      header p {
+        font-size: 0.8rem;
+      }
+      
+      .content {
+        padding: 0.8rem;
+        margin: 0.5rem auto;
+      }
+      
+      section h2 {
+        font-size: 1.3rem;
+      }
+      
+      /* Simplify gallery for very small screens */
+      .gallery-item-image {
+        height: 150px;
+      }
+      
+      /* More compact keyboard shortcuts */
+      .keyboard-shortcuts {
+        flex-direction: column;
+        align-items: center;
+        padding: 5px;
+      }
+      
+      .shortcut-group {
+        margin: 2px 0;
       }
     }
 
@@ -1012,6 +1103,129 @@
     .network-controls {
       display: none !important;
     }
+    
+    /* Enhanced mobile responsiveness - Portrait */
+    @media (max-width: 768px) {
+      /* ... existing mobile styles ... */
+    }
+    
+    /* Mobile Landscape mode */
+    @media (max-width: 915px) and (orientation: landscape) {
+      .content {
+        margin: 0.5rem auto;
+        padding: 0.8rem;
+        width: 85%;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      
+      header {
+        padding: 0.8rem;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      header p {
+        font-size: 0.8rem;
+        margin: 0.3rem 0 0;
+      }
+      
+      /* Adjust layout for landscape */
+      .project-cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      
+      .project-card {
+        padding: 10px;
+        margin-bottom: 0;
+      }
+      
+      /* Optimize visibility in landscape */
+      section h2 {
+        font-size: 1.3rem;
+        margin: 0.5rem 0;
+      }
+      
+      section {
+        margin-bottom: 1rem;
+      }
+      
+      section p {
+        margin: 0.5rem 0;
+      }
+      
+      .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      /* Adjust keyboard shortcuts for landscape */
+      .keyboard-shortcuts {
+        bottom: 5px;
+        max-width: 80%;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
+    
+    /* Ultrawide monitor optimization */
+    @media (min-width: 2000px) {
+      /* Constrain the 3D background elements */
+      #bg, #larvae-background {
+        max-width: 2000px;
+        margin: 0 auto;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      /* Center the content better */
+      .content {
+        max-width: 1000px;
+      }
+      
+      /* Scale up typography slightly */
+      body {
+        font-size: 18px;
+      }
+      
+      h1 {
+        font-size: 3rem;
+      }
+      
+      h2 {
+        font-size: 2.2rem;
+      }
+      
+      /* Adjust gallery for ultrawide */
+      .gallery-grid {
+        grid-template-columns: repeat(4, 1fr);
+        max-width: 1600px;
+        margin: 0 auto;
+      }
+      
+      /* Keep controls visible but properly positioned */
+      .network-controls, .arrangement-controls {
+        right: calc(50% - 980px);
+      }
+      
+      .arrangement-controls {
+        left: calc(50% - 980px);
+      }
+    }
+    
+    /* Extra super-wide monitors */
+    @media (min-width: 3000px) {
+      body {
+        font-size: 20px;
+      }
+      
+      .content {
+        max-width: 1200px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1288,7 +1502,7 @@
     // Initialize renderer
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0); // Transparent background
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
     
     // Create separate rendering groups for background and foreground
     const backgroundGroup = new THREE.Group();
@@ -1318,9 +1532,10 @@
       const trajectoriesGroup = new THREE.Group();
       backgroundGroup.add(trajectoriesGroup);
       
-      // Create larvae
+      // Create larvae - fewer on mobile
+      const isMobile = window.innerWidth < 768;
+      const larvaeCount = isMobile ? 70 : 100; // Fewer larvae on mobile for better performance
       const larvae = [];
-      const larvaeCount = 100; // More larvae for fuller effect
       
       for (let i = 0; i < larvaeCount; i++) {
         // Create a more realistic larva shape with segments
@@ -1561,14 +1776,15 @@
         opacity: 0.5 // More visible connections
       });
       
-      // Create some basic nodes
-      const nodeCount = 60; // More nodes for fuller effect
+      // Create some basic nodes - fewer on mobile
+      const isMobile = window.innerWidth < 768;
+      const nodeCount = isMobile ? 40 : 60; // Fewer nodes on mobile for better performance
       
       for (let i = 0; i < nodeCount; i++) {
         const node = new THREE.Mesh(nodeGeometry, nodeMaterial.clone());
         
         // Position each node randomly in a sphere
-        const radius = 15; // Larger radius
+        const radius = isMobile ? 12 : 15; // Smaller radius on mobile
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
         
@@ -1825,8 +2041,10 @@
       // Initialize the Drosophila larvae simulation
       larvae = initDrosophilaBackground();
       
-      // Set initial camera position
-      camera.position.z = 30;
+      // Set initial camera position based on device
+      const isMobile = window.innerWidth < 768;
+      camera.position.z = isMobile ? 25 : 30;
+      cameraDistance = isMobile ? 25 : 30;
       
       // Hide keyboard shortcuts after 5 seconds
       setTimeout(() => {
@@ -1836,8 +2054,92 @@
         }
       }, 5000);
       
+      // Add touch controls for mobile
+      setupTouchControls();
+      
       // Start the animation loop
       animate();
+    }
+    
+    // Touch controls for mobile devices
+    function setupTouchControls() {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let touchStartTime = 0;
+      let isTouching = false;
+      
+      // Handle touch start
+      document.addEventListener('touchstart', (event) => {
+        if (event.touches.length === 1) {
+          touchStartX = event.touches[0].clientX;
+          touchStartY = event.touches[0].clientY;
+          touchStartTime = Date.now();
+          isTouching = true;
+        }
+      }, { passive: true });
+      
+      // Handle touch move
+      document.addEventListener('touchmove', (event) => {
+        if (isTouching && event.touches.length === 1) {
+          const touchX = event.touches[0].clientX;
+          const touchY = event.touches[0].clientY;
+          
+          const deltaX = touchX - touchStartX;
+          const deltaY = touchY - touchStartY;
+          
+          // Update rotation based on touch movement
+          targetRotationY -= deltaX * 0.005;
+          targetRotationX -= deltaY * 0.005;
+          
+          touchStartX = touchX;
+          touchStartY = touchY;
+        }
+      }, { passive: true });
+      
+      // Handle touch end
+      document.addEventListener('touchend', (event) => {
+        const touchEndTime = Date.now();
+        const touchDuration = touchEndTime - touchStartTime;
+        
+        // Detect tap (quick touch)
+        if (touchDuration < 300) {
+          // Implement tap behavior if needed
+        }
+        
+        isTouching = false;
+      }, { passive: true });
+      
+      // Handle pinch zoom
+      let initialPinchDistance = 0;
+      
+      document.addEventListener('touchstart', (event) => {
+        if (event.touches.length === 2) {
+          initialPinchDistance = Math.hypot(
+            event.touches[0].clientX - event.touches[1].clientX,
+            event.touches[0].clientY - event.touches[1].clientY
+          );
+        }
+      }, { passive: true });
+      
+      document.addEventListener('touchmove', (event) => {
+        if (event.touches.length === 2) {
+          const currentPinchDistance = Math.hypot(
+            event.touches[0].clientX - event.touches[1].clientX,
+            event.touches[0].clientY - event.touches[1].clientY
+          );
+          
+          const pinchDelta = currentPinchDistance - initialPinchDistance;
+          
+          // Adjust camera distance based on pinch
+          cameraDistance = Math.max(
+            minDistance,
+            Math.min(maxDistance, cameraDistance - pinchDelta * 0.05)
+          );
+          
+          initialPinchDistance = currentPinchDistance;
+          updateCameraPosition();
+        }
+      }, { passive: true });
     }
     
     // Start the application when page is loaded
@@ -2105,6 +2407,306 @@
       
       // Update camera position
       updateCameraPosition();
+    }
+
+    // Handle window resize events
+    window.addEventListener('resize', () => {
+      // Update renderer and camera
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      
+      // Adjust field of view based on aspect ratio to prevent stretching on ultrawide
+      const aspectRatio = window.innerWidth / window.innerHeight;
+      if (aspectRatio > 2.0) { // Ultrawide
+        camera.fov = Math.min(75, 75 - (aspectRatio - 2.0) * 10); // Reduce FOV as width increases
+      } else {
+        camera.fov = 75; // Default FOV
+      }
+      
+      camera.updateProjectionMatrix();
+      
+      // Check if we're crossing the mobile threshold
+      const wasMobile = window.innerWidth < 768;
+      
+      // Call animation-related functions
+      checkElementsInView();
+      
+      // Update camera distance based on screen size
+      if (window.innerWidth < 768) {
+        // Mobile view - move camera closer
+        if (cameraDistance > 25) {
+          cameraDistance = 25;
+          updateCameraPosition();
+        }
+      } else if (aspectRatio > 2.0) {
+        // Ultrawide - move camera back
+        const desiredDistance = 30 + (aspectRatio - 2.0) * 5;
+        cameraDistance = Math.min(maxDistance, desiredDistance);
+        updateCameraPosition();
+      }
+    });
+
+    // Detect device capabilities
+    function detectDeviceCapabilities() {
+      const capabilities = {
+        isMobile: window.innerWidth < 768,
+        isLowEnd: false,
+        preferReducedMotion: prefersReducedMotion,
+        needsLowerEffects: false
+      };
+      
+      // Check for low-end devices - can expand this with more checks later
+      const lowEndDevicePixelRatio = 1;
+      if (window.devicePixelRatio <= lowEndDevicePixelRatio) {
+        capabilities.isLowEnd = true;
+      }
+      
+      // Combine factors to determine if we need lower effects
+      capabilities.needsLowerEffects = 
+        capabilities.isMobile || 
+        capabilities.isLowEnd || 
+        capabilities.preferReducedMotion;
+      
+      return capabilities;
+    }
+    
+    // Update the Drosophila larvae simulation as skybox
+    function initDrosophilaBackground() {
+      const capabilities = detectDeviceCapabilities();
+      
+      // Create spherical environment for larvae simulation
+      const radius = 50; // Larger radius for skybox effect
+      
+      // Create persistent trajectories group to track larva paths
+      const trajectoriesGroup = new THREE.Group();
+      backgroundGroup.add(trajectoriesGroup);
+      
+      // Create larvae - fewer on mobile/low-end
+      const larvaeCount = capabilities.needsLowerEffects ? 50 : 100;
+      const larvae = [];
+      
+      for (let i = 0; i < larvaeCount; i++) {
+        // Create a more realistic larva shape with segments
+        const larvaLength = 0.8 + Math.random() * 0.4; // Random length
+        
+        // Create segmented larva - simpler on low-end devices
+        const segmentCount = capabilities.needsLowerEffects ? 10 : 20;
+        const curve = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Vector3(larvaLength * 0.3, 0, 0),
+          new THREE.Vector3(larvaLength * 0.6, 0, 0),
+          new THREE.Vector3(larvaLength, 0, 0)
+        ]);
+        
+        const points = curve.getPoints(segmentCount);
+        const larvaGeometry = new THREE.BufferGeometry().setFromPoints(points);
+        
+        // Create glowing effect that mimics infrared footage
+        const larvaMaterial = new THREE.LineBasicMaterial({
+          color: 0xdddddd, // Slightly off-white for IR appearance
+          linewidth: capabilities.needsLowerEffects ? 2 : 3,
+          opacity: capabilities.needsLowerEffects ? 0.7 : 0.85,
+          transparent: true
+        });
+        
+        const larva = new THREE.Line(larvaGeometry, larvaMaterial);
+        
+        // Create a glow effect using a point light - only on higher-end devices
+        if (!capabilities.needsLowerEffects) {
+          const glowLight = new THREE.PointLight(0xffffff, 0.5, 1);
+          glowLight.position.set(larvaLength/2, 0, 0);
+          larva.add(glowLight);
+        }
+        
+        // Position randomly on a sphere
+        const phi = Math.acos(2 * Math.random() - 1); // Random angle from top to bottom
+        const theta = Math.random() * Math.PI * 2; // Random angle around the sphere
+        
+        larva.position.x = radius * Math.sin(phi) * Math.cos(theta);
+        larva.position.y = radius * Math.sin(phi) * Math.sin(theta);
+        larva.position.z = radius * Math.cos(phi);
+        
+        // Orient larva tangent to the sphere
+        larva.lookAt(0, 0, 0);
+        // Then rotate around its own axis for random direction on the sphere surface
+        const randomRotation = Math.random() * Math.PI * 2;
+        larva.rotateOnAxis(new THREE.Vector3(0, 0, 1), randomRotation);
+        
+        // Add motion properties
+        larva.userData = {
+          velocity: 0.02 + Math.random() * 0.03, // Random speed
+          direction: randomRotation,
+          lastTurn: 0,
+          turnInterval: 20 + Math.random() * 40,
+          wigglePhase: Math.random() * Math.PI * 2,
+          wiggleFrequency: 0.2 + Math.random() * 0.3,
+          wiggleAmount: 0.05 + Math.random() * 0.1,
+          size: 0.3 + Math.random() * 0.2,
+          
+          // Make trajectories more visible and persistent
+          trajectoryPoints: [],
+          trajectoryColor: new THREE.Color(
+            0.7 + Math.random() * 0.3, // Brighter colors
+            0.7 + Math.random() * 0.3,
+            0.7 + Math.random() * 0.3
+          ),
+          lastTrajectoryUpdate: 0,
+          trajectoryUpdateInterval: capabilities.needsLowerEffects ? 5 : 3, // Less frequent updates on mobile
+          
+          // Headcasting behavior
+          isHeadcasting: false,
+          headcastTimer: 0,
+          headcastInterval: 100 + Math.random() * 200,
+          headcastDuration: 0,
+          headcastMaxDuration: 0,
+          
+          // Store original position on sphere for containment
+          originalRadius: radius,
+          phi: phi,
+          theta: theta,
+          
+          // Flag for optimized rendering
+          needsLowerEffects: capabilities.needsLowerEffects
+        };
+        
+        // Resize larva based on random size
+        larva.scale.set(larva.userData.size, larva.userData.size, larva.userData.size);
+        
+        backgroundGroup.add(larva);
+        larvae.push(larva);
+      }
+      
+      return larvae;
+    }
+    
+    // Create a neural network-like structure with a simplified implementation
+    function createNeuralNetwork() {
+      const capabilities = detectDeviceCapabilities();
+      const group = new THREE.Group();
+      
+      // Create materials for nodes with more glow/flash effect
+      const nodeMaterial = new THREE.MeshStandardMaterial({
+        color: 0x6d72a8,
+        emissive: 0x6d72a8,
+        emissiveIntensity: capabilities.needsLowerEffects ? 0.6 : 0.8,
+        metalness: capabilities.needsLowerEffects ? 0.7 : 0.9,
+        roughness: 0.1
+      });
+      
+      const nodeGeometry = new THREE.SphereGeometry(0.25, capabilities.needsLowerEffects ? 8 : 16, capabilities.needsLowerEffects ? 8 : 16);
+      const nodes = [];
+      const connectionMaterial = new THREE.LineBasicMaterial({
+        color: 0x6d72a8,
+        transparent: true,
+        opacity: 0.5
+      });
+      
+      // Create some basic nodes - fewer on lower-end devices
+      const nodeCount = capabilities.needsLowerEffects ? 30 : 60;
+      
+      for (let i = 0; i < nodeCount; i++) {
+        const node = new THREE.Mesh(nodeGeometry, nodeMaterial.clone());
+        
+        // Position each node randomly in a sphere
+        const radius = capabilities.needsLowerEffects ? 12 : 15;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        
+        node.position.x = radius * Math.sin(phi) * Math.cos(theta);
+        node.position.y = radius * Math.sin(phi) * Math.sin(theta);
+        node.position.z = radius * Math.cos(phi);
+        
+        // Add metadata to the node
+        node.userData = {
+          velocity: new THREE.Vector3(
+            (Math.random() - 0.5) * 0.03,
+            (Math.random() - 0.5) * 0.03,
+            (Math.random() - 0.5) * 0.03
+          ),
+          isAnchor: false,
+          active: false,
+          flashTimer: Math.random() * 100,
+          flashInterval: capabilities.needsLowerEffects ? 50 + Math.random() * 100 : 30 + Math.random() * 100,
+          flashDuration: 20 + Math.random() * 20,
+          flashIntensity: capabilities.needsLowerEffects ? 1.2 : 1.5 + Math.random() * 1.0,
+          pulsePhase: Math.random() * Math.PI * 2,
+          needsLowerEffects: capabilities.needsLowerEffects
+        };
+        
+        // Add a point light to each node for extra glow - only on higher-end devices
+        if (!capabilities.needsLowerEffects) {
+          const nodeLight = new THREE.PointLight(0x6d72a8, 0.5, 3);
+          nodeLight.position.set(0, 0, 0);
+          node.add(nodeLight);
+          node.userData.light = nodeLight;
+        }
+        
+        nodes.push(node);
+        group.add(node);
+      }
+      
+      // Create some connections between nodes - fewer on mobile
+      const connections = [];
+      const connectionsPerNode = capabilities.needsLowerEffects ? 3 : 5;
+      
+      for (let i = 0; i < nodes.length; i++) {
+        // Connect to a few nearby nodes
+        for (let j = 0; j < connectionsPerNode; j++) {
+          const targetIndex = (i + j + 1) % nodes.length;
+          
+          const geometry = new THREE.BufferGeometry().setFromPoints([
+            nodes[i].position,
+            nodes[targetIndex].position
+          ]);
+          
+          const line = new THREE.Line(geometry, connectionMaterial.clone());
+          line.userData = {
+            pointA: i,
+            pointB: targetIndex,
+            flashActive: false,
+            flashTimer: Math.random() * 100,
+            pulsePhase: Math.random() * Math.PI * 2,
+            needsLowerEffects: capabilities.needsLowerEffects
+          };
+          
+          connections.push(line);
+          group.add(line);
+        }
+      }
+      
+      // Add fewer lights on mobile
+      if (!capabilities.needsLowerEffects) {
+        // Add ambient light to the scene
+        const ambientLight = new THREE.AmbientLight(0x404060, 0.5);
+        group.add(ambientLight);
+        
+        // Add a light to the scene
+        const light = new THREE.PointLight(0xffffff, 1, 100);
+        light.position.set(0, 0, 20);
+        group.add(light);
+      } else {
+        // Simplified lighting for mobile
+        const ambientLight = new THREE.AmbientLight(0x606080, 0.7);
+        group.add(ambientLight);
+      }
+      
+      // Store references to the nodes and connections
+      group.userData = {
+        nodes: nodes,
+        connections: connections,
+        needsLowerEffects: capabilities.needsLowerEffects,
+        update: function(time) {
+          // Update this in a lower frequency on mobile devices to save performance
+          const updateFrequency = this.needsLowerEffects ? 2 : 1; // Only update every other frame on mobile
+          if (this.needsLowerEffects && (Math.floor(time * 10) % updateFrequency !== 0)) {
+            return; // Skip this update on lower-end devices
+          }
+          
+          // Rest of the update function...
+        }
+      };
+      
+      return group;
     }
   </script>
 </body>
