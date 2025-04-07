@@ -621,6 +621,74 @@
         width: 100%;
       }
     }
+
+    /* Background canvas */
+    #bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    
+    /* Network controls */
+    .network-controls {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+    }
+    
+    .network-controls button {
+      background: rgba(20, 20, 40, 0.7);
+      color: #fff;
+      border: 1px solid rgba(120, 120, 255, 0.5);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+    
+    .network-controls button:hover {
+      background: rgba(40, 40, 80, 0.8);
+      transform: scale(1.1);
+    }
+    
+    .arrangement-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 100;
+    }
+    
+    .arrangement-controls button {
+      background: rgba(20, 20, 40, 0.7);
+      color: #fff;
+      border: 1px solid rgba(120, 120, 255, 0.5);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+    
+    .arrangement-controls button:hover {
+      background: rgba(40, 40, 80, 0.8);
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -634,6 +702,18 @@
     <span aria-hidden="true">↑</span>
   </div>
   
+  <div class="network-controls">
+    <button id="zoom-in" aria-label="Zoom in">+</button>
+    <button id="zoom-out" aria-label="Zoom out">-</button>
+    <button id="reset-view" aria-label="Reset view">⟲</button>
+  </div>
+  
+  <div class="arrangement-controls">
+    <button id="arrange-neural" aria-label="Neural network arrangement">Neural</button>
+    <button id="arrange-circular" aria-label="Circular arrangement">Circular</button>
+    <button id="arrange-random" aria-label="Random arrangement">Random</button>
+  </div>
+  
   <header id="top">
     <h1>Gil Raitses</h1>
     <p>Scientific Machine Learning | Temporal Pattern Analysis | 4D Systems Modeling</p>
@@ -641,7 +721,7 @@
   
   <div class="content">
     <section class="about-me">
-      <h2>Intersections & Influences</h2>
+      <h2>Background & Approach</h2>
       <p>
         I work at the convergence of art and computational science, searching for patterns that emerge from complex time series data. My creative foundation spans media theory, culinary semiotics, immersive light sculptures, and 3D design for clothing. This artistic exploration led me to question how we perceive and interpret multi-dimensional patterns across domains.
       </p>
@@ -714,46 +794,188 @@
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({
       canvas: document.querySelector('#bg'),
-      antialias: true
+      antialias: true,
+      alpha: true
     });
 
     // Flag to track Three.js ready state
     window.threeJsReady = true;
 
+    /*
+    TODO: Interactive Node System Enhancements
+    
+    1. Connect site sections to nodes:
+       - Create special "anchor nodes" that correspond to each section
+       - Position these nodes near their respective section containers
+       - Make them visually distinct (larger, different color, label)
+       - When a section is scrolled into view, highlight its anchor node
+    
+    2. Make nodes interactive and draggable:
+       - Implement raycasting to detect mouse hover and clicks on nodes
+       - Allow users to drag nodes to new positions
+       - Update connections in real-time as nodes are moved
+       - Add physics to make movement feel natural (inertia, bounce)
+    
+    3. Create 3D camera controls:
+       - Allow users to rotate, pan, and zoom the entire network
+       - Add buttons or gesture controls for different view angles
+       - Implement smooth transitions between views
+       - Add reset button to return to default view
+    
+    4. Connect section scrolling with node focus:
+       - When clicking on an anchor node, scroll to corresponding section
+       - When scrolling to a section, move camera to focus on that section's node
+       - Create visual effects showing the connection between nodes and content
+    
+    5. Add node clustering controls:
+       - Create UI controls to adjust node clustering parameters
+       - Allow users to expand/collapse node groups
+       - Implement arrangement presets (circular, hierarchical, random)
+       - Add animation between different arrangements
+    */
+    
     // Dark/Light mode variables
     let isDarkMode = true;
     const primaryColorDark = 0x6d72a8;
     const primaryColorLight = 0x2b2d42;
 
     // Initial dark mode settings
-    renderer.setClearColor(0x121212, 0.3);
+    renderer.setClearColor(0x000000, 0.2); // Darker, more transparent background
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     
+    // Set camera position for better view
+    camera.position.setZ(30);
+    
+    // Add some fog for depth
+    scene.fog = new THREE.FogExp2(0x000000, 0.01);
+    
+    // Setup for raycasting and node interaction
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let hoveredNode = null;
+    let selectedNode = null;
+    let isDragging = false;
+    
+    // Track intersection objects for hover effects
+    function updateMousePosition(event) {
+      // Calculate mouse position in normalized device coordinates
+      // (-1 to +1) for both components
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }
+    
+    // Add event listeners for mouse interaction
+    document.addEventListener('mousemove', updateMousePosition);
+    
+    // Mouse down to start dragging
+    document.addEventListener('mousedown', (event) => {
+      if (hoveredNode) {
+        selectedNode = hoveredNode;
+        isDragging = true;
+        document.body.style.cursor = 'grabbing';
+      }
+    });
+    
+    // Mouse up to stop dragging
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      selectedNode = null;
+      document.body.style.cursor = 'auto';
+    });
+    
+    // Handle hover and selection in animation loop
+    function checkNodeInteractions() {
+      // Update the picking ray with the camera and mouse position
+      raycaster.setFromCamera(mouse, camera);
+      
+      // Get all the nodes for intersection testing
+      const nodes = neuralNetwork ? neuralNetwork.userData.nodes : [];
+      
+      // Calculate objects intersecting the picking ray
+      const intersects = raycaster.intersectObjects(nodes);
+      
+      // Reset hover state
+      if (hoveredNode && hoveredNode !== selectedNode) {
+        hoveredNode.scale.set(1, 1, 1);
+        document.body.style.cursor = 'auto';
+      }
+      
+      hoveredNode = null;
+      
+      // Handle new hover
+      if (intersects.length > 0 && !isDragging) {
+        hoveredNode = intersects[0].object;
+        if (hoveredNode !== selectedNode) {
+          hoveredNode.scale.set(1.3, 1.3, 1.3);
+          document.body.style.cursor = 'pointer';
+        }
+      }
+      
+      // Handle dragging
+      if (isDragging && selectedNode) {
+        // Get intersection with a plane at the camera's target point
+        const planeNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(camera.quaternion);
+        const plane = new THREE.Plane(planeNormal, -20); // Plane at z=20
+        
+        const planeIntersect = new THREE.Vector3();
+        raycaster.ray.intersectPlane(plane, planeIntersect);
+        
+        // Move the selected node to the intersection point
+        selectedNode.position.copy(planeIntersect);
+        
+        // Flag connections for update
+        if (neuralNetwork) {
+          const connections = neuralNetwork.userData.connections;
+          for (let connection of connections) {
+            const nodeIndexA = connection.userData.pointA;
+            const nodeIndexB = connection.userData.pointB;
+            const node = neuralNetwork.userData.nodes[nodeIndexA];
+            const otherNode = neuralNetwork.userData.nodes[nodeIndexB];
+            
+            if (node === selectedNode || otherNode === selectedNode) {
+              connection.geometry.setFromPoints([
+                neuralNetwork.userData.nodes[nodeIndexA].position,
+                neuralNetwork.userData.nodes[nodeIndexB].position
+              ]);
+              connection.geometry.attributes.position.needsUpdate = true;
+            }
+          }
+        }
+      }
+    }
+
     /*
-    TODO: Holographic Neural Network Enhancements
-    1. Create colorful particle system to represent signal transmission
-       - Generate small, bright particles that travel along connections
-       - Use rainbow/spectrum colors with gradient effects
-       - Make particles emit light to create holographic feel
+    TODO: Interactive Node System Enhancements
     
-    2. Add motion trails to particles 
-       - Implement particle trails using THREE.Points with custom shaders
-       - Create fading effect for trails as they move
-       - Vary trail length based on activation intensity
+    1. Connect site sections to nodes:
+       - Create special "anchor nodes" that correspond to each section
+       - Position these nodes near their respective section containers
+       - Make them visually distinct (larger, different color, label)
+       - When a section is scrolled into view, highlight its anchor node
     
-    3. Implement pulse waves that emanate from activated nodes
-       - Create expanding ring effects when neurons activate
-       - Use translucent, colorful materials for the pulse rings
-       - Add decay effect as rings expand
+    2. Make nodes interactive and draggable:
+       - Implement raycasting to detect mouse hover and clicks on nodes
+       - Allow users to drag nodes to new positions
+       - Update connections in real-time as nodes are moved
+       - Add physics to make movement feel natural (inertia, bounce)
     
-    4. Create color spectrum variations for node activations
-       - Replace single-color activation with rainbow spectrum shifts
-       - Implement color cycling during node activation periods
-       - Use color to indicate activation intensity
+    3. Create 3D camera controls:
+       - Allow users to rotate, pan, and zoom the entire network
+       - Add buttons or gesture controls for different view angles
+       - Implement smooth transitions between views
+       - Add reset button to return to default view
     
-    5. Add glow effects to enhance holographic appearance
-       - Implement bloom post-processing for light elements
-       - Create custom shader material for holographic glow
-       - Add subtle noise/distortion to materials for holographic feel
+    4. Connect section scrolling with node focus:
+       - When clicking on an anchor node, scroll to corresponding section
+       - When scrolling to a section, move camera to focus on that section's node
+       - Create visual effects showing the connection between nodes and content
+    
+    5. Add node clustering controls:
+       - Create UI controls to adjust node clustering parameters
+       - Allow users to expand/collapse node groups
+       - Implement arrangement presets (circular, hierarchical, random)
+       - Add animation between different arrangements
     */
 
     // Responsive handler with performance optimization
@@ -782,39 +1004,206 @@
     function createNeuralNetwork() {
       const nodeGroup = new THREE.Group();
       
-      // Nodes
-      const nodeCount = window.innerWidth < 768 ? 40 : 75; // Reduce node count on mobile
-      const nodes = [];
-      const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16); // Reduced geometry complexity
-      
-      // Create multiple node materials for cascading effect
+      // Enhanced materials with more vibrant colors
       const nodeMaterials = [
         new THREE.MeshStandardMaterial({ 
           color: 0x6d72a8,
           emissive: 0x6d72a8,
-          emissiveIntensity: 0.3,
-          metalness: 0.8,
-          roughness: 0.2
+          emissiveIntensity: 0.5,
+          metalness: 0.9,
+          roughness: 0.1
         }),
         new THREE.MeshStandardMaterial({ 
           color: 0x8a8fd8,
           emissive: 0x8a8fd8,
-          emissiveIntensity: 0.5,
-          metalness: 0.8,
-          roughness: 0.2
+          emissiveIntensity: 0.7,
+          metalness: 0.9,
+          roughness: 0.1
         }),
         new THREE.MeshStandardMaterial({ 
           color: 0xa7acff,
           emissive: 0xa7acff,
-          emissiveIntensity: 0.7,
-          metalness: 0.8,
-          roughness: 0.2
+          emissiveIntensity: 0.9,
+          metalness: 0.9,
+          roughness: 0.1
         })
       ];
+      
+      // Section anchor node material (more distinctive)
+      const anchorMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffcc00,
+        emissive: 0xffcc00,
+        emissiveIntensity: 0.9,
+        metalness: 0.9,
+        roughness: 0.1
+      });
+      
+      // Define section anchors - each will have a special node
+      const sections = [
+        { id: 'about-me', name: 'Background & Approach' },
+        { id: 'current', name: 'Active Research Streams' },
+        { id: 'projects', name: 'Framework Implementations' },
+        { id: 'research-themes', name: 'Methodological Foundations' },
+        { id: 'links', name: 'Connect' }
+      ];
+      
+      // Holographic color palette
+      const holographicColors = [
+        0x00ffff, // cyan
+        0xff00ff, // magenta
+        0x00ff00, // green
+        0xff3399, // pink
+        0x3366ff, // blue
+        0xffff00  // yellow
+      ];
 
+      // Create particle system for signal transmission
+      const particleCount = 300;
+      const particles = new THREE.BufferGeometry();
+      const particlePositions = new Float32Array(particleCount * 3);
+      const particleSizes = new Float32Array(particleCount);
+      const particleColors = new Float32Array(particleCount * 3);
+      
+      // Initialize particles (invisible at start)
+      for (let i = 0; i < particleCount; i++) {
+        particlePositions[i * 3] = 0;
+        particlePositions[i * 3 + 1] = 0;
+        particlePositions[i * 3 + 2] = 0;
+        particleSizes[i] = 0; // Start invisible
+        
+        // Random holographic color for each particle
+        const color = new THREE.Color(holographicColors[Math.floor(Math.random() * holographicColors.length)]);
+        particleColors[i * 3] = color.r;
+        particleColors[i * 3 + 1] = color.g;
+        particleColors[i * 3 + 2] = color.b;
+      }
+      
+      particles.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+      particles.setAttribute('size', new THREE.BufferAttribute(particleSizes, 1));
+      particles.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+      
+      // Custom shader material for particles
+      const particleMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          time: { value: 0.0 },
+          pixelRatio: { value: window.devicePixelRatio }
+        },
+        vertexShader: `
+          attribute float size;
+          attribute vec3 color;
+          varying vec3 vColor;
+          uniform float pixelRatio;
+          uniform float time;
+          
+          void main() {
+            vColor = color;
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * pixelRatio * (300.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vColor;
+          uniform float time;
+          
+          void main() {
+            float r = 0.0;
+            vec2 cxy = 2.0 * gl_PointCoord - 1.0;
+            r = dot(cxy, cxy);
+            if (r > 1.0) {
+                discard;
+            }
+            
+            // Glow effect
+            float glow = 1.0 - r;
+            glow = pow(glow, 1.5);
+            
+            // Holographic color variation with time
+            vec3 color = vColor;
+            color += 0.1 * vec3(sin(time + vColor.r * 10.0), 
+                                sin(time * 1.2 + vColor.g * 10.0), 
+                                sin(time * 0.8 + vColor.b * 10.0));
+            
+            gl_FragColor = vec4(color, glow);
+          }
+        `,
+        blending: THREE.AdditiveBlending,
+        depthTest: false,
+        transparent: true
+      });
+      
+      const particleSystem = new THREE.Points(particles, particleMaterial);
+      nodeGroup.add(particleSystem);
+      
+      // Nodes
+      const nodeCount = window.innerWidth < 768 ? 40 : 75;
+      const nodes = [];
+      const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16);
+      
+      // Create anchor nodes (one for each section)
+      const anchorNodes = [];
+      const anchorNodeGeometry = new THREE.SphereGeometry(0.5, 24, 24); // Bigger
+      
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
+        
+        // Create an anchor node with unique properties
+        const anchorNode = new THREE.Mesh(anchorNodeGeometry, anchorMaterial.clone());
+        
+        // Position at the edge of the network, spaced evenly in a semi-circle
+        const angle = (Math.PI / (sections.length - 1)) * i;
+        const radius = 18;
+        
+        anchorNode.position.x = Math.cos(angle) * radius;
+        anchorNode.position.y = Math.sin(angle) * radius;
+        anchorNode.position.z = 5;
+        
+        // Custom properties
+        anchorNode.userData = {
+          isAnchor: true,
+          sectionId: section.id,
+          sectionName: section.name,
+          originalScale: new THREE.Vector3(1, 1, 1),
+          active: false,
+          activationTime: 0,
+          hovered: false
+        };
+        
+        nodes.push(anchorNode);
+        anchorNodes.push(anchorNode);
+        nodeGroup.add(anchorNode);
+        
+        // Create text sprite with section name
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 256;
+        canvas.height = 64;
+        
+        context.font = 'Bold 24px Arial';
+        context.fillStyle = 'rgba(255,255,255,0.95)';
+        context.fillText(section.name, 8, 24);
+        
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.needsUpdate = true;
+        
+        const labelMaterial = new THREE.SpriteMaterial({
+          map: texture,
+          transparent: true,
+          opacity: 0.8
+        });
+        
+        const sprite = new THREE.Sprite(labelMaterial);
+        sprite.position.copy(anchorNode.position);
+        sprite.position.y += 1.5;
+        sprite.scale.set(5, 1.2, 1);
+        
+        anchorNode.label = sprite;
+        nodeGroup.add(sprite);
+      }
+      
       // Create nodes in a neural network pattern with layers
       const layers = 5;
-      const nodesPerLayer = Math.ceil(nodeCount / layers);
+      const nodesPerLayer = Math.ceil((nodeCount - anchorNodes.length) / layers);
       
       for (let layer = 0; layer < layers; layer++) {
         for (let i = 0; i < nodesPerLayer; i++) {
@@ -834,7 +1223,7 @@
           node.position.y = (layer - layers/2) * 3 + (Math.random() - 0.5) * 2;
           node.position.z = Math.sin(angle) * radius + (Math.random() - 0.5) * spread;
           
-          // Store velocity and activation state for animation
+          // Store data for animation
           node.userData = {
             velocity: new THREE.Vector3(
               (Math.random() - 0.5) * 0.03,
@@ -845,7 +1234,9 @@
             active: false,
             activationTime: 0,
             activationDuration: 1 + Math.random() * 2,
-            originalMaterial: materialIndex
+            originalMaterial: materialIndex,
+            colorIndex: Math.floor(Math.random() * holographicColors.length),
+            isAnchor: false
           };
           
           nodes.push(node);
@@ -853,21 +1244,46 @@
         }
       }
 
-      // Create connections between layers
-      const connectionMaterials = [
-        new THREE.LineBasicMaterial({ color: 0x6d72a8, transparent: true, opacity: 0.2 }),
-        new THREE.LineBasicMaterial({ color: 0x8a8fd8, transparent: true, opacity: 0.5 }),
-        new THREE.LineBasicMaterial({ color: 0xa7acff, transparent: true, opacity: 0.8 })
-      ];
+      // Create connections with enhanced colors
+      const connectionMaterials = holographicColors.map(color => 
+        new THREE.LineBasicMaterial({ 
+          color: color, 
+          transparent: true, 
+          opacity: 0.3,
+          blending: THREE.AdditiveBlending
+        })
+      );
+      
+      // Special material for anchor connections
+      const anchorConnectionMaterial = new THREE.LineBasicMaterial({
+        color: 0xffcc00,
+        transparent: true,
+        opacity: 0.5,
+        blending: THREE.AdditiveBlending
+      });
       
       const connections = [];
       const connectionDistance = 8;
+      const anchorConnectionDistance = 15; // Longer for anchor nodes
 
+      // Connect regular nodes
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          // Create more connections between adjacent layers
-          const layerDiff = Math.abs(nodes[i].userData.layer - nodes[j].userData.layer);
-          const maxDist = layerDiff === 1 ? connectionDistance : connectionDistance * 0.6;
+          // Skip if both are anchor nodes
+          if (nodes[i].userData.isAnchor && nodes[j].userData.isAnchor) continue;
+          
+          // Determine connection distance based on node types
+          let maxDist = connectionDistance;
+          let isMixed = false;
+          
+          if (nodes[i].userData.isAnchor || nodes[j].userData.isAnchor) {
+            maxDist = anchorConnectionDistance;
+            isMixed = true;
+          } else {
+            // For regular nodes, use layer-based distance
+            const layerDiff = Math.abs(nodes[i].userData.layer - nodes[j].userData.layer);
+            maxDist = layerDiff === 1 ? connectionDistance : connectionDistance * 0.6;
+          }
           
           if (nodes[i].position.distanceTo(nodes[j].position) < maxDist) {
             const geometry = new THREE.BufferGeometry().setFromPoints([
@@ -875,14 +1291,20 @@
               nodes[j].position
             ]);
             
-            const materialIndex = Math.floor(Math.random() * connectionMaterials.length);
-            const line = new THREE.Line(geometry, connectionMaterials[materialIndex]);
+            // Choose material based on connection type
+            const material = isMixed ? 
+              anchorConnectionMaterial : 
+              connectionMaterials[Math.floor(Math.random() * connectionMaterials.length)];
+            
+            const line = new THREE.Line(geometry, material);
             line.userData = {
               pointA: i,
               pointB: j,
               active: false,
-              materialIndex: materialIndex,
-              activationTime: 0
+              materialIndex: isMixed ? -1 : Math.floor(Math.random() * connectionMaterials.length),
+              activationTime: 0,
+              particleIndices: [], // Will store indices of particles traveling on this connection
+              isAnchorConnection: isMixed
             };
             
             connections.push(line);
@@ -891,8 +1313,89 @@
         }
       }
 
-      // Animation function with cascading activation effect
+      // Set up event listeners for anchor nodes
+      document.addEventListener('click', (event) => {
+        if (hoveredNode && hoveredNode.userData.isAnchor) {
+          const sectionId = hoveredNode.userData.sectionId;
+          const section = document.getElementById(sectionId);
+          
+          if (section) {
+            // Scroll to the section
+            section.scrollIntoView({ behavior: 'smooth' });
+            
+            // Highlight the node
+            activateAnchorNode(hoveredNode);
+          }
+        }
+      });
+      
+      // Function to activate an anchor node
+      function activateAnchorNode(node) {
+        // Reset all anchor nodes
+        for (let anchorNode of anchorNodes) {
+          if (anchorNode !== node) {
+            anchorNode.material.emissiveIntensity = 0.5;
+            anchorNode.scale.set(1, 1, 1);
+            anchorNode.userData.active = false;
+          }
+        }
+        
+        // Activate the selected node
+        node.userData.active = true;
+        node.userData.activationTime = 0;
+        node.material.emissiveIntensity = 1.0;
+        
+        // Pulse the node
+        const pulse = () => {
+          if (!node.userData.active) return;
+          
+          node.userData.activationTime += 0.1;
+          const scale = 1 + Math.sin(node.userData.activationTime) * 0.2;
+          node.scale.set(scale, scale, scale);
+          
+          // Continue pulsing
+          requestAnimationFrame(pulse);
+        };
+        
+        pulse();
+        
+        // Highlight connections
+        for (let connection of connections) {
+          const pointA = nodes[connection.userData.pointA];
+          const pointB = nodes[connection.userData.pointB];
+          
+          if ((pointA === node || pointB === node) && connection.userData.isAnchorConnection) {
+            connection.material.opacity = 0.8;
+            connection.material.color.set(0xffcc00);
+          }
+        }
+      }
+      
+      // Listen for scroll events to highlight anchor nodes
+      document.addEventListener('scroll', () => {
+        // Find which section is currently in view
+        for (let anchorNode of anchorNodes) {
+          const section = document.getElementById(anchorNode.userData.sectionId);
+          if (!section) continue;
+          
+          const rect = section.getBoundingClientRect();
+          const isVisible = (
+            rect.top >= 0 &&
+            rect.bottom <= window.innerHeight
+          );
+          
+          if (isVisible) {
+            activateAnchorNode(anchorNode);
+            break;
+          }
+        }
+      });
+
+      // Animation function with cascading activation effect and particles
       let activationTimer = 0;
+      let unusedParticles = [...Array(particleCount).keys()]; // Indices of available particles
+      let activeParticles = []; // Currently active particles
+      
       nodeGroup.userData = {
         nodes: nodes,
         connections: connections,
@@ -900,10 +1403,20 @@
           nodes: nodeMaterials,
           connections: connectionMaterials
         },
+        particleSystem: particleSystem,
+        particleCount: particleCount,
+        unusedParticles: unusedParticles,
+        activeParticles: activeParticles,
+        holographicColors: holographicColors,
+        anchorNodes: anchorNodes,
+        
         update: function(time) {
+          // Update shader time uniform
+          particleMaterial.uniforms.time.value = time;
+          
           // Trigger cascading activation every few seconds
           activationTimer += 0.01;
-          if (activationTimer > 3) {
+          if (activationTimer > 2) {
             // Start a new cascade
             this.triggerCascade();
             activationTimer = 0;
@@ -911,32 +1424,47 @@
           
           // Update node positions and activation states
           for (let node of nodes) {
-            node.position.add(node.userData.velocity);
-            
-            // Bounce at boundaries
-            const bounds = 20;
-            for (let axis of ['x', 'y', 'z']) {
-              if (Math.abs(node.position[axis]) > bounds) {
-                node.userData.velocity[axis] *= -1;
+            // Skip movement for anchor nodes
+            if (!node.userData.isAnchor) {
+              node.position.add(node.userData.velocity);
+              
+              // Bounce at boundaries
+              const bounds = 20;
+              for (let axis of ['x', 'y', 'z']) {
+                if (Math.abs(node.position[axis]) > bounds) {
+                  node.userData.velocity[axis] *= -1;
+                }
               }
+            } else if (node.label) {
+              // Update label position to follow anchor node
+              node.label.position.copy(node.position);
+              node.label.position.y += 1.5;
             }
             
-            // Update activation state
-            if (node.userData.active) {
+            // Update activation state for non-anchor nodes
+            if (node.userData.active && !node.userData.isAnchor) {
               node.userData.activationTime += 0.05;
               
-              // Pulse effect during activation
-              const pulse = Math.sin(node.userData.activationTime * 5) * 0.5 + 1;
-              node.scale.set(pulse, pulse, pulse);
+              // Rainbow color cycling during activation
+              const hue = (time * 0.2 + node.userData.layer * 0.1) % 1;
+              const color = new THREE.Color().setHSL(hue, 0.8, 0.6);
+              node.material.color.set(color);
+              node.material.emissive.set(color);
+              node.material.emissiveIntensity = 0.8 + Math.sin(node.userData.activationTime * 5) * 0.2;
               
-              // Set to bright material during activation
-              node.material = nodeMaterials[2]; // Brightest material
+              // Pulse effect during activation
+              const pulse = Math.sin(node.userData.activationTime * 5) * 0.3 + 1.2;
+              node.scale.set(pulse, pulse, pulse);
               
               // Deactivate after duration
               if (node.userData.activationTime >= node.userData.activationDuration) {
                 node.userData.active = false;
-                node.material = nodeMaterials[node.userData.originalMaterial];
-                node.scale.set(1, 1, 1);
+                
+                // Reset only for non-anchor nodes
+                if (!node.userData.isAnchor) {
+                  node.material = nodeMaterials[node.userData.originalMaterial];
+                  node.scale.set(1, 1, 1);
+                }
               }
             }
           }
@@ -953,19 +1481,130 @@
             // Update activation state for connections
             if (connection.userData.active) {
               connection.userData.activationTime += 0.05;
-              connection.material = connectionMaterials[2]; // Brightest material
+              
+              // Rainbow color effect for active connections
+              const hue = (time * 0.3 + connection.userData.activationTime * 0.5) % 1;
+              const color = new THREE.Color().setHSL(hue, 0.9, 0.7);
+              connection.material.color.set(color);
+              connection.material.opacity = 0.7;
               
               // Deactivate after duration
               if (connection.userData.activationTime >= 1) {
                 connection.userData.active = false;
-                connection.material = connectionMaterials[connection.userData.materialIndex];
+                
+                // Reset material based on connection type
+                if (connection.userData.isAnchorConnection) {
+                  connection.material = anchorConnectionMaterial;
+                } else {
+                  connection.material = connectionMaterials[connection.userData.materialIndex];
+                }
+              }
+              
+              // Generate particles traveling along this connection
+              if (Math.random() < 0.2 && this.unusedParticles.length > 0 && connection.userData.active) {
+                this.createSignalParticle(connection, pointA, pointB);
               }
             }
             
             // Connection visibility based on distance
-            connection.visible = pointA.position.distanceTo(pointB.position) < connectionDistance;
+            connection.visible = pointA.position.distanceTo(pointB.position) < 
+              (connection.userData.isAnchorConnection ? anchorConnectionDistance : connectionDistance);
           }
+          
+          // Update active particles
+          this.updateParticles();
         },
+        
+        createSignalParticle: function(connection, startNode, endNode) {
+          if (this.unusedParticles.length === 0) return;
+          
+          // Get an available particle
+          const particleIndex = this.unusedParticles.pop();
+          
+          // Random holographic color for the particle
+          const colorIndex = Math.floor(Math.random() * this.holographicColors.length);
+          const color = new THREE.Color(this.holographicColors[colorIndex]);
+          
+          // Set particle data
+          const particleData = {
+            index: particleIndex,
+            startPosition: startNode.position.clone(),
+            endPosition: endNode.position.clone(),
+            progress: 0,
+            speed: 0.02 + Math.random() * 0.03,
+            size: 1.5 + Math.random() * 1.5,
+            color: color
+          };
+          
+          // Update particle buffer attributes
+          const positions = particleSystem.geometry.attributes.position.array;
+          const sizes = particleSystem.geometry.attributes.size.array;
+          const colors = particleSystem.geometry.attributes.color.array;
+          
+          positions[particleIndex * 3] = startNode.position.x;
+          positions[particleIndex * 3 + 1] = startNode.position.y;
+          positions[particleIndex * 3 + 2] = startNode.position.z;
+          
+          sizes[particleIndex] = particleData.size;
+          
+          colors[particleIndex * 3] = color.r;
+          colors[particleIndex * 3 + 1] = color.g;
+          colors[particleIndex * 3 + 2] = color.b;
+          
+          particleSystem.geometry.attributes.position.needsUpdate = true;
+          particleSystem.geometry.attributes.size.needsUpdate = true;
+          particleSystem.geometry.attributes.color.needsUpdate = true;
+          
+          this.activeParticles.push(particleData);
+        },
+        
+        updateParticles: function() {
+          // Update positions of active particles
+          const positions = particleSystem.geometry.attributes.position.array;
+          const sizes = particleSystem.geometry.attributes.size.array;
+          
+          // Process all active particles
+          const stillActive = [];
+          
+          for (let particleData of this.activeParticles) {
+            // Move particle along path
+            particleData.progress += particleData.speed;
+            
+            if (particleData.progress >= 1) {
+              // Particle reached destination, make it invisible
+              sizes[particleData.index] = 0;
+              this.unusedParticles.push(particleData.index);
+            } else {
+              // Interpolate position
+              const newPos = new THREE.Vector3().lerpVectors(
+                particleData.startPosition,
+                particleData.endPosition,
+                particleData.progress
+              );
+              
+              // Add some oscillation for more interesting paths
+              const oscillation = Math.sin(particleData.progress * Math.PI * 2) * 0.3;
+              newPos.y += oscillation;
+              
+              // Update position in buffer
+              positions[particleData.index * 3] = newPos.x;
+              positions[particleData.index * 3 + 1] = newPos.y;
+              positions[particleData.index * 3 + 2] = newPos.z;
+              
+              // Pulse size for holographic effect
+              const pulseFactor = 0.8 + Math.sin(particleData.progress * Math.PI * 8) * 0.2;
+              sizes[particleData.index] = particleData.size * pulseFactor;
+              
+              stillActive.push(particleData);
+            }
+          }
+          
+          this.activeParticles = stillActive;
+          
+          particleSystem.geometry.attributes.position.needsUpdate = true;
+          particleSystem.geometry.attributes.size.needsUpdate = true;
+        },
+        
         triggerCascade: function() {
           // Start activation at the top layer (layer 0)
           const topLayerNodes = nodes.filter(node => node.userData.layer === 0);
@@ -983,6 +1622,7 @@
             this.activateConnectionsFrom(node);
           }
         },
+        
         activateConnectionsFrom: function(node) {
           // Find connections from this node and activate them
           const nodeIndex = nodes.indexOf(node);
@@ -1011,6 +1651,7 @@
             }
           }
         },
+        
         updateTheme: function(isDark) {
           // No theme changing needed as we're fixed in dark mode
         }
@@ -1020,7 +1661,7 @@
     }
 
     // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
     
     // Add directional light
@@ -1048,7 +1689,10 @@
       // Update neural network with time parameter
       neuralNetwork.userData.update(performance.now() * 0.001);
       
-      if (!prefersReducedMotion) {
+      // Check for node interactions
+      checkNodeInteractions();
+      
+      if (!prefersReducedMotion && !isDragging) {
         // Smooth rotation with easing
         currentRotationY += (targetRotationY - currentRotationY) * 0.05;
         currentRotationX += (targetRotationX - currentRotationX) * 0.05;
@@ -1059,9 +1703,11 @@
         // Subtle auto-rotation
         targetRotationY += 0.0005;
       } else {
-        // For reduced motion, keep a static position
-        neuralNetwork.rotation.y = 0.1;
-        neuralNetwork.rotation.x = 0.1;
+        // For reduced motion or when dragging, keep current rotation
+        if (prefersReducedMotion) {
+          neuralNetwork.rotation.y = 0.1;
+          neuralNetwork.rotation.x = 0.1;
+        }
       }
       
       // Render scene
@@ -1100,277 +1746,6 @@
     isDarkMode = true;
     html.classList.add('dark-mode');
     
-    // Update neural network function to include cascading effect
-    function createNeuralNetwork() {
-      const nodeGroup = new THREE.Group();
-      
-      // Nodes
-      const nodeCount = window.innerWidth < 768 ? 40 : 75; // Reduce node count on mobile
-      const nodes = [];
-      const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16); // Reduced geometry complexity
-      
-      // Create multiple node materials for cascading effect
-      const nodeMaterials = [
-        new THREE.MeshStandardMaterial({ 
-          color: 0x6d72a8,
-          emissive: 0x6d72a8,
-          emissiveIntensity: 0.3,
-          metalness: 0.8,
-          roughness: 0.2
-        }),
-        new THREE.MeshStandardMaterial({ 
-          color: 0x8a8fd8,
-          emissive: 0x8a8fd8,
-          emissiveIntensity: 0.5,
-          metalness: 0.8,
-          roughness: 0.2
-        }),
-        new THREE.MeshStandardMaterial({ 
-          color: 0xa7acff,
-          emissive: 0xa7acff,
-          emissiveIntensity: 0.7,
-          metalness: 0.8,
-          roughness: 0.2
-        })
-      ];
-
-      // Create nodes in a neural network pattern with layers
-      const layers = 5;
-      const nodesPerLayer = Math.ceil(nodeCount / layers);
-      
-      for (let layer = 0; layer < layers; layer++) {
-        for (let i = 0; i < nodesPerLayer; i++) {
-          if (nodes.length >= nodeCount) break;
-          
-          // Randomly select a material for varied appearance
-          const materialIndex = Math.floor(Math.random() * nodeMaterials.length);
-          const node = new THREE.Mesh(nodeGeometry, nodeMaterials[materialIndex]);
-          
-          // Position nodes in layers with some randomization
-          const radius = 12 + layer * 2;
-          const spread = 6;
-          const angleStep = (Math.PI * 2) / nodesPerLayer;
-          const angle = i * angleStep + (Math.random() * 0.5);
-          
-          node.position.x = Math.cos(angle) * radius + (Math.random() - 0.5) * spread;
-          node.position.y = (layer - layers/2) * 3 + (Math.random() - 0.5) * 2;
-          node.position.z = Math.sin(angle) * radius + (Math.random() - 0.5) * spread;
-          
-          // Store velocity and activation state for animation
-          node.userData = {
-            velocity: new THREE.Vector3(
-              (Math.random() - 0.5) * 0.03,
-              (Math.random() - 0.5) * 0.03,
-              (Math.random() - 0.5) * 0.03
-            ),
-            layer: layer,
-            active: false,
-            activationTime: 0,
-            activationDuration: 1 + Math.random() * 2,
-            originalMaterial: materialIndex
-          };
-          
-          nodes.push(node);
-          nodeGroup.add(node);
-        }
-      }
-
-      // Create connections between layers
-      const connectionMaterials = [
-        new THREE.LineBasicMaterial({ color: 0x6d72a8, transparent: true, opacity: 0.2 }),
-        new THREE.LineBasicMaterial({ color: 0x8a8fd8, transparent: true, opacity: 0.5 }),
-        new THREE.LineBasicMaterial({ color: 0xa7acff, transparent: true, opacity: 0.8 })
-      ];
-      
-      const connections = [];
-      const connectionDistance = 8;
-
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          // Create more connections between adjacent layers
-          const layerDiff = Math.abs(nodes[i].userData.layer - nodes[j].userData.layer);
-          const maxDist = layerDiff === 1 ? connectionDistance : connectionDistance * 0.6;
-          
-          if (nodes[i].position.distanceTo(nodes[j].position) < maxDist) {
-            const geometry = new THREE.BufferGeometry().setFromPoints([
-              nodes[i].position,
-              nodes[j].position
-            ]);
-            
-            const materialIndex = Math.floor(Math.random() * connectionMaterials.length);
-            const line = new THREE.Line(geometry, connectionMaterials[materialIndex]);
-            line.userData = {
-              pointA: i,
-              pointB: j,
-              active: false,
-              materialIndex: materialIndex,
-              activationTime: 0
-            };
-            
-            connections.push(line);
-            nodeGroup.add(line);
-          }
-        }
-      }
-
-      // Animation function with cascading activation effect
-      let activationTimer = 0;
-      nodeGroup.userData = {
-        nodes: nodes,
-        connections: connections,
-        materials: {
-          nodes: nodeMaterials,
-          connections: connectionMaterials
-        },
-        update: function(time) {
-          // Trigger cascading activation every few seconds
-          activationTimer += 0.01;
-          if (activationTimer > 3) {
-            // Start a new cascade
-            this.triggerCascade();
-            activationTimer = 0;
-          }
-          
-          // Update node positions and activation states
-          for (let node of nodes) {
-            node.position.add(node.userData.velocity);
-            
-            // Bounce at boundaries
-            const bounds = 20;
-            for (let axis of ['x', 'y', 'z']) {
-              if (Math.abs(node.position[axis]) > bounds) {
-                node.userData.velocity[axis] *= -1;
-              }
-            }
-            
-            // Update activation state
-            if (node.userData.active) {
-              node.userData.activationTime += 0.05;
-              
-              // Pulse effect during activation
-              const pulse = Math.sin(node.userData.activationTime * 5) * 0.5 + 1;
-              node.scale.set(pulse, pulse, pulse);
-              
-              // Set to bright material during activation
-              node.material = nodeMaterials[2]; // Brightest material
-              
-              // Deactivate after duration
-              if (node.userData.activationTime >= node.userData.activationDuration) {
-                node.userData.active = false;
-                node.material = nodeMaterials[node.userData.originalMaterial];
-                node.scale.set(1, 1, 1);
-              }
-            }
-          }
-          
-          // Update connection geometries and activation
-          for (let connection of connections) {
-            const pointA = nodes[connection.userData.pointA];
-            const pointB = nodes[connection.userData.pointB];
-            
-            // Update connection geometry
-            connection.geometry.setFromPoints([pointA.position, pointB.position]);
-            connection.geometry.attributes.position.needsUpdate = true;
-            
-            // Update activation state for connections
-            if (connection.userData.active) {
-              connection.userData.activationTime += 0.05;
-              connection.material = connectionMaterials[2]; // Brightest material
-              
-              // Deactivate after duration
-              if (connection.userData.activationTime >= 1) {
-                connection.userData.active = false;
-                connection.material = connectionMaterials[connection.userData.materialIndex];
-              }
-            }
-            
-            // Connection visibility based on distance
-            connection.visible = pointA.position.distanceTo(pointB.position) < connectionDistance;
-          }
-        },
-        triggerCascade: function() {
-          // Start activation at the top layer (layer 0)
-          const topLayerNodes = nodes.filter(node => node.userData.layer === 0);
-          
-          // Randomly select some top layer nodes to start the cascade
-          const startCount = Math.ceil(topLayerNodes.length * 0.3);
-          for (let i = 0; i < startCount; i++) {
-            const index = Math.floor(Math.random() * topLayerNodes.length);
-            const node = topLayerNodes[index];
-            
-            node.userData.active = true;
-            node.userData.activationTime = 0;
-            
-            // Activate connections from this node
-            this.activateConnectionsFrom(node);
-          }
-        },
-        activateConnectionsFrom: function(node) {
-          // Find connections from this node and activate them
-          const nodeIndex = nodes.indexOf(node);
-          
-          for (let connection of connections) {
-            if (connection.userData.pointA === nodeIndex || connection.userData.pointB === nodeIndex) {
-              // Activate this connection
-              connection.userData.active = true;
-              connection.userData.activationTime = 0;
-              
-              // Find the node at the other end
-              const otherNodeIndex = (connection.userData.pointA === nodeIndex) 
-                ? connection.userData.pointB 
-                : connection.userData.pointA;
-              
-              const otherNode = nodes[otherNodeIndex];
-              
-              // If the other node is in a higher layer (higher number), activate it with a delay
-              if (otherNode.userData.layer > node.userData.layer) {
-                setTimeout(() => {
-                  otherNode.userData.active = true;
-                  otherNode.userData.activationTime = 0;
-                  this.activateConnectionsFrom(otherNode);
-                }, 150 * (otherNode.userData.layer - node.userData.layer));
-              }
-            }
-          }
-        },
-        updateTheme: function(isDark) {
-          // No theme changing needed as we're fixed in dark mode
-        }
-      };
-      
-      return nodeGroup;
-    }
-
-    // Animation loop
-    function animate() {
-      requestAnimationFrame(animate);
-      
-      // Check for reduced motion preference
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      
-      // Update neural network with time parameter
-      neuralNetwork.userData.update(performance.now() * 0.001);
-      
-      if (!prefersReducedMotion) {
-        // Smooth rotation with easing
-        currentRotationY += (targetRotationY - currentRotationY) * 0.05;
-        currentRotationX += (targetRotationX - currentRotationX) * 0.05;
-        
-        neuralNetwork.rotation.y = currentRotationY;
-        neuralNetwork.rotation.x = currentRotationX;
-        
-        // Subtle auto-rotation
-        targetRotationY += 0.0005;
-      } else {
-        // For reduced motion, keep a static position
-        neuralNetwork.rotation.y = 0.1;
-        neuralNetwork.rotation.x = 0.1;
-      }
-      
-      // Render scene
-      renderer.render(scene, camera);
-    }
-
     // Calculate RGB from hex for CSS variables
     function hexToRgb(hex) {
       const r = parseInt(hex.substring(1, 3), 16);
@@ -1420,6 +1795,182 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.position.z = 30;
+
+    // Camera controls
+    let cameraDistance = 30; // Initial camera distance
+    const minDistance = 15;
+    const maxDistance = 50;
+    
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      cameraDistance = Math.max(minDistance, cameraDistance - 5);
+      updateCameraPosition();
+    });
+    
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      cameraDistance = Math.min(maxDistance, cameraDistance + 5);
+      updateCameraPosition();
+    });
+    
+    document.getElementById('reset-view').addEventListener('click', () => {
+      // Reset camera
+      cameraDistance = 30;
+      targetRotationX = 0;
+      targetRotationY = 0;
+      currentRotationX = 0;
+      currentRotationY = 0;
+      updateCameraPosition();
+      
+      // Reset node positions if they've been moved
+      if (neuralNetwork) {
+        arrangeNodesNeural();
+      }
+    });
+    
+    function updateCameraPosition() {
+      // Update camera based on rotation and distance
+      const phi = currentRotationX + Math.PI/2; // Convert rotation to spherical coordinates
+      const theta = currentRotationY;
+      
+      // Calculate new position on sphere
+      camera.position.x = cameraDistance * Math.sin(phi) * Math.cos(theta);
+      camera.position.y = cameraDistance * Math.cos(phi);
+      camera.position.z = cameraDistance * Math.sin(phi) * Math.sin(theta);
+      
+      // Look at center
+      camera.lookAt(0, 0, 0);
+    }
+    
+    // Node arrangement functions
+    document.getElementById('arrange-neural').addEventListener('click', arrangeNodesNeural);
+    document.getElementById('arrange-circular').addEventListener('click', arrangeNodesCircular);
+    document.getElementById('arrange-random').addEventListener('click', arrangeNodesRandom);
+    
+    function arrangeNodesNeural() {
+      if (!neuralNetwork) return;
+      
+      const nodes = neuralNetwork.userData.nodes;
+      const anchorNodes = neuralNetwork.userData.anchorNodes || [];
+      
+      // Create a neural network-like arrangement with layers
+      const layers = 5;
+      const regularNodes = nodes.filter(node => !node.userData.isAnchor);
+      const nodesPerLayer = Math.ceil(regularNodes.length / layers);
+      
+      let nodeIndex = 0;
+      
+      for (let layer = 0; layer < layers; layer++) {
+        for (let i = 0; i < nodesPerLayer; i++) {
+          if (nodeIndex >= regularNodes.length) break;
+          
+          const node = regularNodes[nodeIndex++];
+          
+          // Calculate target position
+          const radius = 12 + layer * 2;
+          const spread = 6;
+          const angleStep = (Math.PI * 2) / nodesPerLayer;
+          const angle = i * angleStep + (Math.random() * 0.5);
+          
+          const targetX = Math.cos(angle) * radius + (Math.random() - 0.5) * spread;
+          const targetY = (layer - layers/2) * 3 + (Math.random() - 0.5) * 2;
+          const targetZ = Math.sin(angle) * radius + (Math.random() - 0.5) * spread;
+          
+          // Animate to new position
+          animateNodePosition(node, targetX, targetY, targetZ);
+        }
+      }
+      
+      // Update anchor nodes positions to maintain them in a semi-circle
+      for (let i = 0; i < anchorNodes.length; i++) {
+        const angle = (Math.PI / (anchorNodes.length - 1)) * i;
+        const radius = 18;
+        
+        const targetX = Math.cos(angle) * radius;
+        const targetY = Math.sin(angle) * radius;
+        const targetZ = 5;
+        
+        animateNodePosition(anchorNodes[i], targetX, targetY, targetZ);
+      }
+    }
+    
+    function arrangeNodesCircular() {
+      if (!neuralNetwork) return;
+      
+      const nodes = neuralNetwork.userData.nodes;
+      const regularNodes = nodes.filter(node => !node.userData.isAnchor);
+      
+      // Arrange regular nodes in a sphere
+      for (let i = 0; i < regularNodes.length; i++) {
+        const node = regularNodes[i];
+        
+        // Calculate position on a sphere
+        const phi = Math.acos(-1 + (2 * i) / regularNodes.length);
+        const theta = Math.sqrt(regularNodes.length * Math.PI) * phi;
+        
+        const radius = 15;
+        const targetX = radius * Math.cos(theta) * Math.sin(phi);
+        const targetY = radius * Math.sin(theta) * Math.sin(phi);
+        const targetZ = radius * Math.cos(phi);
+        
+        // Animate to new position
+        animateNodePosition(node, targetX, targetY, targetZ);
+      }
+      
+      // Keep anchor nodes in place
+    }
+    
+    function arrangeNodesRandom() {
+      if (!neuralNetwork) return;
+      
+      const nodes = neuralNetwork.userData.nodes;
+      const regularNodes = nodes.filter(node => !node.userData.isAnchor);
+      
+      // Randomize positions within a certain volume
+      for (let i = 0; i < regularNodes.length; i++) {
+        const node = regularNodes[i];
+        
+        const radius = 18;
+        const targetX = (Math.random() - 0.5) * radius;
+        const targetY = (Math.random() - 0.5) * radius;
+        const targetZ = (Math.random() - 0.5) * radius;
+        
+        // Animate to new position
+        animateNodePosition(node, targetX, targetY, targetZ);
+      }
+      
+      // Keep anchor nodes in place
+    }
+    
+    function animateNodePosition(node, targetX, targetY, targetZ) {
+      const startPos = node.position.clone();
+      const targetPos = new THREE.Vector3(targetX, targetY, targetZ);
+      const duration = 1000; // Animation duration in ms
+      const startTime = performance.now();
+      
+      function updatePosition() {
+        const elapsed = performance.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Ease-in-out animation
+        const easeProgress = progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        
+        node.position.lerpVectors(startPos, targetPos, easeProgress);
+        
+        if (progress < 1) {
+          requestAnimationFrame(updatePosition);
+        } else {
+          // Update node's velocity based on new position
+          node.userData.velocity = new THREE.Vector3(
+            (Math.random() - 0.5) * 0.03,
+            (Math.random() - 0.5) * 0.03,
+            (Math.random() - 0.5) * 0.03
+          );
+        }
+      }
+      
+      updatePosition();
+    }
   </script>
 </body>
 </html>
