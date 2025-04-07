@@ -1462,14 +1462,19 @@
     
     // Update larvae positions and behaviors
     function updateLarvae(larvae, deltaTime) {
+      // Skip if larvae array is not valid
+      if (!Array.isArray(larvae) || larvae.length === 0) return;
+      
       // Get reference to trajectories group
       const trajectoriesGroup = backgroundGroup.children.find(child => child.isGroup && child !== foregroundGroup);
+      if (!trajectoriesGroup) return;
       
       larvae.forEach(larva => {
         const ud = larva.userData;
+        if (!ud) return;
         
         // Handle headcasting behavior (stopping and looking around)
-        ud.headcastTimer++;
+        if (ud.headcastTimer) ud.headcastTimer++;
         if (!ud.isHeadcasting && ud.headcastTimer > ud.headcastInterval) {
           // Start headcasting
           ud.isHeadcasting = true;
@@ -1484,7 +1489,7 @@
         
         if (ud.isHeadcasting) {
           // During headcasting, wiggle more dramatically to simulate "looking around"
-          ud.direction += (Math.random() - 0.5) * 0.5;
+          if (ud.direction) ud.direction += (Math.random() - 0.5) * 0.5;
           ud.headcastDuration++;
           
           if (ud.headcastDuration > ud.headcastMaxDuration) {
@@ -1494,40 +1499,41 @@
             ud.velocity = ud.originalVelocity;
             
             // Choose a new direction after headcasting
-            ud.direction += (Math.random() * 2 - 1) * Math.PI * 0.7;
+            if (ud.direction) ud.direction += (Math.random() * 2 - 1) * Math.PI * 0.7;
           }
-        } else {
+        } else if (ud.wigglePhase !== undefined) {
           // Normal movement updates
-          
           // Update wiggle phase
-          ud.wigglePhase += ud.wiggleFrequency;
+          ud.wigglePhase += ud.wiggleFrequency || 0.2;
           
           // Decide if it's time to change direction
-          ud.lastTurn += 1;
-          if (ud.lastTurn > ud.turnInterval) {
-            ud.direction += (Math.random() - 0.5) * Math.PI; // Random turn
-            ud.lastTurn = 0;
-            ud.turnInterval = 20 + Math.random() * 40; // New random interval
+          if (ud.lastTurn !== undefined) {
+            ud.lastTurn += 1;
+            if (ud.turnInterval && ud.lastTurn > ud.turnInterval) {
+              ud.direction += (Math.random() - 0.5) * Math.PI;
+              ud.lastTurn = 0;
+              ud.turnInterval = 20 + Math.random() * 40;
+            }
           }
           
           // Apply small random direction changes to simulate natural movement
-          ud.direction += (Math.random() - 0.5) * 0.1;
+          if (ud.direction) ud.direction += (Math.random() - 0.5) * 0.1;
           
           // Add wiggle effect to direction
-          const wiggleDirection = ud.direction + Math.sin(ud.wigglePhase) * ud.wiggleAmount;
+          const wiggleDirection = ud.direction + (ud.wiggleAmount ? Math.sin(ud.wigglePhase) * ud.wiggleAmount : 0);
           
-          // Update position
-          larva.position.x += Math.cos(wiggleDirection) * ud.velocity;
-          larva.position.y += Math.sin(wiggleDirection) * ud.velocity;
-          
-          // Update rotation to match direction
-          larva.rotation.z = wiggleDirection;
+          // Update position if velocity and direction are available
+          if (ud.velocity && wiggleDirection !== undefined) {
+            larva.position.x += Math.cos(wiggleDirection) * ud.velocity;
+            larva.position.y += Math.sin(wiggleDirection) * ud.velocity;
+            larva.rotation.z = wiggleDirection;
+          }
         }
         
-        // Contain within boundaries (agar plate)
+        // Contain within boundaries (agar plate) if position is valid
         const boundaryRadius = 29;
         const distance = Math.sqrt(larva.position.x ** 2 + larva.position.y ** 2);
-        if (distance > boundaryRadius) {
+        if (distance > boundaryRadius && ud.direction !== undefined) {
           // Turn away from edge with some randomness
           ud.direction = Math.atan2(-larva.position.y, -larva.position.x) + (Math.random() - 0.5) * 0.5;
           
@@ -1536,61 +1542,40 @@
           larva.position.y = (boundaryRadius * 0.99) * Math.sin(Math.atan2(larva.position.y, larva.position.x));
         }
         
-        // Update trail (short-term trail following the larva)
-        ud.trailHistory.push({
-          x: larva.position.x,
-          y: larva.position.y,
-          z: larva.position.z
-        });
-        
-        // Limit trail length
-        if (ud.trailHistory.length > ud.trailMaxLength) {
-          ud.trailHistory.shift();
-        }
-        
-        // Update trail geometry
-        if (ud.trailHistory.length > 1) {
-          const points = ud.trailHistory.map(p => new THREE.Vector3(p.x - larva.position.x, p.y - larva.position.y, p.z - larva.position.z));
-          ud.trail.geometry.dispose();
-          ud.trail.geometry = new THREE.BufferGeometry().setFromPoints(points);
-        }
-        
-        // Update long-term trajectory (persistent trace)
-        ud.lastTrajectoryUpdate++;
-        if (ud.lastTrajectoryUpdate >= ud.trajectoryUpdateInterval) {
-          ud.lastTrajectoryUpdate = 0;
-          
-          // Add current position to trajectory points
-          ud.trajectoryPoints.push(new THREE.Vector3(
-            larva.position.x,
-            larva.position.y,
-            -29.7 // Slightly above the plate but below the larvae
-          ));
-          
-          // If this is the first trajectory point, create the line object
-          if (ud.trajectoryPoints.length === 1) {
-            const material = new THREE.LineBasicMaterial({
-              color: ud.trajectoryColor,
-              transparent: true,
-              opacity: 0.3,
-              linewidth: 1
-            });
+        // Update trajectory (persistent trace) if available
+        if (ud.lastTrajectoryUpdate !== undefined && ud.trajectoryUpdateInterval) {
+          ud.lastTrajectoryUpdate++;
+          if (ud.lastTrajectoryUpdate >= ud.trajectoryUpdateInterval) {
+            ud.lastTrajectoryUpdate = 0;
             
-            const geometry = new THREE.BufferGeometry().setFromPoints(ud.trajectoryPoints);
-            const line = new THREE.Line(geometry, material);
-            
-            // Remove any existing trajectory line
-            if (ud.trajectoryLine) {
-              trajectoriesGroup.remove(ud.trajectoryLine);
+            if (ud.trajectoryPoints) {
+              // Add current position to trajectory points
+              ud.trajectoryPoints.push(new THREE.Vector3(
+                larva.position.x,
+                larva.position.y,
+                -29.7 // Slightly above the plate but below the larvae
+              ));
+              
+              // Update the trajectory line if it exists
+              if (ud.trajectoryLine) {
+                ud.trajectoryLine.geometry.dispose();
+                ud.trajectoryLine.geometry = new THREE.BufferGeometry().setFromPoints(ud.trajectoryPoints);
+              }
+              // Create trajectory line if it doesn't exist yet
+              else if (ud.trajectoryPoints.length > 1 && ud.trajectoryColor) {
+                const material = new THREE.LineBasicMaterial({
+                  color: ud.trajectoryColor,
+                  transparent: true,
+                  opacity: 0.3
+                });
+                
+                const geometry = new THREE.BufferGeometry().setFromPoints(ud.trajectoryPoints);
+                const line = new THREE.Line(geometry, material);
+                
+                ud.trajectoryLine = line;
+                if (trajectoriesGroup) trajectoriesGroup.add(line);
+              }
             }
-            
-            ud.trajectoryLine = line;
-            trajectoriesGroup.add(line);
-          } 
-          // Otherwise update the existing line
-          else if (ud.trajectoryLine) {
-            ud.trajectoryLine.geometry.dispose();
-            ud.trajectoryLine.geometry = new THREE.BufferGeometry().setFromPoints(ud.trajectoryPoints);
           }
         }
       });
@@ -1785,664 +1770,116 @@
       }
     });
     
-    // Create a neural network-like structure
+    // Create a neural network-like structure with a simplified implementation
     function createNeuralNetwork() {
-      const nodeGroup = new THREE.Group();
+      const group = new THREE.Group();
       
-      // Enhanced materials with more vibrant colors
-      const nodeMaterials = [
-        new THREE.MeshStandardMaterial({ 
-          color: 0x6d72a8,
-          emissive: 0x6d72a8,
-          emissiveIntensity: 0.5,
-          metalness: 0.9,
-          roughness: 0.1
-        }),
-        new THREE.MeshStandardMaterial({ 
-          color: 0x8a8fd8,
-          emissive: 0x8a8fd8,
-          emissiveIntensity: 0.7,
-          metalness: 0.9,
-          roughness: 0.1
-        }),
-        new THREE.MeshStandardMaterial({ 
-          color: 0xa7acff,
-          emissive: 0xa7acff,
-          emissiveIntensity: 0.9,
-          metalness: 0.9,
-          roughness: 0.1
-        })
-      ];
-      
-      // Section anchor node material (more distinctive)
-      const anchorMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffcc00,
-        emissive: 0xffcc00,
-        emissiveIntensity: 0.9,
+      // Create materials for nodes
+      const nodeMaterial = new THREE.MeshStandardMaterial({
+        color: 0x6d72a8,
+        emissive: 0x6d72a8,
+        emissiveIntensity: 0.5,
         metalness: 0.9,
         roughness: 0.1
       });
       
-      // Define section anchors - each will have a special node
-      const sections = [
-        { id: 'about-me', name: 'Background & Approach' },
-        { id: 'current', name: 'Active Research Streams' },
-        { id: 'projects', name: 'Framework Implementations' },
-        { id: 'research-themes', name: 'Methodological Foundations' },
-        { id: 'links', name: 'Connect' }
-      ];
-      
-      // Holographic color palette
-      const holographicColors = [
-        0x39ff14, // GFP green (bright)
-        0x00ff80, // calcium green
-        0x00bfff, // deep sky blue
-        0x1e90ff, // dodger blue
-        0x4169e1, // royal blue
-        0x4b0082  // indigo
-      ];
-
-      // Create particle system for signal transmission
-      const particleCount = 300;
-      const particles = new THREE.BufferGeometry();
-      const particlePositions = new Float32Array(particleCount * 3);
-      const particleSizes = new Float32Array(particleCount);
-      const particleColors = new Float32Array(particleCount * 3);
-      
-      // Initialize particles (invisible at start)
-      for (let i = 0; i < particleCount; i++) {
-        particlePositions[i * 3] = 0;
-        particlePositions[i * 3 + 1] = 0;
-        particlePositions[i * 3 + 2] = 0;
-        particleSizes[i] = 0; // Start invisible
-        
-        // Random holographic color for each particle
-        const color = new THREE.Color(holographicColors[Math.floor(Math.random() * holographicColors.length)]);
-        particleColors[i * 3] = color.r;
-        particleColors[i * 3 + 1] = color.g;
-        particleColors[i * 3 + 2] = color.b;
-      }
-      
-      particles.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-      particles.setAttribute('size', new THREE.BufferAttribute(particleSizes, 1));
-      particles.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
-      
-      // Custom shader material for particles
-      const particleMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-          time: { value: 0.0 },
-          pixelRatio: { value: window.devicePixelRatio }
-        },
-        vertexShader: `
-          attribute float size;
-          attribute vec3 color;
-          varying vec3 vColor;
-          uniform float pixelRatio;
-          uniform float time;
-          
-          void main() {
-            vColor = color;
-            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-            gl_PointSize = size * pixelRatio * (300.0 / -mvPosition.z);
-            gl_Position = projectionMatrix * mvPosition;
-          }
-        `,
-        fragmentShader: `
-          varying vec3 vColor;
-          uniform float time;
-          
-          void main() {
-            float r = 0.0;
-            vec2 cxy = 2.0 * gl_PointCoord - 1.0;
-            r = dot(cxy, cxy);
-            if (r > 1.0) {
-                discard;
-            }
-            
-            // Glow effect
-            float glow = 1.0 - r;
-            glow = pow(glow, 1.5);
-            
-            // Holographic color variation with time
-            vec3 color = vColor;
-            color += 0.1 * vec3(sin(time + vColor.r * 10.0), 
-                                sin(time * 1.2 + vColor.g * 10.0), 
-                                sin(time * 0.8 + vColor.b * 10.0));
-            
-            gl_FragColor = vec4(color, glow);
-          }
-        `,
-        blending: THREE.AdditiveBlending,
-        depthTest: false,
-        transparent: true
+      const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16);
+      const nodes = [];
+      const connectionMaterial = new THREE.LineBasicMaterial({
+        color: 0x6d72a8,
+        transparent: true,
+        opacity: 0.3
       });
       
-      const particleSystem = new THREE.Points(particles, particleMaterial);
-      nodeGroup.add(particleSystem);
+      // Create some basic nodes
+      const nodeCount = 40;
       
-      // Nodes
-      const nodeCount = window.innerWidth < 768 ? 40 : 75;
-      const nodes = [];
-      const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16);
-      
-      // Create anchor nodes (one for each section)
-      const anchorNodes = [];
-      const anchorNodeGeometry = new THREE.SphereGeometry(0.5, 24, 24); // Bigger
-      
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
+      for (let i = 0; i < nodeCount; i++) {
+        const node = new THREE.Mesh(nodeGeometry, nodeMaterial.clone());
         
-        // Create an anchor node with unique properties
-        const anchorNode = new THREE.Mesh(anchorNodeGeometry, anchorMaterial.clone());
+        // Position each node randomly in a sphere
+        const radius = 10;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
         
-        // Position at the edge of the network, spaced evenly in a semi-circle
-        const angle = (Math.PI / (sections.length - 1)) * i;
-        const radius = 18;
+        node.position.x = radius * Math.sin(phi) * Math.cos(theta);
+        node.position.y = radius * Math.sin(phi) * Math.sin(theta);
+        node.position.z = radius * Math.cos(phi);
         
-        anchorNode.position.x = Math.cos(angle) * radius;
-        anchorNode.position.y = Math.sin(angle) * radius;
-        anchorNode.position.z = 5;
-        
-        // Custom properties
-        anchorNode.userData = {
-          isAnchor: true,
-          sectionId: section.id,
-          sectionName: section.name,
-          originalScale: new THREE.Vector3(1, 1, 1),
-          active: false,
-          activationTime: 0,
-          hovered: false
+        // Add metadata to the node
+        node.userData = {
+          velocity: new THREE.Vector3(
+            (Math.random() - 0.5) * 0.03,
+            (Math.random() - 0.5) * 0.03,
+            (Math.random() - 0.5) * 0.03
+          ),
+          isAnchor: false,
+          active: false
         };
         
-        nodes.push(anchorNode);
-        anchorNodes.push(anchorNode);
-        nodeGroup.add(anchorNode);
-        
-        // Create text sprite with section name
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.width = 256;
-        canvas.height = 64;
-        
-        context.font = 'Bold 24px Arial';
-        context.fillStyle = 'rgba(255,255,255,0.95)';
-        context.fillText(section.name, 8, 24);
-        
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.needsUpdate = true;
-        
-        const labelMaterial = new THREE.SpriteMaterial({
-          map: texture,
-          transparent: true,
-          opacity: 0.8
-        });
-        
-        const sprite = new THREE.Sprite(labelMaterial);
-        sprite.position.copy(anchorNode.position);
-        sprite.position.y += 1.5;
-        sprite.scale.set(5, 1.2, 1);
-        
-        anchorNode.label = sprite;
-        nodeGroup.add(sprite);
+        nodes.push(node);
+        group.add(node);
       }
       
-      // Create nodes in a neural network pattern with layers
-      const layers = 5;
-      const nodesPerLayer = Math.ceil((nodeCount - anchorNodes.length) / layers);
+      // Create some connections between nodes
+      const connections = [];
       
-      for (let layer = 0; layer < layers; layer++) {
-        for (let i = 0; i < nodesPerLayer; i++) {
-          if (nodes.length >= nodeCount) break;
+      for (let i = 0; i < nodes.length; i++) {
+        // Connect to a few nearby nodes
+        for (let j = 0; j < 3; j++) {
+          const targetIndex = (i + j + 1) % nodes.length;
           
-          // Randomly select a material for varied appearance
-          const materialIndex = Math.floor(Math.random() * nodeMaterials.length);
-          const node = new THREE.Mesh(nodeGeometry, nodeMaterials[materialIndex]);
+          const geometry = new THREE.BufferGeometry().setFromPoints([
+            nodes[i].position,
+            nodes[targetIndex].position
+          ]);
           
-          // Position nodes in layers with some randomization
-          const radius = 12 + layer * 2;
-          const spread = 6;
-          const angleStep = (Math.PI * 2) / nodesPerLayer;
-          const angle = i * angleStep + (Math.random() * 0.5);
-          
-          node.position.x = Math.cos(angle) * radius + (Math.random() - 0.5) * spread;
-          node.position.y = (layer - layers/2) * 3 + (Math.random() - 0.5) * 2;
-          node.position.z = Math.sin(angle) * radius + (Math.random() - 0.5) * spread;
-          
-          // Store data for animation
-          node.userData = {
-            velocity: new THREE.Vector3(
-              (Math.random() - 0.5) * 0.03,
-              (Math.random() - 0.5) * 0.03,
-              (Math.random() - 0.5) * 0.03
-            ),
-            layer: layer,
-            active: false,
-            activationTime: 0,
-            activationDuration: 1 + Math.random() * 2,
-            originalMaterial: materialIndex,
-            colorIndex: Math.floor(Math.random() * holographicColors.length),
-            isAnchor: false
+          const line = new THREE.Line(geometry, connectionMaterial.clone());
+          line.userData = {
+            pointA: i,
+            pointB: targetIndex
           };
           
-          nodes.push(node);
-          nodeGroup.add(node);
-        }
-      }
-
-      // Create connections with enhanced colors
-      const connectionMaterials = holographicColors.map(color => 
-        new THREE.LineBasicMaterial({ 
-          color: color, 
-          transparent: true, 
-          opacity: 0.3,
-          blending: THREE.AdditiveBlending
-        })
-      );
-      
-      // Special material for anchor connections
-      const anchorConnectionMaterial = new THREE.LineBasicMaterial({
-        color: 0xffcc00,
-        transparent: true,
-        opacity: 0.5,
-        blending: THREE.AdditiveBlending
-      });
-      
-      const connections = [];
-      const connectionDistance = 8;
-      const anchorConnectionDistance = 15; // Longer for anchor nodes
-
-      // Connect regular nodes
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          // Skip if both are anchor nodes
-          if (nodes[i].userData.isAnchor && nodes[j].userData.isAnchor) continue;
-          
-          // Determine connection distance based on node types
-          let maxDist = connectionDistance;
-          let isMixed = false;
-          
-          if (nodes[i].userData.isAnchor || nodes[j].userData.isAnchor) {
-            maxDist = anchorConnectionDistance;
-            isMixed = true;
-          } else {
-            // For regular nodes, use layer-based distance
-            const layerDiff = Math.abs(nodes[i].userData.layer - nodes[j].userData.layer);
-            maxDist = layerDiff === 1 ? connectionDistance : connectionDistance * 0.6;
-          }
-          
-          if (nodes[i].position.distanceTo(nodes[j].position) < maxDist) {
-            const geometry = new THREE.BufferGeometry().setFromPoints([
-              nodes[i].position,
-              nodes[j].position
-            ]);
-            
-            // Choose material based on connection type
-            const material = isMixed ? 
-              anchorConnectionMaterial : 
-              connectionMaterials[Math.floor(Math.random() * connectionMaterials.length)];
-            
-            const line = new THREE.Line(geometry, material);
-            line.userData = {
-              pointA: i,
-              pointB: j,
-              active: false,
-              materialIndex: isMixed ? -1 : Math.floor(Math.random() * connectionMaterials.length),
-              activationTime: 0,
-              particleIndices: [], // Will store indices of particles traveling on this connection
-              isAnchorConnection: isMixed
-            };
-            
-            connections.push(line);
-            nodeGroup.add(line);
-          }
-        }
-      }
-
-      // Set up event listeners for anchor nodes
-      document.addEventListener('click', (event) => {
-        if (hoveredNode && hoveredNode.userData.isAnchor) {
-          const sectionId = hoveredNode.userData.sectionId;
-          const section = document.getElementById(sectionId);
-          
-          if (section) {
-            // Scroll to the section
-            section.scrollIntoView({ behavior: 'smooth' });
-            
-            // Highlight the node
-            activateAnchorNode(hoveredNode);
-          }
-        }
-      });
-      
-      // Function to activate an anchor node
-      function activateAnchorNode(node) {
-        // Reset all anchor nodes
-        for (let anchorNode of anchorNodes) {
-          if (anchorNode !== node) {
-            anchorNode.material.emissiveIntensity = 0.5;
-            anchorNode.scale.set(1, 1, 1);
-            anchorNode.userData.active = false;
-          }
-        }
-        
-        // Activate the selected node
-        node.userData.active = true;
-        node.userData.activationTime = 0;
-        node.material.emissiveIntensity = 1.0;
-        
-        // Pulse the node
-        const pulse = () => {
-          if (!node.userData.active) return;
-          
-          node.userData.activationTime += 0.1;
-          const scale = 1 + Math.sin(node.userData.activationTime) * 0.2;
-          node.scale.set(scale, scale, scale);
-          
-          // Continue pulsing
-          requestAnimationFrame(pulse);
-        };
-        
-        pulse();
-        
-        // Highlight connections
-        for (let connection of connections) {
-          const pointA = nodes[connection.userData.pointA];
-          const pointB = nodes[connection.userData.pointB];
-          
-          if ((pointA === node || pointB === node) && connection.userData.isAnchorConnection) {
-            connection.material.opacity = 0.8;
-            connection.material.color.set(0xffcc00);
-          }
+          connections.push(line);
+          group.add(line);
         }
       }
       
-      // Listen for scroll events to highlight anchor nodes
-      document.addEventListener('scroll', () => {
-        // Find which section is currently in view
-        for (let anchorNode of anchorNodes) {
-          const section = document.getElementById(anchorNode.userData.sectionId);
-          if (!section) continue;
-          
-          const rect = section.getBoundingClientRect();
-          const isVisible = (
-            rect.top >= 0 &&
-            rect.bottom <= window.innerHeight
-          );
-          
-          if (isVisible) {
-            activateAnchorNode(anchorNode);
-            break;
-          }
-        }
-      });
-
-      // Animation function with cascading activation effect and particles
-      let activationTimer = 0;
-      let unusedParticles = [...Array(particleCount).keys()]; // Indices of available particles
-      let activeParticles = []; // Currently active particles
-      
-      nodeGroup.userData = {
+      // Store references to the nodes and connections
+      group.userData = {
         nodes: nodes,
         connections: connections,
-        materials: {
-          nodes: nodeMaterials,
-          connections: connectionMaterials
-        },
-        particleSystem: particleSystem,
-        particleCount: particleCount,
-        unusedParticles: unusedParticles,
-        activeParticles: activeParticles,
-        holographicColors: holographicColors,
-        anchorNodes: anchorNodes,
-        
         update: function(time) {
-          // Update shader time uniform
-          particleMaterial.uniforms.time.value = time;
-          
-          // Trigger cascading activation every few seconds
-          activationTimer += 0.01;
-          if (activationTimer > 2) {
-            // Start a new cascade
-            this.triggerCascade();
-            activationTimer = 0;
-          }
-          
-          // Update node positions and activation states
-          for (let node of nodes) {
-            // Skip movement for anchor nodes
-            if (!node.userData.isAnchor) {
-              node.position.add(node.userData.velocity);
-              
-              // Bounce at boundaries
-              const bounds = 20;
-              for (let axis of ['x', 'y', 'z']) {
-                if (Math.abs(node.position[axis]) > bounds) {
-                  node.userData.velocity[axis] *= -1;
-                }
-              }
-            } else if (node.label) {
-              // Update label position to follow anchor node
-              node.label.position.copy(node.position);
-              node.label.position.y += 1.5;
-            }
+          // Basic animation update
+          for (let i = 0; i < nodes.length; i++) {
+            // Apply velocity
+            nodes[i].position.add(nodes[i].userData.velocity);
             
-            // Update activation state for non-anchor nodes
-            if (node.userData.active && !node.userData.isAnchor) {
-              node.userData.activationTime += 0.05;
-              
-              // Rainbow color cycling during activation
-              const hue = (time * 0.2 + node.userData.layer * 0.1) % 1;
-              const color = new THREE.Color().setHSL(hue, 0.8, 0.6);
-              node.material.color.set(color);
-              node.material.emissive.set(color);
-              node.material.emissiveIntensity = 0.8 + Math.sin(node.userData.activationTime * 5) * 0.2;
-              
-              // Pulse effect during activation
-              const pulse = Math.sin(node.userData.activationTime * 5) * 0.3 + 1.2;
-              node.scale.set(pulse, pulse, pulse);
-              
-              // Deactivate after duration
-              if (node.userData.activationTime >= node.userData.activationDuration) {
-                node.userData.active = false;
-                
-                // Reset only for non-anchor nodes
-                if (!node.userData.isAnchor) {
-                  node.material = nodeMaterials[node.userData.originalMaterial];
-                  node.scale.set(1, 1, 1);
-                }
-              }
+            // Simple containment - if too far, reverse direction
+            const distance = nodes[i].position.length();
+            if (distance > 12) {
+              nodes[i].userData.velocity.multiplyScalar(-1);
             }
           }
           
-          // Update connection geometries and activation
-          for (let connection of connections) {
-            const pointA = nodes[connection.userData.pointA];
-            const pointB = nodes[connection.userData.pointB];
+          // Update connection lines
+          for (let i = 0; i < connections.length; i++) {
+            const line = connections[i];
+            const pointA = nodes[line.userData.pointA].position;
+            const pointB = nodes[line.userData.pointB].position;
             
-            // Update connection geometry
-            connection.geometry.setFromPoints([pointA.position, pointB.position]);
-            connection.geometry.attributes.position.needsUpdate = true;
-            
-            // Update activation state for connections
-            if (connection.userData.active) {
-              connection.userData.activationTime += 0.05;
-              
-              // Rainbow color effect for active connections
-              const hue = (time * 0.3 + connection.userData.activationTime * 0.5) % 1;
-              const color = new THREE.Color().setHSL(hue, 0.9, 0.7);
-              connection.material.color.set(color);
-              connection.material.opacity = 0.7;
-              
-              // Deactivate after duration
-              if (connection.userData.activationTime >= 1) {
-                connection.userData.active = false;
-                
-                // Reset material based on connection type
-                if (connection.userData.isAnchorConnection) {
-                  connection.material = anchorConnectionMaterial;
-                } else {
-                  connection.material = connectionMaterials[connection.userData.materialIndex];
-                }
-              }
-              
-              // Generate particles traveling along this connection
-              if (Math.random() < 0.2 && this.unusedParticles.length > 0 && connection.userData.active) {
-                this.createSignalParticle(connection, pointA, pointB);
-              }
-            }
-            
-            // Connection visibility based on distance
-            connection.visible = pointA.position.distanceTo(pointB.position) < 
-              (connection.userData.isAnchorConnection ? anchorConnectionDistance : connectionDistance);
+            line.geometry.dispose();
+            line.geometry = new THREE.BufferGeometry().setFromPoints([pointA, pointB]);
           }
-          
-          // Update active particles
-          this.updateParticles();
-        },
-        
-        createSignalParticle: function(connection, startNode, endNode) {
-          if (this.unusedParticles.length === 0) return;
-          
-          // Get an available particle
-          const particleIndex = this.unusedParticles.pop();
-          
-          // Random holographic color for the particle
-          const colorIndex = Math.floor(Math.random() * this.holographicColors.length);
-          const color = new THREE.Color(this.holographicColors[colorIndex]);
-          
-          // Set particle data
-          const particleData = {
-            index: particleIndex,
-            startPosition: startNode.position.clone(),
-            endPosition: endNode.position.clone(),
-            progress: 0,
-            speed: 0.02 + Math.random() * 0.03,
-            size: 1.5 + Math.random() * 1.5,
-            color: color
-          };
-          
-          // Update particle buffer attributes
-          const positions = particleSystem.geometry.attributes.position.array;
-          const sizes = particleSystem.geometry.attributes.size.array;
-          const colors = particleSystem.geometry.attributes.color.array;
-          
-          positions[particleIndex * 3] = startNode.position.x;
-          positions[particleIndex * 3 + 1] = startNode.position.y;
-          positions[particleIndex * 3 + 2] = startNode.position.z;
-          
-          sizes[particleIndex] = particleData.size;
-          
-          colors[particleIndex * 3] = color.r;
-          colors[particleIndex * 3 + 1] = color.g;
-          colors[particleIndex * 3 + 2] = color.b;
-          
-          particleSystem.geometry.attributes.position.needsUpdate = true;
-          particleSystem.geometry.attributes.size.needsUpdate = true;
-          particleSystem.geometry.attributes.color.needsUpdate = true;
-          
-          this.activeParticles.push(particleData);
-        },
-        
-        updateParticles: function() {
-          // Update positions of active particles
-          const positions = particleSystem.geometry.attributes.position.array;
-          const sizes = particleSystem.geometry.attributes.size.array;
-          
-          // Process all active particles
-          const stillActive = [];
-          
-          for (let particleData of this.activeParticles) {
-            // Move particle along path
-            particleData.progress += particleData.speed;
-            
-            if (particleData.progress >= 1) {
-              // Particle reached destination, make it invisible
-              sizes[particleData.index] = 0;
-              this.unusedParticles.push(particleData.index);
-            } else {
-              // Interpolate position
-              const newPos = new THREE.Vector3().lerpVectors(
-                particleData.startPosition,
-                particleData.endPosition,
-                particleData.progress
-              );
-              
-              // Add some oscillation for more interesting paths
-              const oscillation = Math.sin(particleData.progress * Math.PI * 2) * 0.3;
-              newPos.y += oscillation;
-              
-              // Update position in buffer
-              positions[particleData.index * 3] = newPos.x;
-              positions[particleData.index * 3 + 1] = newPos.y;
-              positions[particleData.index * 3 + 2] = newPos.z;
-              
-              // Pulse size for holographic effect
-              const pulseFactor = 0.8 + Math.sin(particleData.progress * Math.PI * 8) * 0.2;
-              sizes[particleData.index] = particleData.size * pulseFactor;
-              
-              stillActive.push(particleData);
-            }
-          }
-          
-          this.activeParticles = stillActive;
-          
-          particleSystem.geometry.attributes.position.needsUpdate = true;
-          particleSystem.geometry.attributes.size.needsUpdate = true;
-        },
-        
-        triggerCascade: function() {
-          // Start activation at the top layer (layer 0)
-          const topLayerNodes = nodes.filter(node => node.userData.layer === 0);
-          
-          // Randomly select some top layer nodes to start the cascade
-          const startCount = Math.ceil(topLayerNodes.length * 0.3);
-          for (let i = 0; i < startCount; i++) {
-            const index = Math.floor(Math.random() * topLayerNodes.length);
-            const node = topLayerNodes[index];
-            
-            node.userData.active = true;
-            node.userData.activationTime = 0;
-            
-            // Activate connections from this node
-            this.activateConnectionsFrom(node);
-          }
-        },
-        
-        activateConnectionsFrom: function(node) {
-          // Find connections from this node and activate them
-          const nodeIndex = nodes.indexOf(node);
-          
-          for (let connection of connections) {
-            if (connection.userData.pointA === nodeIndex || connection.userData.pointB === nodeIndex) {
-              // Activate this connection
-              connection.userData.active = true;
-              connection.userData.activationTime = 0;
-              
-              // Find the node at the other end
-              const otherNodeIndex = (connection.userData.pointA === nodeIndex) 
-                ? connection.userData.pointB 
-                : connection.userData.pointA;
-              
-              const otherNode = nodes[otherNodeIndex];
-              
-              // If the other node is in a higher layer (higher number), activate it with a delay
-              if (otherNode.userData.layer > node.userData.layer) {
-                setTimeout(() => {
-                  otherNode.userData.active = true;
-                  otherNode.userData.activationTime = 0;
-                  this.activateConnectionsFrom(otherNode);
-                }, 150 * (otherNode.userData.layer - node.userData.layer));
-              }
-            }
-          }
-        },
-        
-        updateTheme: function(isDark) {
-          // No theme changing needed as we're fixed in dark mode
         }
       };
       
-      return nodeGroup;
+      // Add a light to the scene
+      const light = new THREE.PointLight(0xffffff, 1, 100);
+      light.position.set(0, 0, 20);
+      group.add(light);
+      
+      return group;
     }
 
     // Add ambient light
@@ -2458,38 +1895,65 @@
     function animate() {
       requestAnimationFrame(animate);
       
+      // Process keyboard controls if available
+      if (typeof processKeyboardControls === 'function') {
+        processKeyboardControls();
+      }
+      
       // Check for node interactions
-      checkNodeInteractions();
+      if (typeof checkNodeInteractions === 'function') {
+        checkNodeInteractions();
+      }
       
       // Update larvae
-      updateLarvae(larvae);
+      if (typeof updateLarvae === 'function' && larvae) {
+        updateLarvae(larvae);
+      }
       
-      // Rotate the scene slightly for visual interest
-      if (!isDragging && !prefersReducedMotion) {
-        if (neuralNetwork) {
+      // Rotate the scene slightly for visual interest when not using keyboard
+      if (neuralNetwork) {
+        if (!isDragging && !prefersReducedMotion && 
+            (!keyState || (!keyState.w && !keyState.a && !keyState.s && !keyState.d && 
+            !keyState.arrowup && !keyState.arrowleft && !keyState.arrowdown && !keyState.arrowright))) {
           neuralNetwork.rotation.y += 0.002;
           neuralNetwork.rotation.z += 0.001;
-        }
-      } else if (prefersReducedMotion) {
-        // Set to static rotation for reduced motion preference
-        if (neuralNetwork) {
+        } else if (prefersReducedMotion) {
+          // Set to static rotation for reduced motion preference
           neuralNetwork.rotation.y = 0.2;
           neuralNetwork.rotation.z = 0.1;
         }
       }
       
+      // Render the scene
       renderer.render(scene, camera);
     }
     
     // Initialize and start the animation
     function init() {
+      // Create the neural network
       neuralNetwork = createNeuralNetwork();
       scene.add(neuralNetwork);
+      
+      // Set initial camera position
+      camera.position.z = 30;
+      
+      // Start the animation loop
       animate();
     }
     
-    // Start the application
-    init();
+    // Start the application when page is loaded
+    window.addEventListener('DOMContentLoaded', () => {
+      // Initialize animations
+      checkElementsInView();
+      
+      // Initialize gallery filters if available
+      if (typeof initGalleryFilters === 'function') {
+        initGalleryFilters();
+      }
+      
+      // Initialize the 3D visualization
+      init();
+    });
 
     // Add animation for elements when they come into view
     function checkElementsInView() {
@@ -2546,11 +2010,6 @@
         observer.observe(item);
       });
     }
-    
-    // Initialize animations when DOM is loaded
-    document.addEventListener('DOMContentLoaded', () => {
-      checkElementsInView();
-    });
     
     // Ensure animations work on page resize
     window.addEventListener('resize', () => {
@@ -2747,38 +2206,6 @@
       
       // Update camera position
       updateCameraPosition();
-    }
-    
-    // Update animation loop to include keyboard controls
-    function animate() {
-      requestAnimationFrame(animate);
-      
-      // Process keyboard controls
-      processKeyboardControls();
-      
-      // Check for node interactions
-      checkNodeInteractions();
-      
-      // Update larvae
-      updateLarvae(larvae);
-      
-      // Rotate the scene slightly for visual interest when not using keyboard
-      if (!isDragging && !prefersReducedMotion && 
-          !keyState.w && !keyState.a && !keyState.s && !keyState.d && 
-          !keyState.arrowup && !keyState.arrowleft && !keyState.arrowdown && !keyState.arrowright) {
-        if (neuralNetwork) {
-          neuralNetwork.rotation.y += 0.002;
-          neuralNetwork.rotation.z += 0.001;
-        }
-      } else if (prefersReducedMotion) {
-        // Set to static rotation for reduced motion preference
-        if (neuralNetwork) {
-          neuralNetwork.rotation.y = 0.2;
-          neuralNetwork.rotation.z = 0.1;
-        }
-      }
-      
-      renderer.render(scene, camera);
     }
   </script>
 </body>
