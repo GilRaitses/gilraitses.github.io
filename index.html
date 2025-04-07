@@ -4,58 +4,106 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gil Raitses | Scientific ML + Simulation</title>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
       padding: 0;
       color: #333;
+      overflow-x: hidden;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
     }
     header {
-      background: #2b2d42;
+      background: rgba(43, 45, 66, 0.85);
       color: white;
       padding: 2rem;
       text-align: center;
+      position: relative;
+      backdrop-filter: blur(5px);
     }
     h1 {
       margin: 0;
+      font-size: 2.5rem;
     }
     .content {
       max-width: 800px;
       margin: 2rem auto;
-      padding: 0 1rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+      position: relative;
     }
     section {
       margin-bottom: 2rem;
     }
     h2 {
       color: #2b2d42;
+      border-bottom: 2px solid #2b2d42;
+      padding-bottom: 0.5rem;
     }
-    .projects ul {
-      list-style-type: square;
+    .projects ul, .current ul, .research-themes ul {
+      list-style-type: none;
+      padding-left: 0.5rem;
+    }
+    .projects li, .current li, .research-themes li {
+      margin-bottom: 0.8rem;
+      position: relative;
       padding-left: 1.5rem;
+    }
+    .projects li:before, .current li:before, .research-themes li:before {
+      content: "▹";
+      position: absolute;
+      left: 0;
+      color: #2b2d42;
     }
     footer {
       text-align: center;
       font-size: 0.9rem;
-      color: #666;
+      color: white;
       padding: 2rem 0;
+      background: rgba(43, 45, 66, 0.85);
+      backdrop-filter: blur(5px);
+      position: relative;
     }
     a {
       color: #2b2d42;
       text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
     }
     a:hover {
-      text-decoration: underline;
+      color: #3c3f60;
+      text-decoration: none;
+    }
+    .links a {
+      margin: 0 10px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      background: rgba(43, 45, 66, 0.1);
+      transition: all 0.3s;
+    }
+    .links a:hover {
+      background: rgba(43, 45, 66, 0.2);
+      transform: translateY(-2px);
     }
   </style>
 </head>
 <body>
+  <canvas id="bg"></canvas>
+  
   <header>
     <h1>Gil Raitses</h1>
     <p>Scientific Machine Learning | Signal Structuring | Environmental Simulation</p>
   </header>
+  
   <div class="content">
     <section class="about">
       <h2>About Me</h2>
@@ -95,8 +143,181 @@
       </p>
     </section>
   </div>
+  
   <footer>
     &copy; 2025 Gil Raitses
   </footer>
+
+  <script>
+    // Three.js setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.querySelector('#bg'),
+      antialias: true
+    });
+
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.position.z = 30;
+
+    // Responsive handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Create a neural network-like structure
+    function createNeuralNetwork() {
+      const nodeGroup = new THREE.Group();
+      
+      // Nodes
+      const nodeCount = 75;
+      const nodes = [];
+      const nodeGeometry = new THREE.SphereGeometry(0.25, 24, 24);
+      const nodeMaterial = new THREE.MeshStandardMaterial({ 
+        color: 0x2b2d42,
+        emissive: 0x2b2d42,
+        emissiveIntensity: 0.3,
+        metalness: 0.8,
+        roughness: 0.2
+      });
+
+      // Create nodes in a 3D grid-like pattern
+      for (let i = 0; i < nodeCount; i++) {
+        const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+        
+        // Distribute nodes in a spherical pattern
+        const radius = 15;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        
+        node.position.x = radius * Math.sin(phi) * Math.cos(theta);
+        node.position.y = radius * Math.sin(phi) * Math.sin(theta);
+        node.position.z = radius * Math.cos(phi);
+        
+        // Store velocity for animation
+        node.userData = {
+          velocity: new THREE.Vector3(
+            (Math.random() - 0.5) * 0.05,
+            (Math.random() - 0.5) * 0.05,
+            (Math.random() - 0.5) * 0.05
+          )
+        };
+        
+        nodes.push(node);
+        nodeGroup.add(node);
+      }
+
+      // Create connections between close nodes
+      const connectionMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x2b2d42,
+        transparent: true,
+        opacity: 0.2
+      });
+      
+      const connections = [];
+      const connectionDistance = 8;
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          if (nodes[i].position.distanceTo(nodes[j].position) < connectionDistance) {
+            const geometry = new THREE.BufferGeometry().setFromPoints([
+              nodes[i].position,
+              nodes[j].position
+            ]);
+            
+            const line = new THREE.Line(geometry, connectionMaterial);
+            line.userData = {
+              pointA: i,
+              pointB: j
+            };
+            
+            connections.push(line);
+            nodeGroup.add(line);
+          }
+        }
+      }
+
+      // Animation function to update connections
+      nodeGroup.userData = {
+        nodes: nodes,
+        connections: connections,
+        update: function() {
+          // Update node positions
+          for (let node of nodes) {
+            node.position.add(node.userData.velocity);
+            
+            // Bounce at boundaries
+            const bounds = 20;
+            for (let axis of ['x', 'y', 'z']) {
+              if (Math.abs(node.position[axis]) > bounds) {
+                node.userData.velocity[axis] *= -1;
+              }
+            }
+          }
+          
+          // Update connection geometries
+          for (let connection of connections) {
+            const pointA = nodes[connection.userData.pointA].position;
+            const pointB = nodes[connection.userData.pointB].position;
+            
+            // Only maintain connections if points are close enough
+            if (pointA.distanceTo(pointB) < connectionDistance) {
+              connection.visible = true;
+              connection.geometry.setFromPoints([pointA, pointB]);
+              connection.geometry.attributes.position.needsUpdate = true;
+            } else {
+              connection.visible = false;
+            }
+          }
+        }
+      };
+      
+      return nodeGroup;
+    }
+
+    // Add ambient light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    
+    // Add directional light
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(5, 5, 5);
+    scene.add(directionalLight);
+
+    // Add neural network
+    const neuralNetwork = createNeuralNetwork();
+    scene.add(neuralNetwork);
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Update neural network
+      neuralNetwork.userData.update();
+      
+      // Rotate the entire network slowly
+      neuralNetwork.rotation.y += 0.001;
+      neuralNetwork.rotation.x += 0.0005;
+      
+      // Render scene
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Interactive camera position on mouse move
+    document.addEventListener('mousemove', (event) => {
+      const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+      const mouseY = (event.clientY / window.innerHeight) * 2 - 1;
+      
+      // Subtle camera movement based on mouse position
+      camera.position.x = mouseX * 3;
+      camera.position.y = -mouseY * 3;
+      camera.lookAt(0, 0, 0);
+    });
+  </script>
 </body>
 </html>
