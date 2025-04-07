@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="light-mode">
+<html lang="en" class="dark-mode">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -643,33 +643,33 @@
     <section class="about">
       <h2>About Me</h2>
       <p>
-        I work at the intersection of computational science, machine learning, and geospatial simulation. My focus is on developing physics-informed and foundation models that extract meaningful patterns from complex signals across biological, behavioral, and environmental domains. Through innovative algorithmic pipelines, I transform raw sensory and spatial data into scalable computational frameworks that enable deeper analysis, clearer interpretation, and more accurate predictive simulations of natural phenomena.
+        I develop computational frameworks that bridge machine learning and domain science, with a focus on neural signal analysis and marine behavioral ecology. My research extracts meaningful structures from complex signal data using custom algorithms and physics-informed models. I'm particularly interested in how self-supervised learning can reveal emergent patterns in time-series data from biological systems and environmental monitoring.
       </p>
     </section>
 
     <section class="current">
       <h2>Current Work</h2>
       <ul>
-        <li><strong>Marine Telemetry Modeling:</strong> Large-scale data pipelines for detecting behavioral states in whale movement using dive-derived signal features.</li>
-        <li><strong>Neural Circuit Signal Analysis:</strong> Exploring sensory integration and emergent perception using pattern recognition on neural data.</li>
-        <li><strong>Glacial Geophysics:</strong> Reconstructing ice flow and terrain evolution using remote sensing, simulation modeling, and multi-resolution GIS analytics.</li>
+        <li><strong>Neural Circuit Analysis:</strong> Developing a novel statistical framework that extracts functional motifs from Drosophila larval connectome data, identifying synchronized firing patterns that correspond to specific sensory inputs.</li>
+        <li><strong>Marine Behavioral States:</strong> Building a transformer-based model to identify and classify humpback whale behavioral states from high-resolution dive telemetry, enabling automated detection of feeding events from time-series acceleration data.</li>
+        <li><strong>Biomimetic Sensors:</strong> Creating signal processing algorithms for bio-inspired acoustic sensors that filter environmental noise while preserving biologically relevant signals, mimicking the selective filtering observed in mammalian auditory systems.</li>
       </ul>
     </section>
 
     <section class="projects">
       <h2>Featured Projects</h2>
       <div class="project-cards">
-        <div class="project-card" tabindex="0" role="button" aria-label="Whale Behavior Classification project">
-          <h3>Whale Behavior Classification</h3>
-          <p>Machine learning model that identifies complex behavioral patterns from marine telemetry data, enabling deeper understanding of cetacean activities.</p>
+        <div class="project-card" tabindex="0" role="button" aria-label="Cetacean Dive Pattern Analysis project">
+          <h3>Cetacean Dive Pattern Analysis</h3>
+          <p>Developed a recurrent neural network that classifies diving patterns in tagged humpback whales, achieving 92% accuracy in identifying feeding dives based on time-series acceleration and depth data collected off the coast of Massachusetts.</p>
         </div>
-        <div class="project-card" tabindex="0" role="button" aria-label="Neural Signal Processing project">
-          <h3>Neural Signal Processing</h3>
-          <p>Statistical framework for extracting meaningful patterns from noisy neurological data, revealing the underlying structure of sensory processing.</p>
+        <div class="project-card" tabindex="0" role="button" aria-label="Drosophila Sensory Circuit Mapping project">
+          <h3>Drosophila Sensory Circuit Mapping</h3>
+          <p>Created a graph-based analysis pipeline for larval Drosophila brain connectome data that identified previously unknown functional circuits responding to specific environmental stimuli, published in collaboration with the Center for Neural Circuit Dynamics.</p>
         </div>
-        <div class="project-card" tabindex="0" role="button" aria-label="Glacial Flow Simulation project">
-          <h3>Glacial Flow Simulation</h3>
-          <p>Physics-based model for predicting ice movement patterns using multi-resolution data from remote sensing platforms.</p>
+        <div class="project-card" tabindex="0" role="button" aria-label="Biomimetic Acoustic Processing project">
+          <h3>Biomimetic Acoustic Processing</h3>
+          <p>Engineered a wavelet-based signal processing framework that enhances biologically relevant acoustic signals in noisy underwater environments, improving detection of marine mammal vocalizations by 65% compared to conventional methods.</p>
         </div>
       </div>
     </section>
@@ -677,10 +677,10 @@
     <section class="research-themes">
       <h2>Research Themes</h2>
       <ul>
-        <li>Signal-to-structure translation</li>
-        <li>Physics-informed machine learning</li>
-        <li>Multi-resolution modeling and simulation</li>
-        <li>Foundation model logic across scientific domains</li>
+        <li>Temporal pattern extraction from biological time-series data</li>
+        <li>Self-supervised learning for structure detection in noisy signals</li>
+        <li>Multi-scale signal analysis with adaptive wavelet transformations</li>
+        <li>Transfer learning across ecological and neurological domains</li>
       </ul>
     </section>
 
@@ -711,10 +711,13 @@
     window.threeJsReady = true;
 
     // Dark/Light mode variables
-    let isDarkMode = false;
+    let isDarkMode = true;
     const primaryColorDark = 0x6d72a8;
     const primaryColorLight = 0x2b2d42;
 
+    // Initial dark mode settings
+    renderer.setClearColor(0x121212, 0.3);
+    
     // Responsive handler with performance optimization
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -931,6 +934,9 @@
     const toggleIcon = document.querySelector('.toggle-icon');
     const html = document.documentElement;
     
+    // Set initial toggle icon to match dark mode
+    toggleIcon.textContent = '🌙';
+    
     themeToggle.addEventListener('click', () => {
       isDarkMode = !isDarkMode;
       html.classList.toggle('dark-mode');
@@ -941,13 +947,6 @@
       
       // Adjust renderer background
       renderer.setClearColor(isDarkMode ? 0x121212 : 0xf9f9f9, 0.3);
-      
-      // Update brain visualization colors
-      brainColor = isDarkMode ? '#6d72a8' : '#2b2d42';
-      neuronColors[0] = isDarkMode ? '#5fb8ec' : '#4ea5d9';
-      neuronColors[1] = isDarkMode ? '#f7b943' : '#f6ae2d';
-      neuronColors[2] = isDarkMode ? '#f37a3c' : '#f26419';
-      neuronColors[3] = isDarkMode ? '#99cde9' : '#86bbd8';
     });
 
     // Calculate RGB from hex for CSS variables
