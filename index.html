@@ -758,62 +758,103 @@
       const nodeCount = window.innerWidth < 768 ? 40 : 75; // Reduce node count on mobile
       const nodes = [];
       const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16); // Reduced geometry complexity
-      const nodeMaterial = new THREE.MeshStandardMaterial({ 
-        color: primaryColorLight,
-        emissive: primaryColorLight,
-        emissiveIntensity: 0.3,
-        metalness: 0.8,
-        roughness: 0.2
-      });
+      
+      // Create multiple node materials for cascading effect
+      const nodeMaterials = [
+        new THREE.MeshStandardMaterial({ 
+          color: 0x6d72a8,
+          emissive: 0x6d72a8,
+          emissiveIntensity: 0.3,
+          metalness: 0.8,
+          roughness: 0.2
+        }),
+        new THREE.MeshStandardMaterial({ 
+          color: 0x8a8fd8,
+          emissive: 0x8a8fd8,
+          emissiveIntensity: 0.5,
+          metalness: 0.8,
+          roughness: 0.2
+        }),
+        new THREE.MeshStandardMaterial({ 
+          color: 0xa7acff,
+          emissive: 0xa7acff,
+          emissiveIntensity: 0.7,
+          metalness: 0.8,
+          roughness: 0.2
+        })
+      ];
 
-      // Create nodes in a 3D grid-like pattern
-      for (let i = 0; i < nodeCount; i++) {
-        const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-        
-        // Distribute nodes in a spherical pattern
-        const radius = 15;
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        
-        node.position.x = radius * Math.sin(phi) * Math.cos(theta);
-        node.position.y = radius * Math.sin(phi) * Math.sin(theta);
-        node.position.z = radius * Math.cos(phi);
-        
-        // Store velocity for animation
-        node.userData = {
-          velocity: new THREE.Vector3(
-            (Math.random() - 0.5) * 0.05,
-            (Math.random() - 0.5) * 0.05,
-            (Math.random() - 0.5) * 0.05
-          )
-        };
-        
-        nodes.push(node);
-        nodeGroup.add(node);
+      // Create nodes in a neural network pattern with layers
+      const layers = 5;
+      const nodesPerLayer = Math.ceil(nodeCount / layers);
+      
+      for (let layer = 0; layer < layers; layer++) {
+        for (let i = 0; i < nodesPerLayer; i++) {
+          if (nodes.length >= nodeCount) break;
+          
+          // Randomly select a material for varied appearance
+          const materialIndex = Math.floor(Math.random() * nodeMaterials.length);
+          const node = new THREE.Mesh(nodeGeometry, nodeMaterials[materialIndex]);
+          
+          // Position nodes in layers with some randomization
+          const radius = 12 + layer * 2;
+          const spread = 6;
+          const angleStep = (Math.PI * 2) / nodesPerLayer;
+          const angle = i * angleStep + (Math.random() * 0.5);
+          
+          node.position.x = Math.cos(angle) * radius + (Math.random() - 0.5) * spread;
+          node.position.y = (layer - layers/2) * 3 + (Math.random() - 0.5) * 2;
+          node.position.z = Math.sin(angle) * radius + (Math.random() - 0.5) * spread;
+          
+          // Store velocity and activation state for animation
+          node.userData = {
+            velocity: new THREE.Vector3(
+              (Math.random() - 0.5) * 0.03,
+              (Math.random() - 0.5) * 0.03,
+              (Math.random() - 0.5) * 0.03
+            ),
+            layer: layer,
+            active: false,
+            activationTime: 0,
+            activationDuration: 1 + Math.random() * 2,
+            originalMaterial: materialIndex
+          };
+          
+          nodes.push(node);
+          nodeGroup.add(node);
+        }
       }
 
-      // Create connections between close nodes
-      const connectionMaterial = new THREE.LineBasicMaterial({ 
-        color: primaryColorLight,
-        transparent: true,
-        opacity: 0.2
-      });
+      // Create connections between layers
+      const connectionMaterials = [
+        new THREE.LineBasicMaterial({ color: 0x6d72a8, transparent: true, opacity: 0.2 }),
+        new THREE.LineBasicMaterial({ color: 0x8a8fd8, transparent: true, opacity: 0.5 }),
+        new THREE.LineBasicMaterial({ color: 0xa7acff, transparent: true, opacity: 0.8 })
+      ];
       
       const connections = [];
       const connectionDistance = 8;
 
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
-          if (nodes[i].position.distanceTo(nodes[j].position) < connectionDistance) {
+          // Create more connections between adjacent layers
+          const layerDiff = Math.abs(nodes[i].userData.layer - nodes[j].userData.layer);
+          const maxDist = layerDiff === 1 ? connectionDistance : connectionDistance * 0.6;
+          
+          if (nodes[i].position.distanceTo(nodes[j].position) < maxDist) {
             const geometry = new THREE.BufferGeometry().setFromPoints([
               nodes[i].position,
               nodes[j].position
             ]);
             
-            const line = new THREE.Line(geometry, connectionMaterial);
+            const materialIndex = Math.floor(Math.random() * connectionMaterials.length);
+            const line = new THREE.Line(geometry, connectionMaterials[materialIndex]);
             line.userData = {
               pointA: i,
-              pointB: j
+              pointB: j,
+              active: false,
+              materialIndex: materialIndex,
+              activationTime: 0
             };
             
             connections.push(line);
@@ -822,16 +863,25 @@
         }
       }
 
-      // Animation function to update connections
+      // Animation function with cascading activation effect
+      let activationTimer = 0;
       nodeGroup.userData = {
         nodes: nodes,
         connections: connections,
         materials: {
-          nodes: nodeMaterial,
-          connections: connectionMaterial
+          nodes: nodeMaterials,
+          connections: connectionMaterials
         },
-        update: function() {
-          // Update node positions
+        update: function(time) {
+          // Trigger cascading activation every few seconds
+          activationTimer += 0.01;
+          if (activationTimer > 3) {
+            // Start a new cascade
+            this.triggerCascade();
+            activationTimer = 0;
+          }
+          
+          // Update node positions and activation states
           for (let node of nodes) {
             node.position.add(node.userData.velocity);
             
@@ -842,28 +892,99 @@
                 node.userData.velocity[axis] *= -1;
               }
             }
+            
+            // Update activation state
+            if (node.userData.active) {
+              node.userData.activationTime += 0.05;
+              
+              // Pulse effect during activation
+              const pulse = Math.sin(node.userData.activationTime * 5) * 0.5 + 1;
+              node.scale.set(pulse, pulse, pulse);
+              
+              // Set to bright material during activation
+              node.material = nodeMaterials[2]; // Brightest material
+              
+              // Deactivate after duration
+              if (node.userData.activationTime >= node.userData.activationDuration) {
+                node.userData.active = false;
+                node.material = nodeMaterials[node.userData.originalMaterial];
+                node.scale.set(1, 1, 1);
+              }
+            }
           }
           
-          // Update connection geometries
+          // Update connection geometries and activation
           for (let connection of connections) {
-            const pointA = nodes[connection.userData.pointA].position;
-            const pointB = nodes[connection.userData.pointB].position;
+            const pointA = nodes[connection.userData.pointA];
+            const pointB = nodes[connection.userData.pointB];
             
-            // Only maintain connections if points are close enough
-            if (pointA.distanceTo(pointB) < connectionDistance) {
-              connection.visible = true;
-              connection.geometry.setFromPoints([pointA, pointB]);
-              connection.geometry.attributes.position.needsUpdate = true;
-            } else {
-              connection.visible = false;
+            // Update connection geometry
+            connection.geometry.setFromPoints([pointA.position, pointB.position]);
+            connection.geometry.attributes.position.needsUpdate = true;
+            
+            // Update activation state for connections
+            if (connection.userData.active) {
+              connection.userData.activationTime += 0.05;
+              connection.material = connectionMaterials[2]; // Brightest material
+              
+              // Deactivate after duration
+              if (connection.userData.activationTime >= 1) {
+                connection.userData.active = false;
+                connection.material = connectionMaterials[connection.userData.materialIndex];
+              }
+            }
+            
+            // Connection visibility based on distance
+            connection.visible = pointA.position.distanceTo(pointB.position) < connectionDistance;
+          }
+        },
+        triggerCascade: function() {
+          // Start activation at the top layer (layer 0)
+          const topLayerNodes = nodes.filter(node => node.userData.layer === 0);
+          
+          // Randomly select some top layer nodes to start the cascade
+          const startCount = Math.ceil(topLayerNodes.length * 0.3);
+          for (let i = 0; i < startCount; i++) {
+            const index = Math.floor(Math.random() * topLayerNodes.length);
+            const node = topLayerNodes[index];
+            
+            node.userData.active = true;
+            node.userData.activationTime = 0;
+            
+            // Activate connections from this node
+            this.activateConnectionsFrom(node);
+          }
+        },
+        activateConnectionsFrom: function(node) {
+          // Find connections from this node and activate them
+          const nodeIndex = nodes.indexOf(node);
+          
+          for (let connection of connections) {
+            if (connection.userData.pointA === nodeIndex || connection.userData.pointB === nodeIndex) {
+              // Activate this connection
+              connection.userData.active = true;
+              connection.userData.activationTime = 0;
+              
+              // Find the node at the other end
+              const otherNodeIndex = (connection.userData.pointA === nodeIndex) 
+                ? connection.userData.pointB 
+                : connection.userData.pointA;
+              
+              const otherNode = nodes[otherNodeIndex];
+              
+              // If the other node is in a higher layer (higher number), activate it with a delay
+              if (otherNode.userData.layer > node.userData.layer) {
+                setTimeout(() => {
+                  otherNode.userData.active = true;
+                  otherNode.userData.activationTime = 0;
+                  this.activateConnectionsFrom(otherNode);
+                }, 150 * (otherNode.userData.layer - node.userData.layer));
+              }
             }
           }
         },
         updateTheme: function(isDark) {
-          const color = isDark ? primaryColorDark : primaryColorLight;
-          this.materials.nodes.color.set(color);
-          this.materials.nodes.emissive.set(color);
-          this.materials.connections.color.set(color);
+          // No theme changing needed as we're fixed in dark mode
         }
       };
       
@@ -896,8 +1017,8 @@
       // Check for reduced motion preference
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       
-      // Update neural network
-      neuralNetwork.userData.update();
+      // Update neural network with time parameter
+      neuralNetwork.userData.update(performance.now() * 0.001);
       
       if (!prefersReducedMotion) {
         // Smooth rotation with easing
@@ -908,7 +1029,7 @@
         neuralNetwork.rotation.x = currentRotationX;
         
         // Subtle auto-rotation
-        targetRotationY += 0.001;
+        targetRotationY += 0.0005;
       } else {
         // For reduced motion, keep a static position
         neuralNetwork.rotation.y = 0.1;
@@ -944,20 +1065,283 @@
     const toggleIcon = document.querySelector('.toggle-icon');
     const html = document.documentElement;
     
-    // Set initial toggle icon to match dark mode
-    toggleIcon.textContent = '🌙';
+    // Hide the theme toggle button
+    themeToggle.style.display = 'none';
     
-    themeToggle.addEventListener('click', () => {
-      isDarkMode = !isDarkMode;
-      html.classList.toggle('dark-mode');
-      toggleIcon.textContent = isDarkMode ? '🌙' : '☀️';
+    // Always start in dark mode
+    isDarkMode = true;
+    html.classList.add('dark-mode');
+    
+    // Update neural network function to include cascading effect
+    function createNeuralNetwork() {
+      const nodeGroup = new THREE.Group();
       
-      // Update Three.js materials for dark/light mode
-      neuralNetwork.userData.updateTheme(isDarkMode);
+      // Nodes
+      const nodeCount = window.innerWidth < 768 ? 40 : 75; // Reduce node count on mobile
+      const nodes = [];
+      const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16); // Reduced geometry complexity
       
-      // Adjust renderer background
-      renderer.setClearColor(isDarkMode ? 0x121212 : 0xf9f9f9, 0.3);
-    });
+      // Create multiple node materials for cascading effect
+      const nodeMaterials = [
+        new THREE.MeshStandardMaterial({ 
+          color: 0x6d72a8,
+          emissive: 0x6d72a8,
+          emissiveIntensity: 0.3,
+          metalness: 0.8,
+          roughness: 0.2
+        }),
+        new THREE.MeshStandardMaterial({ 
+          color: 0x8a8fd8,
+          emissive: 0x8a8fd8,
+          emissiveIntensity: 0.5,
+          metalness: 0.8,
+          roughness: 0.2
+        }),
+        new THREE.MeshStandardMaterial({ 
+          color: 0xa7acff,
+          emissive: 0xa7acff,
+          emissiveIntensity: 0.7,
+          metalness: 0.8,
+          roughness: 0.2
+        })
+      ];
+
+      // Create nodes in a neural network pattern with layers
+      const layers = 5;
+      const nodesPerLayer = Math.ceil(nodeCount / layers);
+      
+      for (let layer = 0; layer < layers; layer++) {
+        for (let i = 0; i < nodesPerLayer; i++) {
+          if (nodes.length >= nodeCount) break;
+          
+          // Randomly select a material for varied appearance
+          const materialIndex = Math.floor(Math.random() * nodeMaterials.length);
+          const node = new THREE.Mesh(nodeGeometry, nodeMaterials[materialIndex]);
+          
+          // Position nodes in layers with some randomization
+          const radius = 12 + layer * 2;
+          const spread = 6;
+          const angleStep = (Math.PI * 2) / nodesPerLayer;
+          const angle = i * angleStep + (Math.random() * 0.5);
+          
+          node.position.x = Math.cos(angle) * radius + (Math.random() - 0.5) * spread;
+          node.position.y = (layer - layers/2) * 3 + (Math.random() - 0.5) * 2;
+          node.position.z = Math.sin(angle) * radius + (Math.random() - 0.5) * spread;
+          
+          // Store velocity and activation state for animation
+          node.userData = {
+            velocity: new THREE.Vector3(
+              (Math.random() - 0.5) * 0.03,
+              (Math.random() - 0.5) * 0.03,
+              (Math.random() - 0.5) * 0.03
+            ),
+            layer: layer,
+            active: false,
+            activationTime: 0,
+            activationDuration: 1 + Math.random() * 2,
+            originalMaterial: materialIndex
+          };
+          
+          nodes.push(node);
+          nodeGroup.add(node);
+        }
+      }
+
+      // Create connections between layers
+      const connectionMaterials = [
+        new THREE.LineBasicMaterial({ color: 0x6d72a8, transparent: true, opacity: 0.2 }),
+        new THREE.LineBasicMaterial({ color: 0x8a8fd8, transparent: true, opacity: 0.5 }),
+        new THREE.LineBasicMaterial({ color: 0xa7acff, transparent: true, opacity: 0.8 })
+      ];
+      
+      const connections = [];
+      const connectionDistance = 8;
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          // Create more connections between adjacent layers
+          const layerDiff = Math.abs(nodes[i].userData.layer - nodes[j].userData.layer);
+          const maxDist = layerDiff === 1 ? connectionDistance : connectionDistance * 0.6;
+          
+          if (nodes[i].position.distanceTo(nodes[j].position) < maxDist) {
+            const geometry = new THREE.BufferGeometry().setFromPoints([
+              nodes[i].position,
+              nodes[j].position
+            ]);
+            
+            const materialIndex = Math.floor(Math.random() * connectionMaterials.length);
+            const line = new THREE.Line(geometry, connectionMaterials[materialIndex]);
+            line.userData = {
+              pointA: i,
+              pointB: j,
+              active: false,
+              materialIndex: materialIndex,
+              activationTime: 0
+            };
+            
+            connections.push(line);
+            nodeGroup.add(line);
+          }
+        }
+      }
+
+      // Animation function with cascading activation effect
+      let activationTimer = 0;
+      nodeGroup.userData = {
+        nodes: nodes,
+        connections: connections,
+        materials: {
+          nodes: nodeMaterials,
+          connections: connectionMaterials
+        },
+        update: function(time) {
+          // Trigger cascading activation every few seconds
+          activationTimer += 0.01;
+          if (activationTimer > 3) {
+            // Start a new cascade
+            this.triggerCascade();
+            activationTimer = 0;
+          }
+          
+          // Update node positions and activation states
+          for (let node of nodes) {
+            node.position.add(node.userData.velocity);
+            
+            // Bounce at boundaries
+            const bounds = 20;
+            for (let axis of ['x', 'y', 'z']) {
+              if (Math.abs(node.position[axis]) > bounds) {
+                node.userData.velocity[axis] *= -1;
+              }
+            }
+            
+            // Update activation state
+            if (node.userData.active) {
+              node.userData.activationTime += 0.05;
+              
+              // Pulse effect during activation
+              const pulse = Math.sin(node.userData.activationTime * 5) * 0.5 + 1;
+              node.scale.set(pulse, pulse, pulse);
+              
+              // Set to bright material during activation
+              node.material = nodeMaterials[2]; // Brightest material
+              
+              // Deactivate after duration
+              if (node.userData.activationTime >= node.userData.activationDuration) {
+                node.userData.active = false;
+                node.material = nodeMaterials[node.userData.originalMaterial];
+                node.scale.set(1, 1, 1);
+              }
+            }
+          }
+          
+          // Update connection geometries and activation
+          for (let connection of connections) {
+            const pointA = nodes[connection.userData.pointA];
+            const pointB = nodes[connection.userData.pointB];
+            
+            // Update connection geometry
+            connection.geometry.setFromPoints([pointA.position, pointB.position]);
+            connection.geometry.attributes.position.needsUpdate = true;
+            
+            // Update activation state for connections
+            if (connection.userData.active) {
+              connection.userData.activationTime += 0.05;
+              connection.material = connectionMaterials[2]; // Brightest material
+              
+              // Deactivate after duration
+              if (connection.userData.activationTime >= 1) {
+                connection.userData.active = false;
+                connection.material = connectionMaterials[connection.userData.materialIndex];
+              }
+            }
+            
+            // Connection visibility based on distance
+            connection.visible = pointA.position.distanceTo(pointB.position) < connectionDistance;
+          }
+        },
+        triggerCascade: function() {
+          // Start activation at the top layer (layer 0)
+          const topLayerNodes = nodes.filter(node => node.userData.layer === 0);
+          
+          // Randomly select some top layer nodes to start the cascade
+          const startCount = Math.ceil(topLayerNodes.length * 0.3);
+          for (let i = 0; i < startCount; i++) {
+            const index = Math.floor(Math.random() * topLayerNodes.length);
+            const node = topLayerNodes[index];
+            
+            node.userData.active = true;
+            node.userData.activationTime = 0;
+            
+            // Activate connections from this node
+            this.activateConnectionsFrom(node);
+          }
+        },
+        activateConnectionsFrom: function(node) {
+          // Find connections from this node and activate them
+          const nodeIndex = nodes.indexOf(node);
+          
+          for (let connection of connections) {
+            if (connection.userData.pointA === nodeIndex || connection.userData.pointB === nodeIndex) {
+              // Activate this connection
+              connection.userData.active = true;
+              connection.userData.activationTime = 0;
+              
+              // Find the node at the other end
+              const otherNodeIndex = (connection.userData.pointA === nodeIndex) 
+                ? connection.userData.pointB 
+                : connection.userData.pointA;
+              
+              const otherNode = nodes[otherNodeIndex];
+              
+              // If the other node is in a higher layer (higher number), activate it with a delay
+              if (otherNode.userData.layer > node.userData.layer) {
+                setTimeout(() => {
+                  otherNode.userData.active = true;
+                  otherNode.userData.activationTime = 0;
+                  this.activateConnectionsFrom(otherNode);
+                }, 150 * (otherNode.userData.layer - node.userData.layer));
+              }
+            }
+          }
+        },
+        updateTheme: function(isDark) {
+          // No theme changing needed as we're fixed in dark mode
+        }
+      };
+      
+      return nodeGroup;
+    }
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Update neural network with time parameter
+      neuralNetwork.userData.update(performance.now() * 0.001);
+      
+      if (!prefersReducedMotion) {
+        // Smooth rotation with easing
+        currentRotationY += (targetRotationY - currentRotationY) * 0.05;
+        currentRotationX += (targetRotationX - currentRotationX) * 0.05;
+        
+        neuralNetwork.rotation.y = currentRotationY;
+        neuralNetwork.rotation.x = currentRotationX;
+        
+        // Subtle auto-rotation
+        targetRotationY += 0.0005;
+      } else {
+        // For reduced motion, keep a static position
+        neuralNetwork.rotation.y = 0.1;
+        neuralNetwork.rotation.x = 0.1;
+      }
+      
+      // Render scene
+      renderer.render(scene, camera);
+    }
 
     // Calculate RGB from hex for CSS variables
     function hexToRgb(hex) {
