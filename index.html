@@ -4,6 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gil Raitses | Scientific ML + Simulation</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Gil Raitses: Researcher in scientific machine learning, signal structuring, and environmental simulation. Expertise in physics-informed models and computational frameworks." />
+  <meta name="keywords" content="Gil Raitses, scientific machine learning, neural circuit analysis, signal structuring, marine telemetry, environmental simulation, research" />
+  <meta name="author" content="Gil Raitses" />
+  
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:title" content="Gil Raitses | Scientific ML + Simulation" />
+  <meta property="og:description" content="Researcher in scientific machine learning, signal processing, and environmental simulation." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://gilraitses.github.io/" />
+  
+  <!-- Accessibility & Device Compatibility -->
+  <meta name="theme-color" content="#2b2d42" />
+  <meta name="color-scheme" content="light dark" />
+  
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
   <style>
     :root {
@@ -15,6 +31,77 @@
       --header-footer-bg: rgba(43, 45, 66, 0.85);
       --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       --transition-speed: 0.3s;
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition-duration: 0.001s !important;
+        animation-duration: 0.001s !important;
+      }
+      
+      .content:hover {
+        transform: none !important;
+      }
+      
+      .project-card:hover {
+        transform: none !important;
+      }
+      
+      .links a:hover {
+        transform: none !important;
+      }
+      
+      section:hover h2 {
+        transform: none !important;
+      }
+      
+      .projects li:hover, .current li:hover, .research-themes li:hover {
+        transform: none !important;
+      }
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 768px) {
+      body {
+        font-size: 14px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .content {
+        margin: 1rem auto;
+        padding: 1rem;
+      }
+      
+      .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+      }
+      
+      .scroll-indicator {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+      }
+      
+      .project-cards {
+        gap: 10px;
+      }
+      
+      .project-card {
+        flex: 1 1 100%;
+        padding: 12px;
+      }
+      
+      header {
+        padding: 1.5rem 1rem;
+      }
     }
 
     .dark-mode {
@@ -228,6 +315,14 @@
       backdrop-filter: blur(3px);
     }
 
+    /* Style for touch focus on mobile */
+    .project-card.touch-focus {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      background: rgba(var(--primary-color-rgb), 0.1);
+      border-color: var(--primary-color);
+    }
+
     .project-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
@@ -272,63 +367,278 @@
       transform: translateY(-5px);
     }
 
-    .visualization-container {
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      background: rgba(255, 255, 255, 0.05);
+      height: 100%;
+      background-color: var(--bg-color);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .brain-container {
+      position: relative;
+      width: 280px;
+      height: 200px;
+      margin-bottom: 20px;
+    }
+
+    .brain-outline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .neural-circuit {
+      position: absolute;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      filter: blur(5px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .loading-text {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      margin-top: 20px;
+      letter-spacing: 1px;
+    }
+
+    /* Brain model section */
+    .brain-model {
+      margin-top: 2rem;
+    }
+
+    #fly-brain-container {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      background: rgba(0, 0, 0, 0.05);
       border-radius: 8px;
-      padding: 15px;
-      margin-top: 15px;
+      overflow: hidden;
     }
 
-    #signalCanvas {
-      width: 100%;
-      height: 220px;
-      background: rgba(0, 0, 0, 0.03);
-      border-radius: 4px;
-      margin-bottom: 15px;
-    }
-
-    .controls {
+    #model-controls {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      z-index: 10;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
+      gap: 8px;
     }
 
-    .controls button {
+    #model-controls button {
       background: var(--primary-color);
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 6px 12px;
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.3s;
+      font-size: 0.8rem;
     }
 
-    .controls button:hover {
+    #model-controls button:hover {
       background: var(--secondary-color);
       transform: translateY(-2px);
     }
 
-    .signal-info {
-      margin-left: auto;
-      font-size: 0.9rem;
-      background: rgba(var(--primary-color-rgb), 0.1);
-      padding: 8px 12px;
+    .model-info {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 5px 10px;
       border-radius: 4px;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 768px) {
+      #fly-brain-container {
+        height: 250px;
+      }
+      
+      #model-controls {
+        bottom: 10px;
+        left: 10px;
+      }
+      
+      #model-controls button {
+        padding: 5px 10px;
+        font-size: 0.7rem;
+      }
+    }
+
+    /* FlyWire API Integration Styles */
+    .flywire-controls {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+    }
+    
+    .flywire-controls h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: var(--primary-color);
+    }
+    
+    .neuron-selection {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .auth-status, .selection-row, .action-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .status-indicator {
+      font-size: 0.9rem;
+    }
+    
+    .api-button, #fetch-neuron {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+    }
+    
+    .api-button:hover, #fetch-neuron:hover {
+      background: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+    
+    .api-button:disabled, #fetch-neuron:disabled, select:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    select {
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background: white;
+      flex: 1;
+    }
+    
+    .hidden {
       display: none;
+    }
+    
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    /* Neuron info panel styles */
+    #neuron-info-panel {
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 6px;
+      border-left: 3px solid var(--primary-color);
+    }
+    
+    #neuron-info-panel h4 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+      font-size: 1rem;
+    }
+    
+    .info-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .info-row {
+      display: flex;
+      font-size: 0.9rem;
+    }
+    
+    .info-label {
+      font-weight: bold;
+      min-width: 80px;
+    }
+    
+    .info-details {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 4px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .flywire-controls {
+        padding: 10px;
+      }
+      
+      .neuron-selection, .auth-status, .selection-row, .action-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .api-button, #fetch-neuron {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="bg"></canvas>
   
+  <div class="loading-overlay" role="status" aria-label="Loading page content">
+    <div class="brain-container">
+      <canvas id="brainCanvas" width="280" height="200" aria-label="Animated visualization of a Drosophila larva brain" role="img"></canvas>
+    </div>
+    <div class="loading-text" aria-live="polite">Loading neural connections...</div>
+  </div>
+  
   <button class="theme-toggle" aria-label="Toggle dark/light mode">
     <span class="toggle-icon">☀️</span>
   </button>
 
-  <div class="scroll-indicator">
-    <span>↑</span>
+  <div class="scroll-indicator" aria-label="Scroll to top" role="button" tabindex="0">
+    <span aria-hidden="true">↑</span>
   </div>
   
   <header id="top">
@@ -356,15 +666,15 @@
     <section class="projects">
       <h2>Featured Projects</h2>
       <div class="project-cards">
-        <div class="project-card">
+        <div class="project-card" tabindex="0" role="button" aria-label="Whale Behavior Classification project">
           <h3>Whale Behavior Classification</h3>
           <p>Machine learning model that identifies complex behavioral patterns from marine telemetry data, enabling deeper understanding of cetacean activities.</p>
         </div>
-        <div class="project-card">
+        <div class="project-card" tabindex="0" role="button" aria-label="Neural Signal Processing project">
           <h3>Neural Signal Processing</h3>
           <p>Statistical framework for extracting meaningful patterns from noisy neurological data, revealing the underlying structure of sensory processing.</p>
         </div>
-        <div class="project-card">
+        <div class="project-card" tabindex="0" role="button" aria-label="Glacial Flow Simulation project">
           <h3>Glacial Flow Simulation</h3>
           <p>Physics-based model for predicting ice movement patterns using multi-resolution data from remote sensing platforms.</p>
         </div>
@@ -381,14 +691,71 @@
       </ul>
     </section>
 
-    <section class="visualization">
-      <h2>Interactive Data Model</h2>
-      <div class="visualization-container">
-        <canvas id="signalCanvas" width="700" height="220"></canvas>
-        <div class="controls">
-          <button id="generateSignal">Generate New Signal</button>
-          <button id="analyzeSignal">Analyze Pattern</button>
-          <div class="signal-info"></div>
+    <section class="brain-model">
+      <h2>Interactive Neuron Model</h2>
+      <div id="fly-brain-container">
+        <div id="model-controls">
+          <button id="rotate-model">Toggle Rotation</button>
+          <button id="highlight-axon">Highlight Axon</button>
+          <button id="highlight-dendrites">Highlight Dendrites</button>
+          <button id="reset-view">Reset View</button>
+        </div>
+        <div class="model-info">Inspired by FlyWire Drosophila connectome data</div>
+      </div>
+      
+      <!-- FlyWire API Integration UI -->
+      <div class="flywire-controls">
+        <h3>FlyWire Neuron Selector</h3>
+        <div class="neuron-selection">
+          <!-- Step 1: Authentication status -->
+          <div class="auth-status">
+            <span id="auth-indicator" class="status-indicator">⚪ API Not Connected</span>
+            <button id="connect-api" class="api-button">Connect to FlyWire</button>
+          </div>
+          
+          <!-- Step 2: Neuron Selection -->
+          <div class="selection-row">
+            <select id="neuron-type" disabled>
+              <option value="">-- Select Neuron Type --</option>
+              <option value="KC">Kenyon Cell (KC)</option>
+              <option value="MBON">Mushroom Body Output Neuron (MBON)</option>
+              <option value="PN">Projection Neuron (PN)</option>
+              <option value="LN">Local Neuron (LN)</option>
+            </select>
+            
+            <select id="specific-neuron" disabled>
+              <option value="">-- Select Specific Neuron --</option>
+              <!-- This will be populated via API -->
+            </select>
+          </div>
+          
+          <!-- Step 3: Fetch button -->
+          <div class="action-row">
+            <button id="fetch-neuron" disabled>Fetch Neuron Data</button>
+            <span id="loading-indicator" class="hidden">Loading... <span class="spinner"></span></span>
+          </div>
+        </div>
+        
+        <!-- Neuron Information Panel -->
+        <div id="neuron-info-panel" class="hidden">
+          <h4>Neuron Information</h4>
+          <div class="info-content">
+            <div class="info-row">
+              <span class="info-label">Type:</span>
+              <span id="info-type" class="info-value">--</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">ID:</span>
+              <span id="info-id" class="info-value">--</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Region:</span>
+              <span id="info-region" class="info-value">--</span>
+            </div>
+            <div class="info-details" id="info-details">
+              Select a neuron to see details.
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -408,6 +775,261 @@
   </footer>
 
   <script>
+    // Drosophila larva brain visualization
+    const brainCanvas = document.getElementById('brainCanvas');
+    const brainCtx = brainCanvas.getContext('2d');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    
+    // Brain parameters
+    let brainColor = '#2b2d42';
+    const neuronColors = ['#4ea5d9', '#f6ae2d', '#f26419', '#86bbd8'];
+    const neurons = [];
+    const connections = [];
+    let frameCount = 0;
+    
+    // Global variables for brain model components
+    let brainScene, brainCamera, brainRenderer, neuronModel;
+    
+    // Brain outline points (simplified Drosophila larva brain shape)
+    const brainOutline = [
+      {x: 140, y: 30},  // Top center
+      {x: 200, y: 50},  // Top right
+      {x: 240, y: 100}, // Right
+      {x: 210, y: 160}, // Bottom right
+      {x: 140, y: 180}, // Bottom center
+      {x: 70, y: 160},  // Bottom left
+      {x: 40, y: 100},  // Left
+      {x: 80, y: 50}    // Top left
+    ];
+    
+    // Create neurons at random positions within the brain
+    function createNeurons() {
+      // Define key regions in larva brain
+      const regions = [
+        {name: 'Olfactory', x: 80, y: 70, radius: 25, color: neuronColors[0]},
+        {name: 'Visual', x: 200, y: 70, radius: 25, color: neuronColors[1]},
+        {name: 'Motor', x: 140, y: 150, radius: 30, color: neuronColors[2]},
+        {name: 'Central', x: 140, y: 100, radius: 40, color: neuronColors[3]}
+      ];
+      
+      // Create neurons in each region
+      regions.forEach(region => {
+        const neuronCount = 8 + Math.floor(Math.random() * 5);
+        
+        for (let i = 0; i < neuronCount; i++) {
+          // Random position within region
+          const angle = Math.random() * Math.PI * 2;
+          const distance = Math.random() * region.radius;
+          const x = region.x + Math.cos(angle) * distance;
+          const y = region.y + Math.sin(angle) * distance;
+          
+          // Random size
+          const size = 2 + Math.random() * 4;
+          
+          neurons.push({
+            x,
+            y,
+            size,
+            color: region.color,
+            region: region.name,
+            pulseSpeed: 0.5 + Math.random() * 1.5,
+            pulseOffset: Math.random() * Math.PI * 2,
+            active: false,
+            activationTime: 0
+          });
+        }
+      });
+      
+      // Create connections between neurons
+      for (let i = 0; i < neurons.length; i++) {
+        const neuronA = neurons[i];
+        
+        // Connect to 1-3 other neurons
+        const connectionCount = 1 + Math.floor(Math.random() * 3);
+        
+        for (let c = 0; c < connectionCount; c++) {
+          // Pick another random neuron
+          const j = Math.floor(Math.random() * neurons.length);
+          
+          if (i !== j) {
+            const neuronB = neurons[j];
+            
+            connections.push({
+              sourceIndex: i,
+              targetIndex: j,
+              active: false,
+              progress: 0,
+              speed: 0.01 + Math.random() * 0.03,
+              thickness: 0.5 + Math.random() * 1.5,
+              activationDelay: Math.random() * 1000 // ms
+            });
+          }
+        }
+      }
+    }
+    
+    // Draw the brain outline
+    function drawBrainOutline() {
+      brainCtx.beginPath();
+      brainCtx.moveTo(brainOutline[0].x, brainOutline[0].y);
+      
+      for (let i = 1; i < brainOutline.length; i++) {
+        brainCtx.lineTo(brainOutline[i].x, brainOutline[i].y);
+      }
+      
+      brainCtx.closePath();
+      brainCtx.fillStyle = 'rgba(43, 45, 66, 0.1)';
+      brainCtx.fill();
+      
+      brainCtx.lineWidth = 2;
+      brainCtx.strokeStyle = brainColor;
+      brainCtx.stroke();
+    }
+    
+    // Draw neurons and connections
+    function drawNeurons() {
+      // Draw connections first (behind neurons)
+      connections.forEach(connection => {
+        const source = neurons[connection.sourceIndex];
+        const target = neurons[connection.targetIndex];
+        
+        brainCtx.beginPath();
+        brainCtx.moveTo(source.x, source.y);
+        brainCtx.lineTo(target.x, target.y);
+        
+        if (connection.active) {
+          // Draw active connection with animated progress
+          const dx = target.x - source.x;
+          const dy = target.y - source.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          const progressPoint = {
+            x: source.x + dx * connection.progress,
+            y: source.y + dy * connection.progress
+          };
+          
+          const gradient = brainCtx.createLinearGradient(source.x, source.y, target.x, target.y);
+          gradient.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
+          gradient.addColorStop(connection.progress, 'rgba(255, 255, 255, 0.8)');
+          gradient.addColorStop(Math.min(1, connection.progress + 0.1), 'rgba(255, 255, 255, 0.1)');
+          gradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
+          
+          brainCtx.strokeStyle = gradient;
+          brainCtx.lineWidth = connection.thickness + 1;
+          
+          // Update progress
+          connection.progress += connection.speed;
+          if (connection.progress >= 1) {
+            connection.progress = 0;
+            
+            // Activate the target neuron
+            neurons[connection.targetIndex].active = true;
+            neurons[connection.targetIndex].activationTime = frameCount;
+          }
+        } else {
+          // Inactive connection style
+          brainCtx.strokeStyle = 'rgba(100, 100, 100, 0.1)';
+          brainCtx.lineWidth = connection.thickness;
+        }
+        
+        brainCtx.stroke();
+      });
+      
+      // Draw neurons
+      neurons.forEach((neuron, index) => {
+        // Base neuron style
+        brainCtx.beginPath();
+        brainCtx.arc(neuron.x, neuron.y, neuron.size, 0, Math.PI * 2);
+        
+        if (neuron.active) {
+          // Active neuron style with pulsing effect
+          const timeSinceActivation = frameCount - neuron.activationTime;
+          const pulseSize = neuron.size * (1 + 0.5 * Math.sin(timeSinceActivation * 0.1));
+          
+          brainCtx.arc(neuron.x, neuron.y, pulseSize, 0, Math.PI * 2);
+          
+          // Draw glow
+          const glow = brainCtx.createRadialGradient(
+            neuron.x, neuron.y, neuron.size * 0.5,
+            neuron.x, neuron.y, neuron.size * 3
+          );
+          glow.addColorStop(0, neuron.color);
+          glow.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          
+          brainCtx.fillStyle = neuron.color;
+          brainCtx.shadowColor = neuron.color;
+          brainCtx.shadowBlur = 15;
+        } else {
+          // Inactive neuron style
+          brainCtx.fillStyle = 'rgba(100, 100, 100, 0.5)';
+          brainCtx.shadowBlur = 0;
+        }
+        
+        brainCtx.fill();
+        brainCtx.shadowBlur = 0; // Reset shadow
+      });
+    }
+    
+    // Animation loop for brain visualization
+    function animateBrain() {
+      brainCtx.clearRect(0, 0, brainCanvas.width, brainCanvas.height);
+      
+      // Draw brain components
+      drawBrainOutline();
+      drawNeurons();
+      
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Activate random neurons and connections over time (with reduced animation if needed)
+      if (!prefersReducedMotion && frameCount % 30 === 0) {
+        // Activate a random neuron if none are active yet
+        if (frameCount < 60 && !neurons.some(n => n.active)) {
+          const randomNeuron = Math.floor(Math.random() * neurons.length);
+          neurons[randomNeuron].active = true;
+          neurons[randomNeuron].activationTime = frameCount;
+        }
+        
+        // Activate random connections
+        const randomConnection = Math.floor(Math.random() * connections.length);
+        
+        if (!connections[randomConnection].active && neurons[connections[randomConnection].sourceIndex].active) {
+          connections[randomConnection].active = true;
+          connections[randomConnection].progress = 0;
+        }
+      } else if (prefersReducedMotion && frameCount < 60) {
+        // For reduced motion, just activate all neurons more quickly without animation
+        const activationBatch = 5;
+        for (let i = 0; i < activationBatch; i++) {
+          const index = (frameCount * activationBatch + i) % neurons.length;
+          if (index < neurons.length) {
+            neurons[index].active = true;
+          }
+        }
+      }
+      
+      frameCount++;
+      
+      // Handle loading completion (faster for reduced motion)
+      const loadingTime = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 60 : 180;
+      if (frameCount > loadingTime) {
+        // Start hiding the overlay if Three.js is ready
+        if (window.threeJsReady) {
+          loadingOverlay.classList.add('hidden');
+          // Stop animation when hidden
+          if (loadingOverlay.classList.contains('hidden')) {
+            return;
+          }
+        }
+      }
+      
+      requestAnimationFrame(animateBrain);
+    }
+    
+    // Initialize brain visualization
+    createNeurons();
+    animateBrain();
+
     // Three.js setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -416,20 +1038,34 @@
       antialias: true
     });
 
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.position.z = 30;
+    // Flag to track Three.js ready state
+    window.threeJsReady = false;
 
     // Dark/Light mode variables
     let isDarkMode = false;
     const primaryColorDark = 0x6d72a8;
     const primaryColorLight = 0x2b2d42;
 
-    // Responsive handler
+    // Responsive handler with performance optimization
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
+      
+      // Set renderer size with lower pixel ratio on mobile
+      const pixelRatio = window.innerWidth < 768 ? 
+        Math.min(1.5, window.devicePixelRatio) : 
+        window.devicePixelRatio;
+      
+      renderer.setPixelRatio(pixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
+      
+      // Adjust node count for performance on resize
+      if (window.innerWidth < 768 && neuralNetwork.userData.nodes.length > 40) {
+        // Rebuild network with fewer nodes
+        scene.remove(neuralNetwork);
+        neuralNetwork = createNeuralNetwork();
+        scene.add(neuralNetwork);
+      }
     });
 
     // Create a neural network-like structure
@@ -437,9 +1073,9 @@
       const nodeGroup = new THREE.Group();
       
       // Nodes
-      const nodeCount = 75;
+      const nodeCount = window.innerWidth < 768 ? 40 : 75; // Reduce node count on mobile
       const nodes = [];
-      const nodeGeometry = new THREE.SphereGeometry(0.25, 24, 24);
+      const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16); // Reduced geometry complexity
       const nodeMaterial = new THREE.MeshStandardMaterial({ 
         color: primaryColorLight,
         emissive: primaryColorLight,
@@ -575,18 +1211,27 @@
     function animate() {
       requestAnimationFrame(animate);
       
+      // Check for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
       // Update neural network
       neuralNetwork.userData.update();
       
-      // Smooth rotation with easing
-      currentRotationY += (targetRotationY - currentRotationY) * 0.05;
-      currentRotationX += (targetRotationX - currentRotationX) * 0.05;
-      
-      neuralNetwork.rotation.y = currentRotationY;
-      neuralNetwork.rotation.x = currentRotationX;
-      
-      // Subtle auto-rotation
-      targetRotationY += 0.001;
+      if (!prefersReducedMotion) {
+        // Smooth rotation with easing
+        currentRotationY += (targetRotationY - currentRotationY) * 0.05;
+        currentRotationX += (targetRotationX - currentRotationX) * 0.05;
+        
+        neuralNetwork.rotation.y = currentRotationY;
+        neuralNetwork.rotation.x = currentRotationX;
+        
+        // Subtle auto-rotation
+        targetRotationY += 0.001;
+      } else {
+        // For reduced motion, keep a static position
+        neuralNetwork.rotation.y = 0.1;
+        neuralNetwork.rotation.x = 0.1;
+      }
       
       // Render scene
       renderer.render(scene, camera);
@@ -594,8 +1239,11 @@
 
     animate();
 
-    // Interactive camera position on mouse move
+    // Interactive camera position on mouse move - with reduced motion check
     document.addEventListener('mousemove', (event) => {
+      // Skip camera movement if reduced motion is preferred
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      
       const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       const mouseY = (event.clientY / window.innerHeight) * 2 - 1;
       
@@ -624,6 +1272,13 @@
       
       // Adjust renderer background
       renderer.setClearColor(isDarkMode ? 0x121212 : 0xf9f9f9, 0.3);
+      
+      // Update brain visualization colors
+      brainColor = isDarkMode ? '#6d72a8' : '#2b2d42';
+      neuronColors[0] = isDarkMode ? '#5fb8ec' : '#4ea5d9';
+      neuronColors[1] = isDarkMode ? '#f7b943' : '#f6ae2d';
+      neuronColors[2] = isDarkMode ? '#f37a3c' : '#f26419';
+      neuronColors[3] = isDarkMode ? '#99cde9' : '#86bbd8';
     });
 
     // Calculate RGB from hex for CSS variables
@@ -671,215 +1326,942 @@
       });
     });
 
-    // Interactive Signal Visualization
-    const signalCanvas = document.getElementById('signalCanvas');
-    const ctx = signalCanvas.getContext('2d');
-    const generateBtn = document.getElementById('generateSignal');
-    const analyzeBtn = document.getElementById('analyzeSignal');
-    const signalInfo = document.querySelector('.signal-info');
+    // Mark Three.js as ready when the scene is loaded
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.position.z = 30;
 
-    // Signal parameters
-    let signalData = [];
-    let noiseLevel = 0.2;
-    let patternType = 'sine';
-    let signalAnalyzed = false;
+    // After Three.js initialization is complete
+    setTimeout(() => {
+      window.threeJsReady = true;
+    }, 2000); // Give it 2 seconds to initialize
 
-    // Generate initial signal
-    generateSignal();
-
-    // Event listeners
-    generateBtn.addEventListener('click', () => {
-      signalAnalyzed = false;
-      signalInfo.style.display = 'none';
+    // Add touch interaction for project cards
+    const addTouchInteraction = () => {
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
       
-      // Randomly select a pattern type
-      const patterns = ['sine', 'square', 'sawtooth', 'noise', 'combined'];
-      patternType = patterns[Math.floor(Math.random() * patterns.length)];
-      
-      // Random noise level
-      noiseLevel = Math.random() * 0.3 + 0.1;
-      
-      generateSignal();
-    });
-
-    analyzeBtn.addEventListener('click', () => {
-      analyzeSignal();
-    });
-
-    function generateSignal() {
-      signalData = [];
-      const width = signalCanvas.width;
-      
-      // Generate base signal based on pattern type
-      for (let i = 0; i < width; i++) {
-        const x = i / width * 10; // 0 to 10 range
-        let y = 0;
-        
-        switch (patternType) {
-          case 'sine':
-            y = Math.sin(x * 2) * 0.5 + Math.sin(x * 4) * 0.3;
-            break;
-          case 'square':
-            y = Math.sign(Math.sin(x * 1.5)) * 0.6;
-            break;
-          case 'sawtooth':
-            y = ((x * 1.5) % 2) - 1;
-            break;
-          case 'noise':
-            y = (Math.random() * 2 - 1) * 0.8;
-            break;
-          case 'combined':
-            y = Math.sin(x * 2) * 0.3 + Math.sign(Math.sin(x * 0.5)) * 0.3;
-            break;
-        }
-        
-        // Add noise
-        y += (Math.random() * 2 - 1) * noiseLevel;
-        
-        signalData.push(y);
+      if (isTouchDevice) {
+        projectCards.forEach(card => {
+          card.addEventListener('touchstart', () => {
+            // Clear any existing selected state
+            projectCards.forEach(c => c.classList.remove('touch-focus'));
+            
+            // Add selected state to current card
+            card.classList.add('touch-focus');
+            
+            // Get card position for camera focus
+            const cardRect = card.getBoundingClientRect();
+            const cardCenterX = cardRect.left + cardRect.width / 2;
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            
+            // Adjust camera focus for this card
+            targetRotationY = ((cardCenterX / window.innerWidth) * 2 - 1) * 0.3;
+            targetRotationX = -((cardCenterY / window.innerHeight) * 2 - 1) * 0.3;
+          });
+        });
       }
-      
-      drawSignal();
-    }
+    };
+    
+    // Call this after project cards are initialized
+    addTouchInteraction();
 
-    function drawSignal() {
-      const width = signalCanvas.width;
-      const height = signalCanvas.height;
+    // FlyWire-inspired 3D neuron model
+    function createFlyBrainModel() {
+      // Create a separate scene for the neuron model
+      const brainModelContainer = document.getElementById('fly-brain-container');
+      brainScene = new THREE.Scene();
       
-      // Clear canvas
-      ctx.clearRect(0, 0, width, height);
+      // Camera
+      brainCamera = new THREE.PerspectiveCamera(
+        75, 
+        brainModelContainer.clientWidth / brainModelContainer.clientHeight, 
+        0.1, 
+        1000
+      );
+      brainCamera.position.z = 40;
       
-      // Draw background grid
-      ctx.strokeStyle = isDarkMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
-      ctx.lineWidth = 1;
+      // Renderer
+      brainRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      brainRenderer.setSize(brainModelContainer.clientWidth, brainModelContainer.clientHeight);
+      brainRenderer.setClearColor(0x000000, 0);
+      brainModelContainer.appendChild(brainRenderer.domElement);
       
-      // Vertical grid lines
-      for (let i = 0; i < width; i += 50) {
-        ctx.beginPath();
-        ctx.moveTo(i, 0);
-        ctx.lineTo(i, height);
-        ctx.stroke();
-      }
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+      brainScene.add(ambientLight);
       
-      // Horizontal grid lines
-      for (let i = 0; i < height; i += 40) {
-        ctx.beginPath();
-        ctx.moveTo(0, i);
-        ctx.lineTo(width, i);
-        ctx.stroke();
-      }
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      directionalLight.position.set(0, 10, 10);
+      brainScene.add(directionalLight);
       
-      // Draw signal
-      ctx.strokeStyle = isDarkMode ? '#6d72a8' : '#2b2d42';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
+      const pointLight = new THREE.PointLight(0x88ccff, 1, 50);
+      pointLight.position.set(0, 0, 25);
+      brainScene.add(pointLight);
       
-      for (let i = 0; i < signalData.length; i++) {
-        const x = i;
-        const y = (signalData[i] + 1) * height / 2; // Convert -1,1 to 0,height
+      // Neuron model groups
+      neuronModel = new THREE.Group();
+      const soma = new THREE.Group(); // Cell body
+      const axon = new THREE.Group();
+      const dendrites = new THREE.Group();
+      
+      // Materials
+      const somaMaterial = new THREE.MeshPhongMaterial({
+        color: 0x4ea5d9,
+        shininess: 80,
+        transparent: true,
+        opacity: 0.9
+      });
+      
+      const axonMaterial = new THREE.MeshPhongMaterial({
+        color: 0xf26419,
+        shininess: 70,
+        transparent: true,
+        opacity: 0.8
+      });
+      
+      const dendriteMaterial = new THREE.MeshPhongMaterial({
+        color: 0x86bbd8,
+        shininess: 60,
+        transparent: true,
+        opacity: 0.7
+      });
+      
+      // Create soma (cell body)
+      const somaGeometry = new THREE.SphereGeometry(5, 32, 32);
+      const somaMesh = new THREE.Mesh(somaGeometry, somaMaterial);
+      soma.add(somaMesh);
+      
+      // Helper function to create a branch segment
+      function createBranchSegment(startPoint, endPoint, thickness, material, segmentCount = 8) {
+        const direction = new THREE.Vector3().subVectors(endPoint, startPoint);
+        const length = direction.length();
+        direction.normalize();
         
-        if (i === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      }
-      
-      ctx.stroke();
-      
-      // Draw points if analyzed
-      if (signalAnalyzed) {
-        // Draw feature points
-        ctx.fillStyle = '#4ea5d9';
+        const branch = new THREE.Group();
         
-        // Find peaks and valleys
-        const peaks = findPeaksAndValleys(signalData, 10);
-        
-        for (const point of peaks) {
-          const x = point.index;
-          const y = (signalData[x] + 1) * height / 2;
+        // Create a curve along the branch with some natural variation
+        const points = [];
+        for (let i = 0; i <= segmentCount; i++) {
+          const t = i / segmentCount;
+          const segmentPoint = new THREE.Vector3().copy(startPoint).lerp(endPoint, t);
           
-          ctx.beginPath();
-          ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.fill();
+          // Add some natural waviness
+          if (i > 0 && i < segmentCount) {
+            segmentPoint.x += Math.sin(t * Math.PI * 2) * thickness * 0.3;
+            segmentPoint.y += Math.cos(t * Math.PI * 3) * thickness * 0.2;
+            segmentPoint.z += Math.sin(t * Math.PI * 2.5) * thickness * 0.3;
+          }
+          
+          points.push(segmentPoint);
         }
-      }
-    }
-
-    function analyzeSignal() {
-      signalAnalyzed = true;
-      drawSignal();
-      
-      // Calculate signal features
-      const peaks = findPeaksAndValleys(signalData, 10);
-      const frequency = peaks.length / (signalCanvas.width / 100);
-      const amplitude = calculateAmplitude(signalData);
-      const noise = calculateNoiseLevel(signalData);
-      
-      // Display signal information
-      signalInfo.style.display = 'block';
-      signalInfo.innerHTML = `
-        <strong>Pattern:</strong> ${patternType.charAt(0).toUpperCase() + patternType.slice(1)}<br>
-        <strong>Frequency:</strong> ${frequency.toFixed(2)} Hz<br>
-        <strong>Amplitude:</strong> ${amplitude.toFixed(2)}<br>
-        <strong>Noise Level:</strong> ${noise.toFixed(2)}
-      `;
-    }
-
-    function findPeaksAndValleys(signal, minDistance) {
-      const peaks = [];
-      const valleys = [];
-      
-      for (let i = 1; i < signal.length - 1; i++) {
-        if (signal[i] > signal[i - 1] && signal[i] > signal[i + 1]) {
-          // Peak
-          peaks.push({ index: i, value: signal[i] });
-        } else if (signal[i] < signal[i - 1] && signal[i] < signal[i + 1]) {
-          // Valley
-          valleys.push({ index: i, value: signal[i] });
-        }
-      }
-      
-      // Filter peaks by minimum distance
-      const filteredPeaks = [];
-      peaks.forEach(peak => {
-        const tooClose = filteredPeaks.some(existingPeak => 
-          Math.abs(existingPeak.index - peak.index) < minDistance
+        
+        const curve = new THREE.CatmullRomCurve3(points);
+        const tubeGeometry = new THREE.TubeGeometry(
+          curve, 
+          segmentCount * 2, 
+          thickness * (1 - 0.3 * Math.random()), // Vary thickness
+          8, 
+          false
         );
         
-        if (!tooClose) {
-          filteredPeaks.push(peak);
+        const tubeMesh = new THREE.Mesh(tubeGeometry, material);
+        branch.add(tubeMesh);
+        
+        return {
+          branch,
+          endpoint: endPoint
+        };
+      }
+      
+      // Create axon (single branching structure)
+      const axonStart = new THREE.Vector3(0, 0, 0);
+      const axonMainEndpoint = new THREE.Vector3(15, -10, 15);
+      
+      const axonMain = createBranchSegment(
+        axonStart, 
+        axonMainEndpoint, 
+        1.5, 
+        axonMaterial,
+        12
+      );
+      
+      axon.add(axonMain.branch);
+      
+      // Add sub-branches to axon
+      const axonBranches = [
+        {
+          start: new THREE.Vector3().copy(axonMainEndpoint).add(new THREE.Vector3(0, 0, 0)),
+          end: new THREE.Vector3().copy(axonMainEndpoint).add(new THREE.Vector3(10, -8, 5)),
+          thickness: 0.8
+        },
+        {
+          start: new THREE.Vector3().copy(axonMainEndpoint).add(new THREE.Vector3(0, 0, 0)),
+          end: new THREE.Vector3().copy(axonMainEndpoint).add(new THREE.Vector3(8, -5, 10)),
+          thickness: 0.7
+        },
+        {
+          start: new THREE.Vector3().copy(axonMainEndpoint).add(new THREE.Vector3(0, 0, 0)),
+          end: new THREE.Vector3().copy(axonMainEndpoint).add(new THREE.Vector3(12, -2, 8)),
+          thickness: 0.9
+        }
+      ];
+      
+      axonBranches.forEach(branchData => {
+        const branch = createBranchSegment(
+          branchData.start,
+          branchData.end,
+          branchData.thickness,
+          axonMaterial
+        );
+        
+        axon.add(branch.branch);
+        
+        // Add terminal branches
+        for (let i = 0; i < 3; i++) {
+          const terminalStart = branchData.end;
+          const terminalEnd = new THREE.Vector3().copy(terminalStart).add(
+            new THREE.Vector3(
+              (Math.random() - 0.5) * 8,
+              (Math.random() - 0.5) * 8,
+              (Math.random() - 0.5) * 8
+            )
+          );
+          
+          const terminalBranch = createBranchSegment(
+            terminalStart,
+            terminalEnd,
+            branchData.thickness * 0.6,
+            axonMaterial,
+            6
+          );
+          
+          axon.add(terminalBranch.branch);
         }
       });
       
-      // Filter valleys by minimum distance
-      const filteredValleys = [];
-      valleys.forEach(valley => {
-        const tooClose = filteredValleys.some(existingValley => 
-          Math.abs(existingValley.index - valley.index) < minDistance
+      // Create dendrites (multiple branching structures)
+      const dendriteCount = 6;
+      const baseAngles = [0, 60, 120, 180, 240, 300];
+      
+      for (let i = 0; i < dendriteCount; i++) {
+        const angle = (baseAngles[i] * Math.PI / 180) + (Math.random() - 0.5) * 0.5;
+        const length = 10 + Math.random() * 5;
+        
+        const dendriteStart = new THREE.Vector3(0, 0, 0);
+        const dendriteEnd = new THREE.Vector3(
+          Math.cos(angle) * length,
+          Math.sin(angle) * length,
+          (Math.random() - 0.5) * 10
         );
         
-        if (!tooClose) {
-          filteredValleys.push(valley);
+        const dendrite = createBranchSegment(
+          dendriteStart,
+          dendriteEnd,
+          1.2,
+          dendriteMaterial,
+          8
+        );
+        
+        dendrites.add(dendrite.branch);
+        
+        // Add smaller branches to dendrites
+        const branchCount = 2 + Math.floor(Math.random() * 3);
+        
+        for (let j = 0; j < branchCount; j++) {
+          const branchStart = new THREE.Vector3().copy(dendriteStart).lerp(
+            dendriteEnd,
+            0.3 + Math.random() * 0.6
+          );
+          
+          const branchEnd = new THREE.Vector3().copy(branchStart).add(
+            new THREE.Vector3(
+              (Math.random() - 0.5) * 8,
+              (Math.random() - 0.5) * 8,
+              (Math.random() - 0.5) * 8
+            )
+          );
+          
+          const branch = createBranchSegment(
+            branchStart,
+            branchEnd,
+            0.7,
+            dendriteMaterial,
+            6
+          );
+          
+          dendrites.add(branch.branch);
+        }
+      }
+      
+      // Add all components to the neuron model
+      neuronModel.add(soma);
+      neuronModel.add(axon);
+      neuronModel.add(dendrites);
+      
+      // Center the model
+      neuronModel.position.set(0, 0, 0);
+      brainScene.add(neuronModel);
+      
+      // Controls
+      let isRotating = true;
+      let rotationSpeed = 0.005;
+      
+      // UI controls
+      const rotateButton = document.getElementById('rotate-model');
+      const highlightAxonButton = document.getElementById('highlight-axon');
+      const highlightDendritesButton = document.getElementById('highlight-dendrites');
+      const resetViewButton = document.getElementById('reset-view');
+      
+      rotateButton.addEventListener('click', () => {
+        isRotating = !isRotating;
+        rotateButton.textContent = isRotating ? 'Stop Rotation' : 'Start Rotation';
+      });
+      
+      highlightAxonButton.addEventListener('click', () => {
+        // Reset all materials
+        somaMaterial.emissive.set(0x000000);
+        axonMaterial.emissive.set(0x000000);
+        dendriteMaterial.emissive.set(0x000000);
+        
+        // Highlight axon
+        axonMaterial.emissive.set(0x331100);
+      });
+      
+      highlightDendritesButton.addEventListener('click', () => {
+        // Reset all materials
+        somaMaterial.emissive.set(0x000000);
+        axonMaterial.emissive.set(0x000000);
+        dendriteMaterial.emissive.set(0x000000);
+        
+        // Highlight dendrites
+        dendriteMaterial.emissive.set(0x002244);
+      });
+      
+      resetViewButton.addEventListener('click', () => {
+        neuronModel.rotation.set(0, 0, 0);
+        brainCamera.position.set(0, 0, 40);
+        brainCamera.lookAt(0, 0, 0);
+        
+        // Reset materials
+        somaMaterial.emissive.set(0x000000);
+        axonMaterial.emissive.set(0x000000);
+        dendriteMaterial.emissive.set(0x000000);
+      });
+      
+      // Mouse interaction for rotating model with drag
+      let isDragging = false;
+      let previousMousePosition = {
+        x: 0,
+        y: 0
+      };
+      
+      brainRenderer.domElement.addEventListener('mousedown', (e) => {
+        isDragging = true;
+      });
+      
+      brainRenderer.domElement.addEventListener('mousemove', (e) => {
+        const deltaMove = {
+          x: e.offsetX - previousMousePosition.x,
+          y: e.offsetY - previousMousePosition.y
+        };
+        
+        if (isDragging) {
+          neuronModel.rotation.y += deltaMove.x * 0.01;
+          neuronModel.rotation.x += deltaMove.y * 0.01;
+        }
+        
+        previousMousePosition = {
+          x: e.offsetX,
+          y: e.offsetY
+        };
+      });
+      
+      brainRenderer.domElement.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+      
+      // Touch interaction for mobile
+      brainRenderer.domElement.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        previousMousePosition = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY
+        };
+      });
+      
+      brainRenderer.domElement.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const deltaMove = {
+          x: e.touches[0].clientX - previousMousePosition.x,
+          y: e.touches[0].clientY - previousMousePosition.y
+        };
+        
+        neuronModel.rotation.y += deltaMove.x * 0.01;
+        neuronModel.rotation.x += deltaMove.y * 0.01;
+        
+        previousMousePosition = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY
+        };
+      });
+      
+      brainRenderer.domElement.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+      
+      // Animation loop
+      function animateBrainModel() {
+        requestAnimationFrame(animateBrainModel);
+        
+        // Auto-rotation if enabled
+        if (isRotating && !isDragging) {
+          neuronModel.rotation.y += rotationSpeed;
+        }
+        
+        brainRenderer.render(brainScene, brainCamera);
+      }
+      
+      // Resize handler
+      function handleResize() {
+        const width = brainModelContainer.clientWidth;
+        const height = brainModelContainer.clientHeight;
+        
+        brainCamera.aspect = width / height;
+        brainCamera.updateProjectionMatrix();
+        brainRenderer.setSize(width, height);
+      }
+      
+      window.addEventListener('resize', handleResize);
+      
+      // Start animation
+      animateBrainModel();
+      
+      return {
+        scene: brainScene,
+        camera: brainCamera,
+        renderer: brainRenderer,
+        neuronModel: neuronModel,
+        materials: {
+          soma: somaMaterial,
+          axon: axonMaterial,
+          dendrites: dendriteMaterial
+        }
+      };
+    }
+    
+    // Initialize the 3D neuron model after page load
+    window.addEventListener('load', () => {
+      createFlyBrainModel();
+      setupFlyWireIntegration();
+    });
+
+    // FlyWire API Integration
+    function setupFlyWireIntegration() {
+      // DOM Elements
+      const connectButton = document.getElementById('connect-api');
+      const authIndicator = document.getElementById('auth-indicator');
+      const neuronTypeSelect = document.getElementById('neuron-type');
+      const specificNeuronSelect = document.getElementById('specific-neuron');
+      const fetchNeuronButton = document.getElementById('fetch-neuron');
+      const loadingIndicator = document.getElementById('loading-indicator');
+      const neuronInfoPanel = document.getElementById('neuron-info-panel');
+      const infoType = document.getElementById('info-type');
+      const infoId = document.getElementById('info-id');
+      const infoRegion = document.getElementById('info-region');
+      const infoDetails = document.getElementById('info-details');
+      
+      // Sample neuron IDs by type (would be fetched from API in production)
+      const sampleNeurons = {
+        'KC': [
+          { id: 'KC-alpha-1', name: 'KC-α (#720575940627245057)', region: 'Mushroom Body - Calyx', details: 'Kenyon cells (KCs) are the intrinsic neurons of the mushroom body. KC-α neurons have dendrites in the calyx and axonal projections to the α lobe. They are involved in olfactory associative learning and memory.' },
+          { id: 'KC-alpha-2', name: 'KC-α (#720575940616933647)', region: 'Mushroom Body - Calyx', details: 'This KC-α neuron receives input from projection neurons (PNs) in the calyx and sends outputs to the α lobe. It participates in olfactory processing pathways.' },
+          { id: 'KC-beta-1', name: 'KC-β (#720575940623623997)', region: 'Mushroom Body - Calyx', details: 'KC-β neurons have dendrites in the calyx and axonal projections to the β lobe. They form part of the parallel fibers system involved in memory encoding and retrieval.' }
+        ],
+        'MBON': [
+          { id: 'MBON-1', name: 'MBON-α2sc (#720575940629610374)', region: 'Mushroom Body - α Lobe', details: 'Mushroom body output neurons (MBONs) carry information from the mushroom body to other brain regions. MBON-α2sc receives input from KCs in the α2 compartment and projects to the superior clamp, influencing approach behaviors.' },
+          { id: 'MBON-2', name: 'MBON-α′3 (#720575940625156711)', region: 'Mushroom Body - α′ Lobe', details: 'MBON-α′3 has dendrites in the α′3 compartment and sends axons to the lateral horn and superior lateral protocerebrum. It may be involved in certain forms of memory consolidation.' },
+          { id: 'MBON-3', name: 'MBON-γ1pedc (#720575940627704657)', region: 'Mushroom Body - γ Lobe', details: 'This MBON receives input from KCs in the γ1 compartment and peduncle. It has been implicated in short-term memory and experience-dependent behavioral plasticity.' }
+        ],
+        'PN': [
+          { id: 'PN-1', name: 'PN-DM1 (#720575940628395957)', region: 'Antennal Lobe - DM1 Glomerulus', details: 'Projection neurons (PNs) carry olfactory information from the antennal lobe to higher brain centers. PN-DM1 receives input from olfactory receptor neurons targeting the DM1 glomerulus and responds to food-related odors.' },
+          { id: 'PN-2', name: 'PN-VA1d (#720575940629414031)', region: 'Antennal Lobe - VA1d Glomerulus', details: 'PN-VA1d neurons are activated by pheromone-responsive olfactory receptor neurons and project to the lateral horn and mushroom body calyx. They play a role in social behaviors.' },
+          { id: 'PN-3', name: 'PN-VC3 (#720575940627574123)', region: 'Antennal Lobe - VC3 Glomerulus', details: 'This PN processes information from the VC3 glomerulus and projects to higher brain centers. It may be involved in processing specific environmental odors relevant to fruit fly ecology.' }
+        ],
+        'LN': [
+          { id: 'LN-1', name: 'LN-local1 (#720575940622198473)', region: 'Antennal Lobe', details: 'Local neurons (LNs) in the antennal lobe provide lateral inhibition and gain control. This local LN has processes restricted to a small subset of glomeruli and may facilitate contrast enhancement between similar odors.' },
+          { id: 'LN-2', name: 'LN-broad1 (#720575940622947151)', region: 'Antennal Lobe', details: 'This broad LN innervates most glomeruli in the antennal lobe and uses GABA as a neurotransmitter. It provides global inhibition across the olfactory system, improving odor discrimination.' },
+          { id: 'LN-3', name: 'LN-patchy1 (#720575940625891954)', region: 'Antennal Lobe', details: 'Patchy LNs have selective innervation patterns across multiple glomeruli. This neuron may participate in specific odor processing circuits through both excitatory and inhibitory mechanisms.' }
+        ]
+      };
+      
+      // Neuron type descriptions
+      const neuronTypeInfo = {
+        'KC': 'Kenyon Cells (KCs) are the intrinsic neurons of the mushroom body, a structure involved in learning and memory. They receive input from projection neurons and form the parallel fiber system characteristic of the insect mushroom body.',
+        'MBON': 'Mushroom Body Output Neurons (MBONs) transmit information processed by the mushroom body to other brain regions. Different MBONs encode distinct valences and influence approach or avoidance behaviors.',
+        'PN': 'Projection Neurons (PNs) relay olfactory information from the antennal lobe to higher brain centers such as the mushroom body and lateral horn. They are the second-order neurons in the olfactory pathway.',
+        'LN': 'Local Neurons (LNs) in the antennal lobe provide lateral inhibition and modulate the activity of projection neurons. They help enhance contrast between similar odor representations.'
+      };
+      
+      // Connect to API Button Click Handler
+      connectButton.addEventListener('click', async () => {
+        // In a real implementation, we would redirect to OAuth flow
+        // For demo purposes, we'll simulate a successful authentication
+        
+        loadingIndicator.classList.remove('hidden');
+        connectButton.disabled = true;
+        
+        // Simulate API connection delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Update UI to show connected state
+        authIndicator.innerHTML = '🟢 Connected to FlyWire API';
+        neuronTypeSelect.disabled = false;
+        connectButton.textContent = 'Reconnect';
+        connectButton.disabled = false;
+        loadingIndicator.classList.add('hidden');
+        
+        // Log a message about the simulated connection
+        console.log('FlyWire API connection simulated for demo purposes.');
+        console.log('In production, this would implement proper OAuth authentication.');
+      });
+      
+      // Neuron Type Selection Change Handler
+      neuronTypeSelect.addEventListener('change', () => {
+        const selectedType = neuronTypeSelect.value;
+        
+        // Clear the specific neuron dropdown
+        specificNeuronSelect.innerHTML = '<option value="">-- Select Specific Neuron --</option>';
+        
+        if (selectedType) {
+          // Populate with neurons of the selected type
+          sampleNeurons[selectedType].forEach(neuron => {
+            const option = document.createElement('option');
+            option.value = neuron.id;
+            option.textContent = neuron.name;
+            option.dataset.region = neuron.region;
+            option.dataset.details = neuron.details;
+            specificNeuronSelect.appendChild(option);
+          });
+          
+          // Enable the specific neuron dropdown
+          specificNeuronSelect.disabled = false;
+          
+          // Update type info in the panel
+          infoType.textContent = selectedType;
+          infoDetails.textContent = neuronTypeInfo[selectedType];
+          neuronInfoPanel.classList.remove('hidden');
+        } else {
+          specificNeuronSelect.disabled = true;
+          neuronInfoPanel.classList.add('hidden');
+        }
+        
+        // Disable fetch button until a specific neuron is selected
+        fetchNeuronButton.disabled = true;
+      });
+      
+      // Specific Neuron Selection Change Handler
+      specificNeuronSelect.addEventListener('change', () => {
+        const selectedOption = specificNeuronSelect.selectedOptions[0];
+        
+        // Enable fetch button if a specific neuron is selected
+        fetchNeuronButton.disabled = specificNeuronSelect.value === '';
+        
+        if (selectedOption && selectedOption.value) {
+          // Update neuron info panel
+          infoId.textContent = selectedOption.value;
+          infoRegion.textContent = selectedOption.dataset.region || '--';
+          infoDetails.textContent = selectedOption.dataset.details || 'No detailed information available.';
+          neuronInfoPanel.classList.remove('hidden');
         }
       });
       
-      // Combine peaks and valleys
-      return [...filteredPeaks, ...filteredValleys].sort((a, b) => a.index - b.index);
+      // Fetch Neuron Button Click Handler
+      fetchNeuronButton.addEventListener('click', async () => {
+        const neuronType = neuronTypeSelect.value;
+        const neuronId = specificNeuronSelect.value;
+        
+        if (!neuronId) return;
+        
+        // Show loading indicator
+        loadingIndicator.classList.remove('hidden');
+        fetchNeuronButton.disabled = true;
+        
+        try {
+          // In a real implementation, this would fetch SWC data from the FlyWire API
+          // For demo purposes, we'll simulate the API call and generate a model
+          
+          // Simulate network delay
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          // Load the neuron data into the 3D viewer
+          loadNeuronModel(neuronType, neuronId);
+          
+          console.log(`Simulated fetching neuron data for ${neuronId}.`);
+          console.log('In production, this would make a real API call to FlyWire.');
+        } catch (error) {
+          console.error('Error fetching neuron data:', error);
+          alert('Error fetching neuron data. Please try again.');
+        } finally {
+          // Hide loading indicator
+          loadingIndicator.classList.add('hidden');
+          fetchNeuronButton.disabled = false;
+        }
+      });
+      
+      // Function to load neuron data into the 3D viewer
+      function loadNeuronModel(neuronType, neuronId) {
+        // Get the existing neuron model container
+        const brainModelContainer = document.getElementById('fly-brain-container');
+        
+        // Find details for the selected neuron
+        const selectedNeuron = sampleNeurons[neuronType].find(n => n.id === neuronId);
+        
+        // Update the model info text with the selected neuron
+        const modelInfo = brainModelContainer.querySelector('.model-info');
+        modelInfo.textContent = `FlyWire Neuron: ${selectedNeuron.name}`;
+        modelInfo.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        modelInfo.style.padding = '8px 15px';
+        modelInfo.style.borderRadius = '4px';
+        
+        // Display a congratulatory message for selecting a neuron
+        setTimeout(() => {
+          alert(`Successfully loaded ${selectedNeuron.name} from the FlyWire connectome database.\n\nThis demo simulates the FlyWire API integration. In a production version, this would fetch actual SWC format neuron data and render it accurately.`);
+        }, 500);
+        
+        // In a real implementation, we would:
+        // 1. Parse the SWC data from the API
+        // 2. Convert it to 3D geometries
+        // 3. Replace the current neuron model with the real data
+        
+        // For this demo, we'll modify our existing neuron model to reflect the selected type
+        
+        // Reset the 3D scene
+        const scene = brainScene; // Access the scene from the createFlyBrainModel function
+        
+        // Store camera position to avoid jump
+        const currentCameraPosition = new THREE.Vector3();
+        brainCamera.getWorldPosition(currentCameraPosition);
+        
+        // Remove existing neuron model
+        scene.remove(neuronModel);
+        
+        // Create a new model based on the selected type
+        const newNeuronModel = createStylizedNeuron(neuronType);
+        
+        // Add custom details based on specific neuron ID
+        customizeNeuronModel(newNeuronModel, neuronType, neuronId);
+        
+        scene.add(newNeuronModel);
+        
+        // Replace the global reference with the new model
+        neuronModel = newNeuronModel;
+        
+        // Smooth camera transition
+        const targetPosition = new THREE.Vector3(0, 0, 40);
+        animateCameraPosition(currentCameraPosition, targetPosition, 1000);
+        
+        // Reset view after a short delay
+        setTimeout(() => {
+          // Start a small rotation animation
+          newNeuronModel.rotation.y = 0;
+          const initialRotation = { y: 0 };
+          const targetRotation = { y: Math.PI * 2 };
+          
+          // Animate one full rotation
+          animateProperty(initialRotation, targetRotation, 3000, (value) => {
+            newNeuronModel.rotation.y = value.y;
+          });
+        }, 200);
+      }
+      
+      // Function to customize neuron model based on specific ID
+      function customizeNeuronModel(model, type, id) {
+        // Apply specific customizations based on neuron ID
+        // This would normally be based on actual morphology data
+        
+        switch(id) {
+          // Kenyon Cells
+          case 'KC-alpha-1':
+            // Longer α lobe axon
+            scaleModelPart(model, 'axon', 1.2, 1.0, 1.0);
+            break;
+          case 'KC-alpha-2':
+            // More dendrites
+            scaleModelPart(model, 'dendrites', 1.1, 1.1, 1.0);
+            break;
+          case 'KC-beta-1':
+            // Thicker axon
+            scaleModelPart(model, 'axon', 1.0, 1.0, 1.3);
+            break;
+            
+          // MBONs
+          case 'MBON-1':
+            // Wider dendritic field
+            scaleModelPart(model, 'dendrites', 1.3, 1.0, 1.3);
+            break;
+          case 'MBON-2':
+            // More elongated
+            scaleModelPart(model, 'axon', 1.5, 1.0, 1.0);
+            break;
+          case 'MBON-3':
+            // Denser branches
+            scaleModelPart(model, 'axon', 0.9, 0.9, 1.2);
+            scaleModelPart(model, 'dendrites', 0.8, 0.8, 1.3);
+            break;
+            
+          // Projection Neurons
+          case 'PN-1':
+            // Characteristic PN shape
+            scaleModelPart(model, 'axon', 1.4, 1.0, 1.0);
+            scaleModelPart(model, 'dendrites', 0.7, 0.7, 1.0);
+            break;
+          case 'PN-2':
+            // Lateral projection
+            scaleModelPart(model, 'axon', 1.0, 1.3, 1.0);
+            break;
+          case 'PN-3':
+            // Denser dendrites
+            scaleModelPart(model, 'dendrites', 0.9, 0.9, 1.4);
+            break;
+            
+          // Local Neurons
+          case 'LN-1':
+            // Local LN is more compact
+            scaleModelPart(model, 'dendrites', 0.6, 0.6, 0.6);
+            break;
+          case 'LN-2':
+            // Broad LN has wide reach
+            scaleModelPart(model, 'dendrites', 1.5, 1.5, 1.0);
+            break;
+          case 'LN-3':
+            // Patchy LN has uneven distribution
+            scaleModelPart(model, 'dendrites', 1.2, 0.8, 0.8);
+            break;
+        }
+      }
+      
+      // Helper function to scale a specific part of the neuron model
+      function scaleModelPart(model, partName, scaleX, scaleY, scaleZ) {
+        const part = partName === 'axon' ? model.children[1] : 
+                    partName === 'dendrites' ? model.children[2] : null;
+                    
+        if (part) {
+          part.scale.set(scaleX, scaleY, scaleZ);
+        }
+      }
+      
+      // Animation helper for camera movement
+      function animateCameraPosition(startPosition, targetPosition, duration) {
+        const startTime = Date.now();
+        
+        function updatePosition() {
+          const elapsedTime = Date.now() - startTime;
+          const progress = Math.min(elapsedTime / duration, 1);
+          
+          // Ease-out function
+          const easeProgress = 1 - Math.pow(1 - progress, 3);
+          
+          brainCamera.position.lerpVectors(startPosition, targetPosition, easeProgress);
+          brainCamera.lookAt(0, 0, 0);
+          
+          if (progress < 1) {
+            requestAnimationFrame(updatePosition);
+          }
+        }
+        
+        updatePosition();
+      }
+      
+      // Generic animation helper
+      function animateProperty(start, target, duration, updateFn) {
+        const startTime = Date.now();
+        
+        function update() {
+          const elapsedTime = Date.now() - startTime;
+          const progress = Math.min(elapsedTime / duration, 1);
+          
+          // Ease in-out function
+          const easeProgress = progress < 0.5 ? 
+            2 * progress * progress :
+            1 - Math.pow(-2 * progress + 2, 2) / 2;
+          
+          // Interpolate between start and target values
+          const current = {};
+          for (const key in start) {
+            current[key] = start[key] + (target[key] - start[key]) * easeProgress;
+          }
+          
+          // Update with current values
+          updateFn(current);
+          
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          }
+        }
+        
+        update();
+      }
     }
 
-    function calculateAmplitude(signal) {
-      const min = Math.min(...signal);
-      const max = Math.max(...signal);
-      return (max - min) / 2;
-    }
-
-    function calculateNoiseLevel(signal) {
-      // Simple noise estimation by calculating standard deviation
-      const mean = signal.reduce((sum, val) => sum + val, 0) / signal.length;
-      const variance = signal.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / signal.length;
-      return Math.sqrt(variance);
-    }
+    // ... existing code ...
+      // Add event listeners for model controls
+      document.addEventListener('DOMContentLoaded', function() {
+        // Get control buttons
+        const rotateBtn = document.getElementById('rotate-model');
+        const highlightAxonsBtn = document.getElementById('highlight-axons');
+        const highlightDendritesBtn = document.getElementById('highlight-dendrites');
+        const resetViewBtn = document.getElementById('reset-view');
+        
+        // Rotate model button
+        if (rotateBtn) {
+          rotateBtn.addEventListener('click', function() {
+            if (!neuronModel) return;
+            
+            // Animate rotation
+            const initialRotation = { y: neuronModel.rotation.y };
+            const targetRotation = { y: neuronModel.rotation.y + Math.PI * 2 };
+            
+            // Animate one full rotation
+            animateProperty(initialRotation, targetRotation, 3000, (value) => {
+              neuronModel.rotation.y = value.y;
+            });
+          });
+        }
+        
+        // Highlight axons button
+        if (highlightAxonsBtn) {
+          highlightAxonsBtn.addEventListener('click', function() {
+            if (!neuronModel) return;
+            
+            // Get axon material
+            const axon = neuronModel.children[1];
+            if (!axon) return;
+            
+            // Create highlight effect
+            const originalColor = axon.material.color.getHex();
+            const originalEmissive = axon.material.emissive ? 
+                                    axon.material.emissive.getHex() : 0x000000;
+            
+            // Change to highlight color
+            axon.material.emissive = new THREE.Color(0xff3300);
+            axon.material.emissiveIntensity = 0.5;
+            
+            // Pulse effect
+            let pulse = { intensity: 0.5 };
+            animateProperty(
+              { intensity: 0.5 }, 
+              { intensity: 1.0 }, 
+              1000, 
+              (value) => {
+                axon.material.emissiveIntensity = value.intensity;
+              }
+            );
+            
+            // Reset after delay
+            setTimeout(() => {
+              animateProperty(
+                { intensity: axon.material.emissiveIntensity }, 
+                { intensity: 0 }, 
+                1000, 
+                (value) => {
+                  axon.material.emissiveIntensity = value.intensity;
+                }
+              );
+              
+              // Reset to original after animation
+              setTimeout(() => {
+                axon.material.emissive = new THREE.Color(originalEmissive);
+                axon.material.emissiveIntensity = 0;
+              }, 1000);
+            }, 2000);
+          });
+        }
+        
+        // Highlight dendrites button
+        if (highlightDendritesBtn) {
+          highlightDendritesBtn.addEventListener('click', function() {
+            if (!neuronModel) return;
+            
+            // Get dendrites material
+            const dendrites = neuronModel.children[2];
+            if (!dendrites) return;
+            
+            // Create highlight effect
+            const originalColor = dendrites.material.color.getHex();
+            const originalEmissive = dendrites.material.emissive ? 
+                                    dendrites.material.emissive.getHex() : 0x000000;
+            
+            // Change to highlight color
+            dendrites.material.emissive = new THREE.Color(0x00aaff);
+            dendrites.material.emissiveIntensity = 0.5;
+            
+            // Pulse effect
+            let pulse = { intensity: 0.5 };
+            animateProperty(
+              { intensity: 0.5 }, 
+              { intensity: 1.0 }, 
+              1000, 
+              (value) => {
+                dendrites.material.emissiveIntensity = value.intensity;
+              }
+            );
+            
+            // Reset after delay
+            setTimeout(() => {
+              animateProperty(
+                { intensity: dendrites.material.emissiveIntensity }, 
+                { intensity: 0 }, 
+                1000, 
+                (value) => {
+                  dendrites.material.emissiveIntensity = value.intensity;
+                }
+              );
+              
+              // Reset to original after animation
+              setTimeout(() => {
+                dendrites.material.emissive = new THREE.Color(originalEmissive);
+                dendrites.material.emissiveIntensity = 0;
+              }, 1000);
+            }, 2000);
+          });
+        }
+        
+        // Reset view button
+        if (resetViewBtn) {
+          resetViewBtn.addEventListener('click', function() {
+            if (!brainCamera || !neuronModel) return;
+            
+            // Reset model rotation
+            const initialRotation = { 
+              x: neuronModel.rotation.x,
+              y: neuronModel.rotation.y,
+              z: neuronModel.rotation.z
+            };
+            
+            animateProperty(
+              initialRotation, 
+              { x: 0, y: 0, z: 0 }, 
+              1000, 
+              (value) => {
+                neuronModel.rotation.x = value.x;
+                neuronModel.rotation.y = value.y;
+                neuronModel.rotation.z = value.z;
+              }
+            );
+            
+            // Reset camera position
+            const currentPosition = new THREE.Vector3();
+            brainCamera.getWorldPosition(currentPosition);
+            
+            animateCameraPosition(
+              currentPosition,
+              new THREE.Vector3(0, 0, 40), 
+              1000
+            );
+          });
+        }
+      });
+    // ... existing code ...
   </script>
 </body>
 </html>
