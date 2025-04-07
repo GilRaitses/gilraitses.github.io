@@ -994,51 +994,23 @@
       align-items: center;
       gap: 15px;
       opacity: 0.7;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.8s ease, transform 0.8s ease;
       max-width: 90%;
       flex-wrap: wrap;
       justify-content: center;
     }
     
-    .keyboard-shortcuts:hover {
-      opacity: 1;
+    .keyboard-shortcuts.hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(100px);
+      pointer-events: none;
     }
     
-    .shortcut-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .key {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
-      padding: 2px 6px;
-      min-width: 20px;
-      height: 20px;
-      font-family: monospace;
-      font-weight: 500;
-    }
-    
-    .shortcut-label {
-      margin-right: 3px;
-      font-size: 0.75rem;
-      opacity: 0.9;
-    }
-    
-    @media (max-width: 768px) {
-      .keyboard-shortcuts {
-        padding: 6px 10px;
-        gap: 10px;
-      }
-      
-      .shortcut-group:not(:first-child) {
-        display: none;
-      }
+    /* Hide toggle and controls that we don't want */
+    .theme-toggle, 
+    .arrangement-controls,
+    .network-controls {
+      display: none !important;
     }
   </style>
 </head>
@@ -1337,38 +1309,22 @@
     // Add some fog for depth
     scene.fog = new THREE.FogExp2(0x000000, 0.01);
     
-    // Initialize Drosophila larvae simulation background
+    // Initialize Drosophila larvae simulation as skybox
     function initDrosophilaBackground() {
-      // Create agar plate background
-      const plateGeometry = new THREE.PlaneGeometry(60, 60);
-      const plateMaterial = new THREE.MeshBasicMaterial({
-        color: isDarkMode ? 0x121212 : 0xf0f0f0,
-        transparent: true,
-        opacity: 0.5
-      });
-      const agarPlate = new THREE.Mesh(plateGeometry, plateMaterial);
-      agarPlate.position.z = -30; // Place behind neural network
-      backgroundGroup.add(agarPlate);
-      
-      // Create grid lines to simulate agar plate edges
-      const gridHelper = new THREE.GridHelper(60, 6, 0x444444, 0x444444);
-      gridHelper.position.z = -29.9;
-      gridHelper.rotation.x = Math.PI / 2;
-      backgroundGroup.add(gridHelper);
+      // Create spherical environment for larvae simulation
+      const radius = 50; // Larger radius for skybox effect
       
       // Create persistent trajectories group to track larva paths
       const trajectoriesGroup = new THREE.Group();
-      trajectoriesGroup.position.z = -29.8;
       backgroundGroup.add(trajectoriesGroup);
       
       // Create larvae
       const larvae = [];
-      const larvaeCount = 24; // Number of larvae to simulate
+      const larvaeCount = 100; // More larvae for fuller effect
       
       for (let i = 0; i < larvaeCount; i++) {
         // Create a more realistic larva shape with segments
         const larvaLength = 0.8 + Math.random() * 0.4; // Random length
-        const segmentCount = 5; // Number of segments
         
         // Create segmented larva
         const curve = new THREE.CatmullRomCurve3([
@@ -1396,62 +1352,56 @@
         glowLight.position.set(larvaLength/2, 0, 0);
         larva.add(glowLight);
         
-        // Random starting position on the plate
-        const radius = 28; // Slightly smaller than the plate
-        const randomAngle = Math.random() * Math.PI * 2;
-        const randomRadius = Math.random() * radius;
-        larva.position.x = Math.cos(randomAngle) * randomRadius;
-        larva.position.y = Math.sin(randomAngle) * randomRadius;
-        larva.position.z = -29.5; // Slightly in front of the plate
+        // Position randomly on a sphere
+        const phi = Math.acos(2 * Math.random() - 1); // Random angle from top to bottom
+        const theta = Math.random() * Math.PI * 2; // Random angle around the sphere
         
-        // Random rotation
-        larva.rotation.z = Math.random() * Math.PI * 2;
+        larva.position.x = radius * Math.sin(phi) * Math.cos(theta);
+        larva.position.y = radius * Math.sin(phi) * Math.sin(theta);
+        larva.position.z = radius * Math.cos(phi);
+        
+        // Orient larva tangent to the sphere
+        larva.lookAt(0, 0, 0);
+        // Then rotate around its own axis for random direction on the sphere surface
+        const randomRotation = Math.random() * Math.PI * 2;
+        larva.rotateOnAxis(new THREE.Vector3(0, 0, 1), randomRotation);
         
         // Add motion properties
         larva.userData = {
           velocity: 0.02 + Math.random() * 0.03, // Random speed
-          direction: larva.rotation.z, // Current movement direction
-          lastTurn: 0, // Time counter for turning
-          turnInterval: 20 + Math.random() * 40, // Random turning frequency
-          wigglePhase: Math.random() * Math.PI * 2, // Phase for wiggling
-          wiggleFrequency: 0.2 + Math.random() * 0.3, // Wiggle frequency
-          wiggleAmount: 0.05 + Math.random() * 0.1, // Wiggle amplitude
-          trailHistory: [], // Store positions for trail
-          trailMaxLength: 5 + Math.floor(Math.random() * 3), // Trail length
-          size: 0.3 + Math.random() * 0.2, // Size variation
+          direction: randomRotation,
+          lastTurn: 0,
+          turnInterval: 20 + Math.random() * 40,
+          wigglePhase: Math.random() * Math.PI * 2,
+          wiggleFrequency: 0.2 + Math.random() * 0.3,
+          wiggleAmount: 0.05 + Math.random() * 0.1,
+          size: 0.3 + Math.random() * 0.2,
           
-          // Add trajectory tracking properties
+          // Make trajectories more visible and persistent
           trajectoryPoints: [],
           trajectoryColor: new THREE.Color(
-            0.5 + Math.random() * 0.5, // R
-            0.5 + Math.random() * 0.5, // G
-            0.5 + Math.random() * 0.5  // B
+            0.7 + Math.random() * 0.3, // Brighter colors
+            0.7 + Math.random() * 0.3,
+            0.7 + Math.random() * 0.3
           ),
           lastTrajectoryUpdate: 0,
-          trajectoryUpdateInterval: 5,
+          trajectoryUpdateInterval: 3, // Update more frequently
           
-          // Add headcasting behavior properties
+          // Headcasting behavior
           isHeadcasting: false,
           headcastTimer: 0,
-          headcastInterval: 100 + Math.random() * 200, // Frames between headcasts
+          headcastInterval: 100 + Math.random() * 200,
           headcastDuration: 0,
-          headcastMaxDuration: 0
+          headcastMaxDuration: 0,
+          
+          // Store original position on sphere for containment
+          originalRadius: radius,
+          phi: phi,
+          theta: theta
         };
         
         // Resize larva based on random size
         larva.scale.set(larva.userData.size, larva.userData.size, larva.userData.size);
-        
-        // Create trail effect that resembles mucus trace
-        const trailMaterial = new THREE.LineBasicMaterial({
-          color: 0xcccccc, // Subtle silvery trace
-          transparent: true,
-          opacity: 0.15 // Very faint
-        });
-        
-        const trailGeometry = new THREE.BufferGeometry();
-        const trail = new THREE.Line(trailGeometry, trailMaterial);
-        larva.add(trail);
-        larva.userData.trail = trail;
         
         backgroundGroup.add(larva);
         larvae.push(larva);
@@ -1466,43 +1416,35 @@
       if (!Array.isArray(larvae) || larvae.length === 0) return;
       
       // Get reference to trajectories group
-      const trajectoriesGroup = backgroundGroup.children.find(child => child.isGroup && child !== foregroundGroup);
+      const trajectoriesGroup = backgroundGroup.children.find(child => child.isGroup);
       if (!trajectoriesGroup) return;
       
       larvae.forEach(larva => {
         const ud = larva.userData;
         if (!ud) return;
         
-        // Handle headcasting behavior (stopping and looking around)
+        // Handle headcasting behavior
         if (ud.headcastTimer) ud.headcastTimer++;
         if (!ud.isHeadcasting && ud.headcastTimer > ud.headcastInterval) {
-          // Start headcasting
           ud.isHeadcasting = true;
           ud.headcastTimer = 0;
           ud.headcastDuration = 0;
           ud.headcastMaxDuration = 20 + Math.floor(Math.random() * 30);
-          
-          // Save the original velocity
           ud.originalVelocity = ud.velocity;
-          ud.velocity = 0; // Stop while headcasting
+          ud.velocity = 0;
         }
         
         if (ud.isHeadcasting) {
-          // During headcasting, wiggle more dramatically to simulate "looking around"
           if (ud.direction) ud.direction += (Math.random() - 0.5) * 0.5;
           ud.headcastDuration++;
           
           if (ud.headcastDuration > ud.headcastMaxDuration) {
-            // End headcasting
             ud.isHeadcasting = false;
             ud.headcastTimer = 0;
             ud.velocity = ud.originalVelocity;
-            
-            // Choose a new direction after headcasting
             if (ud.direction) ud.direction += (Math.random() * 2 - 1) * Math.PI * 0.7;
           }
         } else if (ud.wigglePhase !== undefined) {
-          // Normal movement updates
           // Update wiggle phase
           ud.wigglePhase += ud.wiggleFrequency || 0.2;
           
@@ -1516,33 +1458,37 @@
             }
           }
           
-          // Apply small random direction changes to simulate natural movement
+          // Apply small random direction changes
           if (ud.direction) ud.direction += (Math.random() - 0.5) * 0.1;
           
           // Add wiggle effect to direction
           const wiggleDirection = ud.direction + (ud.wiggleAmount ? Math.sin(ud.wigglePhase) * ud.wiggleAmount : 0);
           
-          // Update position if velocity and direction are available
-          if (ud.velocity && wiggleDirection !== undefined) {
-            larva.position.x += Math.cos(wiggleDirection) * ud.velocity;
-            larva.position.y += Math.sin(wiggleDirection) * ud.velocity;
-            larva.rotation.z = wiggleDirection;
+          // Move along the sphere surface
+          if (ud.velocity && wiggleDirection !== undefined && ud.phi !== undefined && ud.theta !== undefined) {
+            // Update spherical coordinates
+            ud.phi += Math.sin(wiggleDirection) * ud.velocity * 0.01;
+            ud.theta += Math.cos(wiggleDirection) * ud.velocity * 0.01;
+            
+            // Constrain phi to avoid issues at poles
+            ud.phi = Math.max(0.1, Math.min(Math.PI - 0.1, ud.phi));
+            
+            // Convert back to Cartesian coordinates
+            larva.position.x = ud.originalRadius * Math.sin(ud.phi) * Math.cos(ud.theta);
+            larva.position.y = ud.originalRadius * Math.sin(ud.phi) * Math.sin(ud.theta);
+            larva.position.z = ud.originalRadius * Math.cos(ud.phi);
+            
+            // Orient larva tangent to sphere
+            const normal = larva.position.clone().normalize();
+            const tangent = new THREE.Vector3(1, 0, 0).cross(normal).normalize();
+            const rotationAxis = tangent.cross(normal).normalize();
+            const rotationMatrix = new THREE.Matrix4().makeRotationAxis(rotationAxis, wiggleDirection);
+            
+            larva.quaternion.setFromRotationMatrix(rotationMatrix);
           }
         }
         
-        // Contain within boundaries (agar plate) if position is valid
-        const boundaryRadius = 29;
-        const distance = Math.sqrt(larva.position.x ** 2 + larva.position.y ** 2);
-        if (distance > boundaryRadius && ud.direction !== undefined) {
-          // Turn away from edge with some randomness
-          ud.direction = Math.atan2(-larva.position.y, -larva.position.x) + (Math.random() - 0.5) * 0.5;
-          
-          // Move slightly inward
-          larva.position.x = (boundaryRadius * 0.99) * Math.cos(Math.atan2(larva.position.y, larva.position.x));
-          larva.position.y = (boundaryRadius * 0.99) * Math.sin(Math.atan2(larva.position.y, larva.position.x));
-        }
-        
-        // Update trajectory (persistent trace) if available
+        // Update trajectory with brighter trails
         if (ud.lastTrajectoryUpdate !== undefined && ud.trajectoryUpdateInterval) {
           ud.lastTrajectoryUpdate++;
           if (ud.lastTrajectoryUpdate >= ud.trajectoryUpdateInterval) {
@@ -1550,11 +1496,12 @@
             
             if (ud.trajectoryPoints) {
               // Add current position to trajectory points
-              ud.trajectoryPoints.push(new THREE.Vector3(
-                larva.position.x,
-                larva.position.y,
-                -29.7 // Slightly above the plate but below the larvae
-              ));
+              ud.trajectoryPoints.push(larva.position.clone());
+              
+              // Limit trajectory length to create fading effect
+              if (ud.trajectoryPoints.length > 30) {
+                ud.trajectoryPoints.shift();
+              }
               
               // Update the trajectory line if it exists
               if (ud.trajectoryLine) {
@@ -1566,219 +1513,42 @@
                 const material = new THREE.LineBasicMaterial({
                   color: ud.trajectoryColor,
                   transparent: true,
-                  opacity: 0.3
+                  opacity: 0.8, // Higher opacity for more visibility
+                  linewidth: 2 // Thicker lines if supported
                 });
                 
                 const geometry = new THREE.BufferGeometry().setFromPoints(ud.trajectoryPoints);
                 const line = new THREE.Line(geometry, material);
                 
+                // Add a glow effect to the trajectory
+                const trailGlow = new THREE.PointLight(ud.trajectoryColor, 0.3, 2);
+                trailGlow.position.copy(larva.position);
+                line.add(trailGlow);
+                
                 ud.trajectoryLine = line;
+                ud.trailGlow = trailGlow;
                 if (trajectoriesGroup) trajectoriesGroup.add(line);
+              }
+              
+              // Update trail glow position if it exists
+              if (ud.trailGlow) {
+                ud.trailGlow.position.copy(larva.position);
               }
             }
           }
         }
       });
     }
-    
-    // Initialize larvae
-    const larvae = initDrosophilaBackground();
-    
-    // Define the neuralNetwork variable
-    let neuralNetwork;
-    
-    // Track intersection objects for hover effects
-    function updateMousePosition(event) {
-      // Calculate mouse position in normalized device coordinates
-      // (-1 to +1) for both components
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    }
-    
-    // Handle hover and selection in animation loop
-    function checkNodeInteractions() {
-      // Update the picking ray with the camera and mouse position
-      raycaster.setFromCamera(mouse, camera);
-      
-      // Get all the nodes for intersection testing
-      const nodes = neuralNetwork ? neuralNetwork.userData.nodes : [];
-      
-      // Calculate objects intersecting the picking ray
-      const intersects = raycaster.intersectObjects(nodes);
-      
-      // Reset hover state
-      if (hoveredNode && hoveredNode !== selectedNode) {
-        hoveredNode.scale.set(1, 1, 1);
-        document.body.style.cursor = 'auto';
-      }
-      
-      hoveredNode = null;
-      
-      // Handle new hover
-      if (intersects.length > 0 && !isDragging) {
-        hoveredNode = intersects[0].object;
-        if (hoveredNode !== selectedNode) {
-          hoveredNode.scale.set(1.3, 1.3, 1.3);
-          document.body.style.cursor = 'pointer';
-        }
-      }
-      
-      // Handle dragging
-      if (isDragging && selectedNode) {
-        // Get intersection with a plane at the camera's target point
-        const planeNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(camera.quaternion);
-        const plane = new THREE.Plane(planeNormal, -20); // Plane at z=20
-        
-        const planeIntersect = new THREE.Vector3();
-        raycaster.ray.intersectPlane(plane, planeIntersect);
-        
-        // Move the selected node to the intersection point
-        selectedNode.position.copy(planeIntersect);
-        
-        // Flag connections for update
-        if (neuralNetwork) {
-          const connections = neuralNetwork.userData.connections;
-          for (let connection of connections) {
-            const nodeIndexA = connection.userData.pointA;
-            const nodeIndexB = connection.userData.pointB;
-            const node = neuralNetwork.userData.nodes[nodeIndexA];
-            const otherNode = neuralNetwork.userData.nodes[nodeIndexB];
-            
-            if (node === selectedNode || otherNode === selectedNode) {
-              connection.geometry.setFromPoints([
-                neuralNetwork.userData.nodes[nodeIndexA].position,
-                neuralNetwork.userData.nodes[nodeIndexB].position
-              ]);
-              connection.geometry.attributes.position.needsUpdate = true;
-            }
-          }
-        }
-      }
-    }
-    
-    // Responsive handler with performance optimization
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      
-      // Set renderer size with lower pixel ratio on mobile
-      const pixelRatio = window.innerWidth < 768 ? 
-        Math.min(1.5, window.devicePixelRatio) : 
-        window.devicePixelRatio;
-      
-      renderer.setPixelRatio(pixelRatio);
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      
-      // Adjust node count for performance on resize
-      if (window.innerWidth < 768 && neuralNetwork.userData.nodes.length > 40) {
-        // Rebuild network with fewer nodes
-        scene.remove(neuralNetwork);
-        neuralNetwork = createNeuralNetwork();
-        scene.add(neuralNetwork);
-      }
-    });
-    
-    // Add event listeners for mouse interaction
-    document.addEventListener('mousemove', updateMousePosition);
-    
-    // Mouse down to start dragging
-    document.addEventListener('mousedown', (event) => {
-      if (hoveredNode) {
-        selectedNode = hoveredNode;
-        isDragging = true;
-        document.body.style.cursor = 'grabbing';
-      }
-    });
-    
-    // Mouse up to stop dragging
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-      
-      // Check if we have a selected node that's an anchor
-      if (selectedNode && selectedNode.userData && selectedNode.userData.isAnchor) {
-        const sectionId = selectedNode.userData.sectionId;
-        const section = document.querySelector(sectionId ? `section.${sectionId}` : null);
-        
-        if (section) {
-          // Scroll to the section
-          section.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-      
-      selectedNode = null;
-      document.body.style.cursor = 'auto';
-    });
-    
-    // Add scroll event listener to highlight anchor nodes when scrolling
-    document.addEventListener('scroll', () => {
-      // Find which section is currently in view
-      const sections = [
-        { id: 'about-me', ref: document.querySelector('section.about-me') },
-        { id: 'current', ref: document.querySelector('section.current') },
-        { id: 'projects', ref: document.querySelector('section.projects') },
-        { id: 'research-themes', ref: document.querySelector('section.research-themes') },
-        { id: 'links', ref: document.querySelector('section.links') }
-      ];
-      
-      if (!neuralNetwork || !neuralNetwork.userData || !neuralNetwork.userData.nodes) return;
-      
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      
-      // Find the section that's currently in view
-      let activeSection = null;
-      
-      for (const section of sections) {
-        if (!section.ref) continue;
-        
-        const { top, bottom } = section.ref.getBoundingClientRect();
-        const sectionTop = top + window.scrollY;
-        const sectionBottom = bottom + window.scrollY;
-        
-        if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
-          activeSection = section.id;
-          break;
-        }
-      }
-      
-      // Highlight the corresponding anchor node
-      if (activeSection) {
-        const nodes = neuralNetwork.userData.nodes;
-        
-        for (const node of nodes) {
-          if (node.userData && node.userData.isAnchor) {
-            if (node.userData.sectionId === activeSection) {
-              // Highlight this node
-              if (!node.userData.active) {
-                node.userData.active = true;
-                node.scale.set(1.5, 1.5, 1.5);
-                if (node.material) {
-                  node.material.emissiveIntensity = 0.9;
-                }
-              }
-            } else {
-              // Reset other nodes
-              if (node.userData.active) {
-                node.userData.active = false;
-                node.scale.set(1, 1, 1);
-                if (node.material) {
-                  node.material.emissiveIntensity = 0.5;
-                }
-              }
-            }
-          }
-        }
-      }
-    });
-    
+
     // Create a neural network-like structure with a simplified implementation
     function createNeuralNetwork() {
       const group = new THREE.Group();
       
-      // Create materials for nodes
+      // Create materials for nodes with more glow/flash effect
       const nodeMaterial = new THREE.MeshStandardMaterial({
         color: 0x6d72a8,
         emissive: 0x6d72a8,
-        emissiveIntensity: 0.5,
+        emissiveIntensity: 0.8, // Higher intensity
         metalness: 0.9,
         roughness: 0.1
       });
@@ -1788,17 +1558,17 @@
       const connectionMaterial = new THREE.LineBasicMaterial({
         color: 0x6d72a8,
         transparent: true,
-        opacity: 0.3
+        opacity: 0.5 // More visible connections
       });
       
       // Create some basic nodes
-      const nodeCount = 40;
+      const nodeCount = 60; // More nodes for fuller effect
       
       for (let i = 0; i < nodeCount; i++) {
         const node = new THREE.Mesh(nodeGeometry, nodeMaterial.clone());
         
         // Position each node randomly in a sphere
-        const radius = 10;
+        const radius = 15; // Larger radius
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
         
@@ -1814,8 +1584,20 @@
             (Math.random() - 0.5) * 0.03
           ),
           isAnchor: false,
-          active: false
+          active: false,
+          flashTimer: Math.random() * 100, // Random start time for flashing
+          flashInterval: 30 + Math.random() * 100, // More frequent flashing
+          flashDuration: 20 + Math.random() * 20, // Random flash duration
+          // Add flash intensity for more dramatic effects
+          flashIntensity: 1.5 + Math.random() * 1.0,
+          pulsePhase: Math.random() * Math.PI * 2
         };
+        
+        // Add a point light to each node for extra glow
+        const nodeLight = new THREE.PointLight(0x6d72a8, 0.5, 3);
+        nodeLight.position.set(0, 0, 0);
+        node.add(nodeLight);
+        node.userData.light = nodeLight;
         
         nodes.push(node);
         group.add(node);
@@ -1826,7 +1608,7 @@
       
       for (let i = 0; i < nodes.length; i++) {
         // Connect to a few nearby nodes
-        for (let j = 0; j < 3; j++) {
+        for (let j = 0; j < 5; j++) { // More connections
           const targetIndex = (i + j + 1) % nodes.length;
           
           const geometry = new THREE.BufferGeometry().setFromPoints([
@@ -1837,7 +1619,10 @@
           const line = new THREE.Line(geometry, connectionMaterial.clone());
           line.userData = {
             pointA: i,
-            pointB: targetIndex
+            pointB: targetIndex,
+            flashActive: false,
+            flashTimer: Math.random() * 100, // Random start time
+            pulsePhase: Math.random() * Math.PI * 2
           };
           
           connections.push(line);
@@ -1852,27 +1637,128 @@
         update: function(time) {
           // Basic animation update
           for (let i = 0; i < nodes.length; i++) {
+            const node = nodes[i];
+            
             // Apply velocity
-            nodes[i].position.add(nodes[i].userData.velocity);
+            node.position.add(node.userData.velocity);
             
             // Simple containment - if too far, reverse direction
-            const distance = nodes[i].position.length();
-            if (distance > 12) {
-              nodes[i].userData.velocity.multiplyScalar(-1);
+            const distance = node.position.length();
+            if (distance > 18) {
+              node.userData.velocity.multiplyScalar(-1);
+            }
+            
+            // Update pulse phase
+            node.userData.pulsePhase += 0.05;
+            
+            // Apply subtle pulse effect to all nodes
+            const pulseScale = 1.0 + 0.1 * Math.sin(node.userData.pulsePhase);
+            node.scale.set(pulseScale, pulseScale, pulseScale);
+            
+            // Handle node flashing
+            node.userData.flashTimer++;
+            if (!node.userData.active && node.userData.flashTimer > node.userData.flashInterval) {
+              // Start flashing
+              node.userData.active = true;
+              node.userData.flashTimer = 0;
+              
+              // Dramatic flash effect
+              const intensity = node.userData.flashIntensity || 1.5;
+              node.material.emissiveIntensity = intensity;
+              node.scale.set(1.5, 1.5, 1.5);
+              
+              // Random color for flashing - more vibrant
+              const hue = Math.random();
+              const color = new THREE.Color().setHSL(hue, 0.9, 0.7);
+              node.material.emissive.set(color);
+              node.material.color.set(color);
+              
+              // Update the node's light
+              if (node.userData.light) {
+                node.userData.light.color.set(color);
+                node.userData.light.intensity = 1.5;
+                node.userData.light.distance = 5;
+              }
+              
+              // Trigger connections from this node to flash
+              for (let j = 0; j < connections.length; j++) {
+                const connection = connections[j];
+                if (connection.userData.pointA === i || connection.userData.pointB === i) {
+                  connection.userData.flashActive = true;
+                  connection.userData.flashTimer = 0;
+                  connection.userData.flashDuration = node.userData.flashDuration;
+                  connection.material.color.copy(color);
+                  connection.material.opacity = 0.9;
+                }
+              }
+            } else if (node.userData.active) {
+              // During flash
+              if (node.userData.flashTimer > node.userData.flashDuration) {
+                // End flash
+                node.userData.active = false;
+                node.userData.flashTimer = 0;
+                node.material.emissiveIntensity = 0.8;
+                node.material.emissive.set(0x6d72a8);
+                node.material.color.set(0x6d72a8);
+                
+                // Reset light
+                if (node.userData.light) {
+                  node.userData.light.color.set(0x6d72a8);
+                  node.userData.light.intensity = 0.5;
+                  node.userData.light.distance = 3;
+                }
+              } else {
+                // During flash, pulse more dramatically
+                const flashProgress = node.userData.flashTimer / node.userData.flashDuration;
+                const pulseIntensity = 1.5 * (1 - flashProgress) + 0.8 * flashProgress;
+                node.material.emissiveIntensity = pulseIntensity;
+                
+                if (node.userData.light) {
+                  node.userData.light.intensity = pulseIntensity;
+                }
+              }
             }
           }
           
-          // Update connection lines
+          // Update connection lines with animated patterns
           for (let i = 0; i < connections.length; i++) {
             const line = connections[i];
-            const pointA = nodes[line.userData.pointA].position;
-            const pointB = nodes[line.userData.pointB].position;
+            const nodeA = nodes[line.userData.pointA];
+            const nodeB = nodes[line.userData.pointB];
+            
+            // Update positions
+            const pointA = nodeA.position;
+            const pointB = nodeB.position;
             
             line.geometry.dispose();
             line.geometry = new THREE.BufferGeometry().setFromPoints([pointA, pointB]);
+            
+            // Update pulse phase
+            line.userData.pulsePhase += 0.03;
+            
+            // Handle connection flashing and propagation of signal
+            if (line.userData.flashActive) {
+              line.userData.flashTimer++;
+              
+              if (line.userData.flashTimer > (line.userData.flashDuration || 20)) {
+                // End flash
+                line.userData.flashActive = false;
+                line.material.color.set(0x6d72a8);
+                line.material.opacity = 0.5;
+              } else {
+                // Animate signal propagation along connection
+                const progress = line.userData.flashTimer / (line.userData.flashDuration || 20);
+                const pulse = 0.5 + 0.5 * Math.sin(line.userData.pulsePhase);
+                line.material.opacity = 0.5 + 0.4 * (1 - progress) * pulse;
+              }
+            }
           }
         }
       };
+      
+      // Add ambient light to the scene
+      const ambientLight = new THREE.AmbientLight(0x404060, 0.5);
+      group.add(ambientLight);
       
       // Add a light to the scene
       const light = new THREE.PointLight(0xffffff, 1, 100);
@@ -1882,16 +1768,7 @@
       return group;
     }
 
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-    scene.add(ambientLight);
-    
-    // Add directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
-
-    // Animation loop
+    // Animation loop with neural network flashing
     function animate() {
       requestAnimationFrame(animate);
       
@@ -1910,13 +1787,24 @@
         updateLarvae(larvae);
       }
       
+      // Update the neural network with flashing
+      if (neuralNetwork && neuralNetwork.userData && neuralNetwork.userData.update) {
+        neuralNetwork.userData.update(performance.now() * 0.001);
+      }
+      
+      // Rotate the background group for skybox effect
+      if (backgroundGroup) {
+        backgroundGroup.rotation.y += 0.0005;
+        backgroundGroup.rotation.x += 0.0002;
+      }
+      
       // Rotate the scene slightly for visual interest when not using keyboard
       if (neuralNetwork) {
         if (!isDragging && !prefersReducedMotion && 
             (!keyState || (!keyState.w && !keyState.a && !keyState.s && !keyState.d && 
             !keyState.arrowup && !keyState.arrowleft && !keyState.arrowdown && !keyState.arrowright))) {
-          neuralNetwork.rotation.y += 0.002;
-          neuralNetwork.rotation.z += 0.001;
+          neuralNetwork.rotation.y += 0.001; // Slower rotation
+          neuralNetwork.rotation.z += 0.0005;
         } else if (prefersReducedMotion) {
           // Set to static rotation for reduced motion preference
           neuralNetwork.rotation.y = 0.2;
@@ -1928,14 +1816,25 @@
       renderer.render(scene, camera);
     }
     
-    // Initialize and start the animation
+    // Initialize and start the application
     function init() {
       // Create the neural network
       neuralNetwork = createNeuralNetwork();
       scene.add(neuralNetwork);
       
+      // Initialize the Drosophila larvae simulation
+      larvae = initDrosophilaBackground();
+      
       // Set initial camera position
       camera.position.z = 30;
+      
+      // Hide keyboard shortcuts after 5 seconds
+      setTimeout(() => {
+        const keyboardShortcuts = document.querySelector('.keyboard-shortcuts');
+        if (keyboardShortcuts) {
+          keyboardShortcuts.classList.add('hidden');
+        }
+      }, 5000);
       
       // Start the animation loop
       animate();
