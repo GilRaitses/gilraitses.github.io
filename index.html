@@ -1,88 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light-mode">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gil Raitses | Scientific ML + Simulation</title>
   <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
   <style>
+    :root {
+      --bg-color: #f9f9f9;
+      --text-color: #333;
+      --primary-color: #2b2d42;
+      --secondary-color: #3c3f60;
+      --content-bg: rgba(255, 255, 255, 0.85);
+      --header-footer-bg: rgba(43, 45, 66, 0.85);
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition-speed: 0.3s;
+    }
+
+    .dark-mode {
+      --bg-color: #121212;
+      --text-color: #e0e0e0;
+      --primary-color: #6d72a8;
+      --secondary-color: #8186bd;
+      --content-bg: rgba(30, 30, 30, 0.85);
+      --header-footer-bg: rgba(20, 20, 20, 0.9);
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      color: #333;
+      color: var(--text-color);
       overflow-x: hidden;
+      background-color: var(--bg-color);
     }
+
     canvas {
       position: fixed;
       top: 0;
       left: 0;
       z-index: -1;
     }
+
     header {
-      background: rgba(43, 45, 66, 0.85);
+      background: var(--header-footer-bg);
       color: white;
       padding: 2rem;
       text-align: center;
       position: relative;
       backdrop-filter: blur(5px);
     }
+
     h1 {
       margin: 0;
       font-size: 2.5rem;
+      position: relative;
+      display: inline-block;
     }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 3px;
+      bottom: -5px;
+      left: 50%;
+      background-color: white;
+      transition: all 0.5s ease;
+    }
+
+    h1:hover::after {
+      width: 100%;
+      left: 0;
+    }
+
     .content {
       max-width: 800px;
       margin: 2rem auto;
       padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.85);
+      background: var(--content-bg);
       border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--card-shadow);
       backdrop-filter: blur(5px);
       position: relative;
+      transition: transform 0.3s ease;
     }
+
+    .content:hover {
+      transform: translateY(-5px);
+    }
+
     section {
       margin-bottom: 2rem;
+      opacity: 0.9;
+      transition: opacity 0.3s ease;
     }
+
+    section:hover {
+      opacity: 1;
+    }
+
     h2 {
-      color: #2b2d42;
-      border-bottom: 2px solid #2b2d42;
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
       padding-bottom: 0.5rem;
+      transition: transform 0.3s ease;
     }
+
+    section:hover h2 {
+      transform: translateX(10px);
+    }
+
     .projects ul, .current ul, .research-themes ul {
       list-style-type: none;
       padding-left: 0.5rem;
     }
+
     .projects li, .current li, .research-themes li {
       margin-bottom: 0.8rem;
       position: relative;
       padding-left: 1.5rem;
+      transition: transform 0.2s ease;
     }
+
+    .projects li:hover, .current li:hover, .research-themes li:hover {
+      transform: translateX(5px);
+    }
+
     .projects li:before, .current li:before, .research-themes li:before {
       content: "▹";
       position: absolute;
       left: 0;
-      color: #2b2d42;
+      color: var(--primary-color);
+      transition: transform 0.2s ease;
     }
+
+    .projects li:hover:before, .current li:hover:before, .research-themes li:hover:before {
+      transform: scale(1.2);
+    }
+
     footer {
       text-align: center;
       font-size: 0.9rem;
       color: white;
       padding: 2rem 0;
-      background: rgba(43, 45, 66, 0.85);
+      background: var(--header-footer-bg);
       backdrop-filter: blur(5px);
       position: relative;
     }
+
     a {
-      color: #2b2d42;
+      color: var(--primary-color);
       text-decoration: none;
       font-weight: bold;
-      transition: color 0.3s;
+      transition: all 0.3s;
+      position: relative;
     }
+
     a:hover {
-      color: #3c3f60;
+      color: var(--secondary-color);
       text-decoration: none;
     }
+
     .links a {
       margin: 0 10px;
       padding: 5px 10px;
@@ -90,16 +179,159 @@
       background: rgba(43, 45, 66, 0.1);
       transition: all 0.3s;
     }
+
     .links a:hover {
       background: rgba(43, 45, 66, 0.2);
       transform: translateY(-2px);
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--header-footer-bg);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: rotate(30deg);
+    }
+
+    .project-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .project-card {
+      flex: 1 1 250px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+      transition: all 0.3s;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(3px);
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      background: rgba(var(--primary-color-rgb), 0.05);
+    }
+
+    .project-card h3 {
+      margin-top: 0;
+      color: var(--primary-color);
+    }
+
+    .project-card p {
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .scroll-indicator {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--header-footer-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .scroll-indicator.visible {
+      opacity: 0.8;
+    }
+
+    .scroll-indicator:hover {
+      opacity: 1;
+      transform: translateY(-5px);
+    }
+
+    .visualization-container {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    #signalCanvas {
+      width: 100%;
+      height: 220px;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .controls button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .controls button:hover {
+      background: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+
+    .signal-info {
+      margin-left: auto;
+      font-size: 0.9rem;
+      background: rgba(var(--primary-color-rgb), 0.1);
+      padding: 8px 12px;
+      border-radius: 4px;
+      display: none;
     }
   </style>
 </head>
 <body>
   <canvas id="bg"></canvas>
   
-  <header>
+  <button class="theme-toggle" aria-label="Toggle dark/light mode">
+    <span class="toggle-icon">☀️</span>
+  </button>
+
+  <div class="scroll-indicator">
+    <span>↑</span>
+  </div>
+  
+  <header id="top">
     <h1>Gil Raitses</h1>
     <p>Scientific Machine Learning | Signal Structuring | Environmental Simulation</p>
   </header>
@@ -108,10 +340,7 @@
     <section class="about">
       <h2>About Me</h2>
       <p>
-        I work at the intersection of computational science, machine learning, and geospatial simulation. My focus is on building
-        physics-informed and foundation-style models that draw structure from signals—biological, behavioral, and geophysical.
-        I design algorithmic pipelines that translate raw sensory and environmental data into scalable models for analysis,
-        interpretation, and simulation.
+        I work at the intersection of computational science, machine learning, and geospatial simulation. My focus is on developing physics-informed and foundation models that extract meaningful patterns from complex signals across biological, behavioral, and environmental domains. Through innovative algorithmic pipelines, I transform raw sensory and spatial data into scalable computational frameworks that enable deeper analysis, clearer interpretation, and more accurate predictive simulations of natural phenomena.
       </p>
     </section>
 
@@ -124,6 +353,24 @@
       </ul>
     </section>
 
+    <section class="projects">
+      <h2>Featured Projects</h2>
+      <div class="project-cards">
+        <div class="project-card">
+          <h3>Whale Behavior Classification</h3>
+          <p>Machine learning model that identifies complex behavioral patterns from marine telemetry data, enabling deeper understanding of cetacean activities.</p>
+        </div>
+        <div class="project-card">
+          <h3>Neural Signal Processing</h3>
+          <p>Statistical framework for extracting meaningful patterns from noisy neurological data, revealing the underlying structure of sensory processing.</p>
+        </div>
+        <div class="project-card">
+          <h3>Glacial Flow Simulation</h3>
+          <p>Physics-based model for predicting ice movement patterns using multi-resolution data from remote sensing platforms.</p>
+        </div>
+      </div>
+    </section>
+
     <section class="research-themes">
       <h2>Research Themes</h2>
       <ul>
@@ -132,6 +379,18 @@
         <li>Multi-resolution modeling and simulation</li>
         <li>Foundation model logic across scientific domains</li>
       </ul>
+    </section>
+
+    <section class="visualization">
+      <h2>Interactive Data Model</h2>
+      <div class="visualization-container">
+        <canvas id="signalCanvas" width="700" height="220"></canvas>
+        <div class="controls">
+          <button id="generateSignal">Generate New Signal</button>
+          <button id="analyzeSignal">Analyze Pattern</button>
+          <div class="signal-info"></div>
+        </div>
+      </div>
     </section>
 
     <section class="links">
@@ -161,6 +420,11 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.position.z = 30;
 
+    // Dark/Light mode variables
+    let isDarkMode = false;
+    const primaryColorDark = 0x6d72a8;
+    const primaryColorLight = 0x2b2d42;
+
     // Responsive handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -177,8 +441,8 @@
       const nodes = [];
       const nodeGeometry = new THREE.SphereGeometry(0.25, 24, 24);
       const nodeMaterial = new THREE.MeshStandardMaterial({ 
-        color: 0x2b2d42,
-        emissive: 0x2b2d42,
+        color: primaryColorLight,
+        emissive: primaryColorLight,
         emissiveIntensity: 0.3,
         metalness: 0.8,
         roughness: 0.2
@@ -212,7 +476,7 @@
 
       // Create connections between close nodes
       const connectionMaterial = new THREE.LineBasicMaterial({ 
-        color: 0x2b2d42,
+        color: primaryColorLight,
         transparent: true,
         opacity: 0.2
       });
@@ -244,6 +508,10 @@
       nodeGroup.userData = {
         nodes: nodes,
         connections: connections,
+        materials: {
+          nodes: nodeMaterial,
+          connections: connectionMaterial
+        },
         update: function() {
           // Update node positions
           for (let node of nodes) {
@@ -272,6 +540,12 @@
               connection.visible = false;
             }
           }
+        },
+        updateTheme: function(isDark) {
+          const color = isDark ? primaryColorDark : primaryColorLight;
+          this.materials.nodes.color.set(color);
+          this.materials.nodes.emissive.set(color);
+          this.materials.connections.color.set(color);
         }
       };
       
@@ -291,6 +565,12 @@
     const neuralNetwork = createNeuralNetwork();
     scene.add(neuralNetwork);
 
+    // Animation variables for mouse interaction
+    let targetRotationX = 0;
+    let targetRotationY = 0;
+    let currentRotationX = 0;
+    let currentRotationY = 0;
+
     // Animation loop
     function animate() {
       requestAnimationFrame(animate);
@@ -298,9 +578,15 @@
       // Update neural network
       neuralNetwork.userData.update();
       
-      // Rotate the entire network slowly
-      neuralNetwork.rotation.y += 0.001;
-      neuralNetwork.rotation.x += 0.0005;
+      // Smooth rotation with easing
+      currentRotationY += (targetRotationY - currentRotationY) * 0.05;
+      currentRotationX += (targetRotationX - currentRotationX) * 0.05;
+      
+      neuralNetwork.rotation.y = currentRotationY;
+      neuralNetwork.rotation.x = currentRotationX;
+      
+      // Subtle auto-rotation
+      targetRotationY += 0.001;
       
       // Render scene
       renderer.render(scene, camera);
@@ -317,7 +603,283 @@
       camera.position.x = mouseX * 3;
       camera.position.y = -mouseY * 3;
       camera.lookAt(0, 0, 0);
+      
+      // Update target rotation based on mouse position
+      targetRotationY = mouseX * 0.5;
+      targetRotationX = -mouseY * 0.5;
     });
+
+    // Theme toggle functionality
+    const themeToggle = document.querySelector('.theme-toggle');
+    const toggleIcon = document.querySelector('.toggle-icon');
+    const html = document.documentElement;
+    
+    themeToggle.addEventListener('click', () => {
+      isDarkMode = !isDarkMode;
+      html.classList.toggle('dark-mode');
+      toggleIcon.textContent = isDarkMode ? '🌙' : '☀️';
+      
+      // Update Three.js materials for dark/light mode
+      neuralNetwork.userData.updateTheme(isDarkMode);
+      
+      // Adjust renderer background
+      renderer.setClearColor(isDarkMode ? 0x121212 : 0xf9f9f9, 0.3);
+    });
+
+    // Calculate RGB from hex for CSS variables
+    function hexToRgb(hex) {
+      const r = parseInt(hex.substring(1, 3), 16);
+      const g = parseInt(hex.substring(3, 5), 16);
+      const b = parseInt(hex.substring(5, 7), 16);
+      return `${r}, ${g}, ${b}`;
+    }
+
+    // Set primary color RGB for CSS variables
+    document.documentElement.style.setProperty('--primary-color-rgb', hexToRgb('#2b2d42'));
+
+    // Scroll to top functionality
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollIndicator.classList.add('visible');
+      } else {
+        scrollIndicator.classList.remove('visible');
+      }
+    });
+    
+    scrollIndicator.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Add hover effect to project cards
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    projectCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        // Create a subtle particle effect around the card on hover
+        const cardRect = card.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+        const cardCenterY = cardRect.top + cardRect.height / 2;
+        
+        // Slightly adjust camera to focus on this area
+        targetRotationY = ((cardCenterX / window.innerWidth) * 2 - 1) * 0.3;
+        targetRotationX = -((cardCenterY / window.innerHeight) * 2 - 1) * 0.3;
+      });
+    });
+
+    // Interactive Signal Visualization
+    const signalCanvas = document.getElementById('signalCanvas');
+    const ctx = signalCanvas.getContext('2d');
+    const generateBtn = document.getElementById('generateSignal');
+    const analyzeBtn = document.getElementById('analyzeSignal');
+    const signalInfo = document.querySelector('.signal-info');
+
+    // Signal parameters
+    let signalData = [];
+    let noiseLevel = 0.2;
+    let patternType = 'sine';
+    let signalAnalyzed = false;
+
+    // Generate initial signal
+    generateSignal();
+
+    // Event listeners
+    generateBtn.addEventListener('click', () => {
+      signalAnalyzed = false;
+      signalInfo.style.display = 'none';
+      
+      // Randomly select a pattern type
+      const patterns = ['sine', 'square', 'sawtooth', 'noise', 'combined'];
+      patternType = patterns[Math.floor(Math.random() * patterns.length)];
+      
+      // Random noise level
+      noiseLevel = Math.random() * 0.3 + 0.1;
+      
+      generateSignal();
+    });
+
+    analyzeBtn.addEventListener('click', () => {
+      analyzeSignal();
+    });
+
+    function generateSignal() {
+      signalData = [];
+      const width = signalCanvas.width;
+      
+      // Generate base signal based on pattern type
+      for (let i = 0; i < width; i++) {
+        const x = i / width * 10; // 0 to 10 range
+        let y = 0;
+        
+        switch (patternType) {
+          case 'sine':
+            y = Math.sin(x * 2) * 0.5 + Math.sin(x * 4) * 0.3;
+            break;
+          case 'square':
+            y = Math.sign(Math.sin(x * 1.5)) * 0.6;
+            break;
+          case 'sawtooth':
+            y = ((x * 1.5) % 2) - 1;
+            break;
+          case 'noise':
+            y = (Math.random() * 2 - 1) * 0.8;
+            break;
+          case 'combined':
+            y = Math.sin(x * 2) * 0.3 + Math.sign(Math.sin(x * 0.5)) * 0.3;
+            break;
+        }
+        
+        // Add noise
+        y += (Math.random() * 2 - 1) * noiseLevel;
+        
+        signalData.push(y);
+      }
+      
+      drawSignal();
+    }
+
+    function drawSignal() {
+      const width = signalCanvas.width;
+      const height = signalCanvas.height;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, width, height);
+      
+      // Draw background grid
+      ctx.strokeStyle = isDarkMode ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)';
+      ctx.lineWidth = 1;
+      
+      // Vertical grid lines
+      for (let i = 0; i < width; i += 50) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, height);
+        ctx.stroke();
+      }
+      
+      // Horizontal grid lines
+      for (let i = 0; i < height; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(width, i);
+        ctx.stroke();
+      }
+      
+      // Draw signal
+      ctx.strokeStyle = isDarkMode ? '#6d72a8' : '#2b2d42';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      
+      for (let i = 0; i < signalData.length; i++) {
+        const x = i;
+        const y = (signalData[i] + 1) * height / 2; // Convert -1,1 to 0,height
+        
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      
+      ctx.stroke();
+      
+      // Draw points if analyzed
+      if (signalAnalyzed) {
+        // Draw feature points
+        ctx.fillStyle = '#4ea5d9';
+        
+        // Find peaks and valleys
+        const peaks = findPeaksAndValleys(signalData, 10);
+        
+        for (const point of peaks) {
+          const x = point.index;
+          const y = (signalData[x] + 1) * height / 2;
+          
+          ctx.beginPath();
+          ctx.arc(x, y, 5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function analyzeSignal() {
+      signalAnalyzed = true;
+      drawSignal();
+      
+      // Calculate signal features
+      const peaks = findPeaksAndValleys(signalData, 10);
+      const frequency = peaks.length / (signalCanvas.width / 100);
+      const amplitude = calculateAmplitude(signalData);
+      const noise = calculateNoiseLevel(signalData);
+      
+      // Display signal information
+      signalInfo.style.display = 'block';
+      signalInfo.innerHTML = `
+        <strong>Pattern:</strong> ${patternType.charAt(0).toUpperCase() + patternType.slice(1)}<br>
+        <strong>Frequency:</strong> ${frequency.toFixed(2)} Hz<br>
+        <strong>Amplitude:</strong> ${amplitude.toFixed(2)}<br>
+        <strong>Noise Level:</strong> ${noise.toFixed(2)}
+      `;
+    }
+
+    function findPeaksAndValleys(signal, minDistance) {
+      const peaks = [];
+      const valleys = [];
+      
+      for (let i = 1; i < signal.length - 1; i++) {
+        if (signal[i] > signal[i - 1] && signal[i] > signal[i + 1]) {
+          // Peak
+          peaks.push({ index: i, value: signal[i] });
+        } else if (signal[i] < signal[i - 1] && signal[i] < signal[i + 1]) {
+          // Valley
+          valleys.push({ index: i, value: signal[i] });
+        }
+      }
+      
+      // Filter peaks by minimum distance
+      const filteredPeaks = [];
+      peaks.forEach(peak => {
+        const tooClose = filteredPeaks.some(existingPeak => 
+          Math.abs(existingPeak.index - peak.index) < minDistance
+        );
+        
+        if (!tooClose) {
+          filteredPeaks.push(peak);
+        }
+      });
+      
+      // Filter valleys by minimum distance
+      const filteredValleys = [];
+      valleys.forEach(valley => {
+        const tooClose = filteredValleys.some(existingValley => 
+          Math.abs(existingValley.index - valley.index) < minDistance
+        );
+        
+        if (!tooClose) {
+          filteredValleys.push(valley);
+        }
+      });
+      
+      // Combine peaks and valleys
+      return [...filteredPeaks, ...filteredValleys].sort((a, b) => a.index - b.index);
+    }
+
+    function calculateAmplitude(signal) {
+      const min = Math.min(...signal);
+      const max = Math.max(...signal);
+      return (max - min) / 2;
+    }
+
+    function calculateNoiseLevel(signal) {
+      // Simple noise estimation by calculating standard deviation
+      const mean = signal.reduce((sum, val) => sum + val, 0) / signal.length;
+      const variance = signal.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / signal.length;
+      return Math.sqrt(variance);
+    }
   </script>
 </body>
 </html>
