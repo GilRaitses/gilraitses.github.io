@@ -2423,6 +2423,8 @@
     let targetLink = null;
     let animationStartTime = 0;
     
+    let expansionTextDiv = null;
+    
     function initExpansionCanvas() {
       const canvas = document.getElementById('expansion-canvas');
       expansionScene = new THREE.Scene();
@@ -2447,6 +2449,18 @@
       
       expansionCircle = new THREE.Mesh(geometry, material);
       expansionScene.add(expansionCircle);
+      
+      // Create orbiting text element
+      expansionTextDiv = document.createElement('div');
+      expansionTextDiv.style.position = 'fixed';
+      expansionTextDiv.style.color = '#000';
+      expansionTextDiv.style.fontWeight = 'bold';
+      expansionTextDiv.style.fontSize = '1.5rem';
+      expansionTextDiv.style.zIndex = '10001';
+      expansionTextDiv.style.display = 'none';
+      expansionTextDiv.style.pointerEvents = 'none';
+      expansionTextDiv.textContent = 'Explore';
+      document.body.appendChild(expansionTextDiv);
     }
     
     function startExpansion(link) {
@@ -2473,6 +2487,21 @@
       const scale = 0.05 + (Math.pow(progress, 2) * 30);
       expansionCircle.scale.set(scale, scale, 1);
       
+      // Update orbiting text
+      if (expansionTextDiv) {
+        expansionTextDiv.style.display = 'block';
+        const angle = (elapsed * 2) * Math.PI; // Rotate twice per second
+        const radius = Math.min(150 + (progress * 300), window.innerWidth / 3);
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const x = centerX + Math.cos(angle) * radius;
+        const y = centerY + Math.sin(angle) * radius;
+        expansionTextDiv.style.left = x + 'px';
+        expansionTextDiv.style.top = y + 'px';
+        expansionTextDiv.style.transform = 'translate(-50%, -50%)';
+        expansionTextDiv.style.fontSize = (1.5 + progress * 2) + 'rem';
+      }
+      
       expansionRenderer.render(expansionScene, expansionCamera);
       
       if (progress >= 1) {
@@ -2490,6 +2519,9 @@
       expansionAnimating = false;
       targetLink = null;
       document.getElementById('expansion-canvas').style.display = 'none';
+      if (expansionTextDiv) {
+        expansionTextDiv.style.display = 'none';
+      }
       expansionCircle.scale.set(1, 1, 1);
     }
     
@@ -2501,14 +2533,22 @@
       
       // Add hover handlers to explore buttons
       document.querySelectorAll('.gallery-item-link').forEach(button => {
+        // Completely override link behavior
         button.addEventListener('click', function(e) {
           e.preventDefault();
           e.stopPropagation();
           return false;
-        });
+        }, true);
         
         button.addEventListener('mouseenter', function(e) {
+          e.preventDefault();
           startExpansion(this.href);
+        });
+        
+        button.addEventListener('mouseleave', function(e) {
+          if (expansionAnimating && (Date.now() - animationStartTime) < 2000) {
+            resetExpansion();
+          }
         });
       });
     });
