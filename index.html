@@ -270,11 +270,56 @@
       backdrop-filter: blur(5px);
     }
     
-    header p {
+    .tagline-clouds {
+      position: relative;
+      height: 80px;
+      margin-top: 1rem;
+      width: 100%;
+    }
+    
+    .cloud-tag {
+      position: absolute;
       font-family: 'Didot', 'Bodoni MT', 'Cochin', 'Baskerville', serif;
       color: #f8d849;
       text-shadow: 0 0 10px rgba(248, 216, 73, 0.5);
       font-size: 1.1rem;
+      background: radial-gradient(ellipse at center, rgba(255, 182, 193, 0.3) 0%, rgba(255, 182, 193, 0.15) 50%, transparent 80%);
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 182, 193, 0.4);
+      box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
+      animation: floatCloud 12s ease-in-out infinite;
+      white-space: nowrap;
+    }
+    
+    .cloud-tag:nth-child(1) {
+      left: 10%;
+      animation-duration: 14s;
+    }
+    
+    .cloud-tag:nth-child(2) {
+      left: 40%;
+      animation-duration: 16s;
+    }
+    
+    .cloud-tag:nth-child(3) {
+      left: 70%;
+      animation-duration: 13s;
+    }
+    
+    @keyframes floatCloud {
+      0%, 100% {
+        transform: translateY(0px) translateX(0px);
+      }
+      25% {
+        transform: translateY(-15px) translateX(20px);
+      }
+      50% {
+        transform: translateY(-5px) translateX(-15px);
+      }
+      75% {
+        transform: translateY(-20px) translateX(10px);
+      }
     }
 
     h1 {
@@ -1393,7 +1438,11 @@
 
   <header>
     <h1>Gil Raitses</h1>
-    <p>Sensory Integration    Behavioral Analysis    Cross-Species Cognition</p>
+    <div class="tagline-clouds">
+      <div class="cloud-tag" style="animation-delay: 0s;">Sensory Integration</div>
+      <div class="cloud-tag" style="animation-delay: 2s;">Behavioral Analysis</div>
+      <div class="cloud-tag" style="animation-delay: 4s;">Cross-Species Cognition</div>
+    </div>
   </header>
 
   <section class="project-gallery">
