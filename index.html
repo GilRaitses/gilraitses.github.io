@@ -283,13 +283,16 @@
       color: #f8d849;
       text-shadow: 0 0 10px rgba(248, 216, 73, 0.5);
       font-size: 1.1rem;
-      background: radial-gradient(ellipse at center, rgba(255, 182, 193, 0.3) 0%, rgba(255, 182, 193, 0.15) 50%, transparent 80%);
-      padding: 0.5rem 1.5rem;
-      border-radius: 50px;
-      border: 1px solid rgba(255, 182, 193, 0.4);
-      box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
+      background: radial-gradient(ellipse 150% 80% at 30% 40%, rgba(255, 182, 193, 0.4) 0%, rgba(255, 192, 203, 0.35) 20%, rgba(255, 182, 193, 0.25) 40%, rgba(255, 192, 203, 0.15) 60%, transparent 100%);
+      padding: 0.8rem 2rem;
+      filter: blur(0.5px);
+      box-shadow: 
+        0 5px 15px rgba(255, 182, 193, 0.4),
+        inset 0 -10px 20px rgba(255, 255, 255, 0.1),
+        inset 0 10px 20px rgba(255, 182, 193, 0.2);
       animation: floatCloud 12s ease-in-out infinite;
       white-space: nowrap;
+      border-radius: 60% 40% 40% 60% / 50% 60% 40% 50%;
     }
     
     .cloud-tag:nth-child(1) {
@@ -1067,6 +1070,8 @@
       flex-direction: column;
       border: 1px solid rgba(127, 255, 0, 0.4);
       box-shadow: 0 0 8px rgba(127, 255, 0, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     
     .gallery-item.hidden {
@@ -1380,6 +1385,7 @@
   <!-- Add the background canvas elements -->
   <canvas id="bg"></canvas>
   <div id="larvae-background"></div>
+  <canvas id="expansion-canvas"></canvas>
 
   <div class="theme-toggle">🌙</div>
   <div class="scroll-indicator">↑</div>
@@ -2400,10 +2406,94 @@
       });
     }
     
+    // Three.js expansion animation
+    let expansionScene, expansionCamera, expansionRenderer, expansionCircle, expansionAnimating = false;
+    let targetLink = null;
+    let animationStartTime = 0;
+    
+    function initExpansionCanvas() {
+      const canvas = document.getElementById('expansion-canvas');
+      expansionScene = new THREE.Scene();
+      expansionCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+      expansionCamera.position.z = 1;
+      
+      expansionRenderer = new THREE.WebGLRenderer({ 
+        canvas: canvas,
+        alpha: true,
+        antialias: true
+      });
+      expansionRenderer.setSize(window.innerWidth, window.innerHeight);
+      expansionRenderer.setClearColor(0x000000, 0);
+      
+      // Create circle geometry
+      const geometry = new THREE.CircleGeometry(0.05, 64);
+      const material = new THREE.MeshBasicMaterial({ 
+        color: 0x7FFF00,
+        transparent: true,
+        opacity: 0.95
+      });
+      
+      expansionCircle = new THREE.Mesh(geometry, material);
+      expansionScene.add(expansionCircle);
+    }
+    
+    function startExpansion(link) {
+      if (expansionAnimating) return;
+      
+      targetLink = link;
+      expansionAnimating = true;
+      animationStartTime = Date.now();
+      
+      const canvas = document.getElementById('expansion-canvas');
+      canvas.style.display = 'block';
+      
+      animateExpansion();
+    }
+    
+    function animateExpansion() {
+      if (!expansionAnimating) return;
+      
+      const elapsed = (Date.now() - animationStartTime) / 1000;
+      const duration = 2.0;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Exponential growth
+      const scale = 0.05 + (Math.pow(progress, 2) * 30);
+      expansionCircle.scale.set(scale, scale, 1);
+      
+      expansionRenderer.render(expansionScene, expansionCamera);
+      
+      if (progress >= 1) {
+        // Open link and reset
+        if (targetLink) {
+          window.open(targetLink, '_blank');
+        }
+        resetExpansion();
+      } else {
+        requestAnimationFrame(animateExpansion);
+      }
+    }
+    
+    function resetExpansion() {
+      expansionAnimating = false;
+      targetLink = null;
+      document.getElementById('expansion-canvas').style.display = 'none';
+      expansionCircle.scale.set(1, 1, 1);
+    }
+    
     // Initialize gallery on DOM load
     document.addEventListener('DOMContentLoaded', () => {
       checkElementsInView();
       initGalleryFilters();
+      initExpansionCanvas();
+      
+      // Add hover handlers to explore buttons
+      document.querySelectorAll('.gallery-item-link').forEach(button => {
+        button.addEventListener('mouseenter', function(e) {
+          e.preventDefault();
+          startExpansion(this.href);
+        });
+      });
     });
 
     // Keyboard navigation controls
