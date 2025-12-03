@@ -1418,17 +1418,17 @@
     <section class="about-me">
       <h2>Research Focus</h2>
       <p>
-        [Background trajectory: film/media → neuroscience research]
+        [Background: film/media theory → neuroscience - to be written]
       </p>
       <p>
-        [Current focus: sensory integration, behavioral analysis tools, cross-species modeling]
+        [Current work: computational tools for behavioral analysis - to be written]
       </p>
     </section>
 
     <section class="current">
       <h2>Current Work</h2>
       <ul>
-        <li><strong>Drosophila Sensory Circuit Analysis:</strong> In Dr. Mirna Mihovilovic-Skanata's laboratory, scaling out analysis infrastructure to quantify neural computations underlying adaptive behaviors in Drosophila larvae. Adapted visualization and computational tools for phase-locked aggregation and high-throughput feature classification.</li>
+        <li><strong>Drosophila Sensory Circuit Analysis:</strong> [Research assistant work - to be written]</li>
         <li><strong>Marine Behavioral States:</strong> Building a lightweight minGRU based model to identify and classify humpback whale behavioral states from high resolution dive telemetry, enabling automated detection of feeding events from time series acceleration data.</li>
         <li><strong>pax-nyc:</strong> Multi-scale signal processing for learned heuristic pathfinding. Real-time urban sensing system extracting multi-modal features from traffic cameras with cloud infrastructure integrating environmental data streams.</li>
         <li><strong>INDYsim:</strong> Hierarchical simulation framework investigating behavior as the interface between perception and adaptation. Agent-based and event-driven simulation modeling transition probabilities under different stimuli and environmental constraints.</li>
@@ -2555,8 +2555,18 @@
         const points = curve.getPoints(segmentCount);
         const larvaGeometry = new THREE.BufferGeometry().setFromPoints(points);
         
-        // Create glowing effect - bright neon larvae
-        const larvaColors = [0x7FFF00, 0x7df9ff, 0x00ff88, 0xffffff]; // Chartreuse, electric blue, mint, white
+        // Create glowing effect - bright neon larvae with more variety
+        const larvaColors = [
+          0x7FFF00, // Chartreuse
+          0x7df9ff, // Electric blue
+          0x00ff88, // Mint
+          0xffffff, // White
+          0xffff00, // Yellow
+          0xff00ff, // Magenta
+          0x00ffff, // Cyan
+          0xff6600, // Orange
+          0x9933ff  // Purple
+        ];
         const larvaMaterial = new THREE.LineBasicMaterial({
           color: larvaColors[Math.floor(Math.random() * larvaColors.length)],
           linewidth: capabilities.needsLowerEffects ? 2 : 3,
