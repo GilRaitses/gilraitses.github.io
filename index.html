@@ -236,12 +236,16 @@
     }
 
     body {
-      font-family: 'Didot', 'Bodoni MT', 'Cochin', 'Baskerville', 'Goudy Old Style', 'Bitstream Charter', serif;
+      font-family: 'Avenir', 'Avenir Next', 'Century Gothic', 'Trebuchet MS', sans-serif;
       margin: 0;
       padding: 0;
       color: var(--text-color);
       overflow-x: hidden;
       background-color: var(--bg-color);
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Didot', 'Bodoni MT', 'Cochin', 'Baskerville', 'Goudy Old Style', 'Bitstream Charter', serif;
     }
 
     canvas {
@@ -419,14 +423,10 @@
     }
 
     .projects li, .current li {
-      margin-bottom: 0.8rem;
+      margin-bottom: 1.2rem;
       position: relative;
-      padding-left: 1.5rem;
+      padding-left: 0;
       transition: transform 0.2s ease;
-    }
-
-    .projects li:hover, .current li:hover {
-      transform: translateX(5px);
     }
     
     .research-themes ul {
@@ -442,15 +442,7 @@
     }
 
     .projects li:before, .current li:before {
-      content: "▹";
-      position: absolute;
-      left: 0;
-      color: var(--primary-color);
-      transition: transform 0.2s ease;
-    }
-
-    .projects li:hover:before, .current li:hover:before {
-      transform: scale(1.2);
+      content: "";
     }
     
     .research-themes li:before {
@@ -1426,6 +1418,7 @@
         <li><strong>Drosophila Sensory Circuit Analysis:</strong> In Dr. Mirna Mihovilovic-Skanata's laboratory, scaling out analysis infrastructure to quantify neural computations underlying adaptive behaviors in Drosophila larvae. Adapted visualization and computational tools for phase-locked aggregation and high-throughput feature classification.</li>
         <li><strong>Marine Behavioral States:</strong> Building a lightweight minGRU based model to identify and classify humpback whale behavioral states from high resolution dive telemetry, enabling automated detection of feeding events from time series acceleration data.</li>
         <li><strong>pax-nyc:</strong> Multi-scale signal processing for learned heuristic pathfinding. Real-time urban sensing system extracting multi-modal features from traffic cameras with cloud infrastructure integrating environmental data streams.</li>
+        <li><strong>INDYsim:</strong> Hierarchical simulation framework investigating behavior as the interface between perception and adaptation. Agent-based and event-driven simulation modeling transition probabilities under different stimuli and environmental constraints.</li>
       </ul>
     </section>
 
