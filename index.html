@@ -218,12 +218,12 @@
     .dark-mode {
       --bg-color: #121212;
       --text-color: #e0e0e0;
-      --primary-color: #39ff14;
+      --primary-color: #7FFF00;
       --secondary-color: #7df9ff;
       --content-bg: rgba(20, 30, 20, 0.4);
       --header-footer-bg: rgba(10, 20, 10, 0.7);
-      --card-shadow: 0 4px 6px rgba(57, 255, 20, 0.15);
-      --neon-glow: 0 0 10px rgba(57, 255, 20, 0.3);
+      --card-shadow: 0 4px 6px rgba(127, 255, 0, 0.15);
+      --neon-glow: 0 0 10px rgba(127, 255, 0, 0.3);
     }
 
     * {
@@ -389,7 +389,7 @@
       border-bottom: 2px solid var(--primary-color);
       padding-bottom: 0.5rem;
       transition: transform 0.3s ease;
-      text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+      text-shadow: 0 0 10px rgba(127, 255, 0, 0.5);
     }
 
     section:hover h2 {
@@ -1059,7 +1059,7 @@
       font-size: 0.8rem;
       transition: all 0.3s ease;
       font-weight: bold;
-      box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+      box-shadow: 0 0 10px rgba(127, 255, 0, 0.3);
     }
     
     .gallery-item-link:hover {
@@ -1071,7 +1071,7 @@
     .submodules {
       margin-top: 1rem;
       padding-top: 1rem;
-      border-top: 1px solid rgba(57, 255, 20, 0.3);
+      border-top: 1px solid rgba(127, 255, 0, 0.3);
     }
     
     .submodules h4 {
@@ -1083,7 +1083,7 @@
     }
     
     .submodule-item {
-      background: rgba(57, 255, 20, 0.05);
+      background: rgba(127, 255, 0, 0.05);
       padding: 0.75rem;
       border-radius: 6px;
       margin-bottom: 0.5rem;
@@ -1298,11 +1298,6 @@
 
   <section class="project-gallery">
     <h2>Projects</h2>
-    <div class="filter-controls">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="framework">Frameworks</button>
-      <button class="filter-btn" data-filter="analysis">Analysis</button>
-    </div>
 
     <div class="gallery-grid">
       <!-- Magniphyq -->
@@ -1885,9 +1880,9 @@
               node.material.emissiveIntensity = intensity;
               node.scale.set(1.8, 1.8, 1.8);
               
-              // Neon colors: green, yellow, electric blue
+              // Neon colors: chartreuse, yellow, electric blue
               const neonColors = [
-                new THREE.Color(0x39ff14), // Neon green
+                new THREE.Color(0x7FFF00), // Chartreuse
                 new THREE.Color(0xffff00), // Neon yellow
                 new THREE.Color(0x7df9ff), // Electric blue
                 new THREE.Color(0x00ff88), // Mint green
@@ -2510,7 +2505,7 @@
         const larvaGeometry = new THREE.BufferGeometry().setFromPoints(points);
         
         // Create glowing effect - bright neon larvae
-        const larvaColors = [0x39ff14, 0x7df9ff, 0x00ff88, 0xffffff]; // Neon green, electric blue, mint, white
+        const larvaColors = [0x7FFF00, 0x7df9ff, 0x00ff88, 0xffffff]; // Chartreuse, electric blue, mint, white
         const larvaMaterial = new THREE.LineBasicMaterial({
           color: larvaColors[Math.floor(Math.random() * larvaColors.length)],
           linewidth: capabilities.needsLowerEffects ? 2 : 3,
