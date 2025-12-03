@@ -90,10 +90,26 @@
         font-size: 2rem;
         font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
         font-weight: 100 !important;
+        color: #7df9ff !important;
       }
       
       h2, h3 {
         font-weight: 200 !important;
+      }
+      
+      .tagline-item {
+        color: #7df9ff !important;
+        text-transform: lowercase;
+      }
+      
+      .links a {
+        font-weight: 100 !important;
+      }
+      
+      /* Hide keyboard instructions on mobile */
+      .keyboard-shortcuts,
+      .keyboard-controls-hint {
+        display: none !important;
       }
       
       .content {
@@ -325,12 +341,14 @@
     }
     
     .tagline-item {
-      font-family: 'Didot', 'Bodoni MT', 'Cochin', 'Baskerville', serif;
-      color: #f8d849;
-      text-shadow: 0 0 10px rgba(248, 216, 73, 0.3);
+      font-family: 'Avenir Next Ultra Light', 'Avenir Ultra Light', 'Avenir', sans-serif;
+      font-weight: 200;
+      color: #7df9ff;
+      text-shadow: 0 0 10px rgba(125, 249, 255, 0.3);
       font-size: 1.1rem;
       letter-spacing: 0.05em;
       white-space: nowrap;
+      text-transform: lowercase;
     }
 
     h1 {
@@ -338,8 +356,8 @@
       font-size: 2.5rem;
       position: relative;
       display: inline-block;
-      color: #ffffff;
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+      color: #7df9ff;
+      text-shadow: 0 0 15px rgba(125, 249, 255, 0.4);
     }
 
     h1::after {
@@ -349,9 +367,9 @@
       height: 3px;
       bottom: -5px;
       left: 50%;
-      background-color: #7df9ff;
+      background-color: #FFB6C1;
       transition: all 0.5s ease;
-      box-shadow: 0 0 10px rgba(125, 249, 255, 0.6);
+      box-shadow: 0 0 10px rgba(255, 182, 193, 0.6);
     }
 
     h1:hover::after {
@@ -584,6 +602,8 @@
       border-radius: 4px;
       background: rgba(43, 45, 66, 0.1);
       transition: all 0.3s;
+      font-family: 'Avenir Next Ultra Light', 'Avenir Ultra Light', 'Avenir', sans-serif;
+      font-weight: 200;
     }
 
     .links a:hover {
