@@ -2501,8 +2501,13 @@
       
       // Add hover handlers to explore buttons
       document.querySelectorAll('.gallery-item-link').forEach(button => {
-        button.addEventListener('mouseenter', function(e) {
+        button.addEventListener('click', function(e) {
           e.preventDefault();
+          e.stopPropagation();
+          return false;
+        });
+        
+        button.addEventListener('mouseenter', function(e) {
           startExpansion(this.href);
         });
       });
