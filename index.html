@@ -2491,28 +2491,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       checkElementsInView();
       initGalleryFilters();
-      initExpansionCanvas();
-      
-      // Add hover handlers to explore buttons
-      document.querySelectorAll('.gallery-item-link').forEach(button => {
-        // Completely override link behavior
-        button.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          return false;
-        }, true);
-        
-        button.addEventListener('mouseenter', function(e) {
-          e.preventDefault();
-          startExpansion(this.href);
-        });
-        
-        button.addEventListener('mouseleave', function(e) {
-          if (expansionAnimating && (Date.now() - animationStartTime) < 2000) {
-            resetExpansion();
-          }
-        });
-      });
+      // Expansion animation disabled - explore buttons are now regular links
+      // initExpansionCanvas();
     });
 
     // Keyboard navigation controls
