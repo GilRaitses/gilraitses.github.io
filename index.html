@@ -218,11 +218,12 @@
     .dark-mode {
       --bg-color: #121212;
       --text-color: #e0e0e0;
-      --primary-color: #6d72a8;
-      --secondary-color: #8186bd;
-      --content-bg: rgba(30, 30, 30, 0.85);
-      --header-footer-bg: rgba(20, 20, 20, 0.9);
-      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      --primary-color: #39ff14;
+      --secondary-color: #7df9ff;
+      --content-bg: rgba(20, 30, 20, 0.4);
+      --header-footer-bg: rgba(10, 20, 10, 0.7);
+      --card-shadow: 0 4px 6px rgba(57, 255, 20, 0.15);
+      --neon-glow: 0 0 10px rgba(57, 255, 20, 0.3);
     }
 
     * {
@@ -388,6 +389,7 @@
       border-bottom: 2px solid var(--primary-color);
       padding-bottom: 0.5rem;
       transition: transform 0.3s ease;
+      text-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
     }
 
     section:hover h2 {
@@ -1050,17 +1052,53 @@
     .gallery-item-link {
       align-self: flex-start;
       background: var(--primary-color);
-      color: white;
+      color: #000;
       text-decoration: none;
       padding: 0.5rem 1rem;
       border-radius: 20px;
       font-size: 0.8rem;
       transition: all 0.3s ease;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
     }
     
     .gallery-item-link:hover {
-      background: #4b50b3;
+      background: var(--primary-color);
       transform: translateY(-2px);
+    }
+    
+    /* Submodules within gallery items */
+    .submodules {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(57, 255, 20, 0.3);
+    }
+    
+    .submodules h4 {
+      font-size: 0.85rem;
+      color: var(--secondary-color);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .submodule-item {
+      background: rgba(57, 255, 20, 0.05);
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      border-left: 2px solid var(--primary-color);
+    }
+    
+    .submodule-item strong {
+      color: var(--primary-color);
+      font-size: 0.9rem;
+    }
+    
+    .submodule-item p {
+      font-size: 0.8rem;
+      margin: 0.25rem 0 0 0;
+      opacity: 0.8;
     }
     
     @media (max-width: 768px) {
@@ -1255,26 +1293,101 @@
 
   <header>
     <h1>Gil Raitses</h1>
-    <p>Scientific Machine Learning | Temporal Pattern Analysis | 4D Systems Modeling</p>
+    <p>Sensory Integration | Behavioral Analysis | Cross-Species Cognition</p>
   </header>
+
+  <section class="project-gallery">
+    <h2>Projects</h2>
+    <div class="filter-controls">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="framework">Frameworks</button>
+      <button class="filter-btn" data-filter="analysis">Analysis</button>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- Magniphyq -->
+      <div class="gallery-item" data-category="framework">
+        <div class="gallery-item-image" style="background-image: url('magniphyq-interface.png'); background-size: cover; background-position: center;">
+          <div class="gallery-item-tags">
+            <span class="gallery-item-tag">Framework</span>
+          </div>
+        </div>
+        <div class="gallery-item-content">
+          <h3 class="gallery-item-title">Magniphyq</h3>
+          <p class="gallery-item-desc">Node-based research workspace for behavioral annotation, simulation, and cross-species analysis.</p>
+          <a href="https://gilraitses.github.io/magniphyq" class="gallery-item-link">Explore</a>
+          
+          <!-- Upcoming Modules -->
+          <div class="submodules">
+            <h4>Upcoming Modules</h4>
+            <div class="submodule-item">
+              <strong>Biosonar Spatial Intelligence</strong>
+              <p>Sound mapping and acoustic signal processing for cetacean spatial cognition research.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAX-NYC -->
+      <div class="gallery-item" data-category="analysis">
+        <div class="gallery-item-image" style="background-image: url('https://gilraitses.github.io/pax/docs/figures/topology_3d_rotating.gif'); background-size: cover; background-position: center;">
+          <div class="gallery-item-tags">
+            <span class="gallery-item-tag">Analysis</span>
+          </div>
+        </div>
+        <div class="gallery-item-content">
+          <h3 class="gallery-item-title">PAX-NYC</h3>
+          <p class="gallery-item-desc">Multi-scale signal processing for learned heuristic pathfinding. Urban sensing with multi-modal feature extraction.</p>
+          <a href="https://gilraitses.github.io/pax/" class="gallery-item-link">Explore</a>
+        </div>
+      </div>
+
+      <!-- Whale Behavior Analysis -->
+      <div class="gallery-item" data-category="analysis">
+        <div class="gallery-item-image" style="background-image: url('https://gilraitses.github.io/whale-behavior-analysis/assets/dive_overview.png'); background-size: cover; background-position: center;">
+          <div class="gallery-item-tags">
+            <span class="gallery-item-tag">Analysis</span>
+          </div>
+        </div>
+        <div class="gallery-item-content">
+          <h3 class="gallery-item-title">Whale Behavior Analysis</h3>
+          <p class="gallery-item-desc">Hierarchical container architecture for humpback whale foraging strategy classification.</p>
+          <a href="https://gilraitses.github.io/whale-behavior-analysis/" class="gallery-item-link">Explore</a>
+        </div>
+      </div>
+
+      <!-- ORCAST -->
+      <div class="gallery-item" data-category="framework">
+        <div class="gallery-item-image" style="background-image: url('https://raw.githubusercontent.com/GilRaitses/orcast/main/assets/orcast_projGallery_image.png'); background-size: cover; background-position: center;">
+          <div class="gallery-item-tags">
+            <span class="gallery-item-tag">Framework</span>
+          </div>
+        </div>
+        <div class="gallery-item-content">
+          <h3 class="gallery-item-title">ORCAST</h3>
+          <p class="gallery-item-desc">Multi-agent platform for cetacean behavior prediction and spatial optimization in the San Juan Islands.</p>
+          <a href="https://orca-904de.web.app" class="gallery-item-link">Explore</a>
+        </div>
+      </div>
+    </div>
+  </section>
   
   <div class="content">
     <section class="about-me">
-      <h2>Background & Approach</h2>
+      <h2>Research Focus</h2>
       <p>
-        In my process as an artist, I've been interested in tools that make forms out of patterns and vis versa. This brought me onto my current path in research with visializing and modeling data. My artistic procession spans media theory, culinary semiotics, cinematic light sculptures, to 3D design for clothing. Having in common, being, in one way or another, interpretative explorations into singular patterns.
+        The purpose of my research is to study the signal physics of sensory integration. I build tools that support studies of adaptive sensorimotor integration and foraging strategies in tractable model systems.
       </p>
       <p>
-        One specific creative trajectory began with trying to recreate, while sketching out a film idea, an intermodal aesthetic to mimic a dolphin's perceptual field by combining different interpretive properties of physical dynamics as a representation. Though this film project itself is on hold for now, it brought me closer with investigating temporal pattern synthesis and classification. Currently, I'm exploring how adaptive models can reveal hidden structures in biological neural networks, environmental systems and biological activity patterns.
+        My goal is to develop foundation models that enable cross-species behavioral analysis, with particular interest in cetacean communication and cognition.
       </p>
     </section>
 
     <section class="current">
-      <h2>Active Research Streams</h2>
+      <h2>Current Work</h2>
       <ul>
-        <li><strong>Neural Circuit Analysis:</strong> Planning a framework to explore subjective experience through behavioral analysis of Drosophila larvae. This upcoming project will interpret phase transitions as both mechanical movements and events within a narrative context. In combination with an analysis pipeline developed in my current lab's mechanosensation work, I'm developing experimental approaches to behavioral modeling.</li>
+        <li><strong>Drosophila Sensory Circuit Analysis:</strong> In Dr. Mirna Mihovilovic-Skanata's laboratory, scaling out analysis infrastructure to quantify neural computations underlying adaptive behaviors in Drosophila larvae. Adapted visualization and computational tools for phase-locked aggregation and high-throughput feature classification.</li>
         <li><strong>Marine Behavioral States:</strong> Building a lightweight minGRU based model to identify and classify humpback whale behavioral states from high resolution dive telemetry, enabling automated detection of feeding events from time series acceleration data.</li>
-        <li><strong>Sound Mapping Data:</strong> Using multimodal narrative interpretation of models for immersive analysis of continuous patterns, creating signal processing algorithms that filter environmental noise while preserving biologically relevant signals in complex acoustic environments.</li>
       </ul>
     </section>
 
@@ -1284,30 +1397,43 @@
         <div class="project-card">
           <h3>Behavior Subtype Classifier</h3>
           <p>
-            A classification system that identifies hierarchical diving patterns in marine mammals using adaptive windowing techniques. This toolkit, developed in partnership with the Parks Lab at Syracuse University, achieves 92% accuracy in detecting feeding, social, and resting behaviors from time series acceleration data. Part of the minGRU based MSTAR framework that enhances annotation intelligence for complex behavioral sequences.
+            Hierarchical container architecture for humpback whale foraging strategy classification. Supports manual and unsupervised segmentation workflows with visualization tools that display behavioral structure at multi-scale resolution. Developed with datasets from Susan Parks Laboratory.
           </p>
         </div>
         <div class="project-card">
-          <h3>Drosophila Sensory Circuit Mapping</h3>
+          <h3>Magniphyq Behavioral Analysis Framework</h3>
           <p>
-            Planned framework that will model larval behavioral transitions as dynamic narrative events rather than mechanical shifts. This project, scheduled to begin summer 2025, aims to use state sequence modeling to reconstruct fragmented data into coherent behavioral trajectories. This narrative-based approach treats phase transitions as meaningful moments within a multidimensional state space, bridging observable behavior with hidden internal states.
-          </p>
-        </div>
-        <div class="project-card">
-          <h3>Glacial Flow Simulation</h3>
-          <p>
-            A physics informed neural network approach to predict ice movement patterns using multi resolution satellite data. This model integrates conservation laws with observational data to simulate non linear flow behavior across temporal scales. Currently in development as part of my Master's thesis, exploring how embedding physical constraints within deep learning architectures can transfer between geophysical systems and biological time series analysis.
+            Node-based research workspace for behavioral annotation, simulation, and cross-species analysis. Infrastructure supports hierarchical visualization, multi-scale segmentation and annotation quality control. Designed for larval mechanosensation, cetacean sensor fusion, and connectomics workflows.
           </p>
         </div>
       </div>
     </section>
 
     <section class="research-themes">
-      <h2>Methodological Foundations</h2>
+      <h2>Systems and Behavioral Neuroscience Foundations</h2>
+      <ul>
+        <li>Sensory-motor integration: how sensory inputs transform into behavioral outputs</li>
+        <li>Navigation and spatial cognition in three-dimensional environments</li>
+        <li>Attention, learning, and memory in adaptive behavior</li>
+        <li>Cross-species behavioral modeling and trajectory analysis</li>
+      </ul>
+    </section>
+
+    <section class="research-themes">
+      <h2>Theoretical Neuroscience Foundations</h2>
+      <ul>
+        <li>Harmonic analysis for acoustic structure in biosonar systems</li>
+        <li>Manifold theory for neural dynamics encoding space and social information</li>
+        <li>Representational geometry and predictive spatial maps</li>
+        <li>Network dynamics and circuit adaptation</li>
+      </ul>
+    </section>
+
+    <section class="research-themes">
+      <h2>Machine Learning and AI Foundations</h2>
       <ul>
         <li>Adaptive windowing and feature extraction from complex signal data</li>
         <li>Memory efficient recurrent architectures for time series classification</li>
-        <li>Physics informed constraints in neural network design</li>
         <li>Dynamic state space modeling for behavioral transitions</li>
         <li>Multimodal representation of continuous signal patterns</li>
       </ul>
@@ -1318,105 +1444,10 @@
       <p>
         <a href="https://github.com/gilraitses">GitHub</a> ·
         <a href="mailto:gilraitses@gmail.com">Email</a> ·
-        <a href="https://www.linkedin.com/in/gilraitses/">LinkedIn</a>
+        <a href="https://www.linkedin.com/in/gilraitses/">LinkedIn</a> ·
+        <a href="https://gilraitses.github.io/phdPrograms/_build/cv/Raitses_Gil_CV_2025.pdf">CV</a>
       </p>
     </section>
-  </div>
-  
-  <footer>
-    &copy; 2025 Gil Raitses
-  </footer>
-
-  <section class="project-gallery">
-    <h2>Project Gallery</h2>
-    <div class="filter-controls">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="framework">Frameworks</button>
-      <button class="filter-btn" data-filter="simulation">Simulations</button>
-      <button class="filter-btn" data-filter="analysis">Analysis</button>
-      <button class="filter-btn" data-filter="visualization">Visualizations</button>
-    </div>
-
-    <div class="gallery-grid">
-      <!-- Gallery Item 1 -->
-      <div class="gallery-item" data-category="analysis visualization">
-        <div class="gallery-item-image" style="background-image: url('https://gilraitses.github.io/whale-behavior-analysis/assets/dive_overview.png')">
-          <div class="gallery-item-tags">
-            <span class="gallery-item-tag">Analysis</span>
-            <span class="gallery-item-tag">Visualization</span>
-          </div>
-        </div>
-        <div class="gallery-item-content">
-          <h3 class="gallery-item-title">Cetacean Dive Analysis</h3>
-          <p class="gallery-item-desc">Classification system for diving patterns in marine mammals using adaptive windowing techniques.</p>
-          <a href="https://gilraitses.github.io/whale-behavior-analysis/" class="gallery-item-link">Explore</a>
-        </div>
-      </div>
-      
-      <!-- Gallery Item 2 -->
-      <div class="gallery-item" data-category="visualization simulation">
-        <div class="gallery-item-image" style="background-image: url('https://via.placeholder.com/500/567890')">
-          <div class="gallery-item-tags">
-            <span class="gallery-item-tag">Visualization</span>
-            <span class="gallery-item-tag">Simulation</span>
-          </div>
-        </div>
-        <div class="gallery-item-content">
-          <h3 class="gallery-item-title">Neural Circuit Visualization</h3>
-          <p class="gallery-item-desc">In development interactive circuit models of neural connectivity patterns for signal processing research.</p>
-          <a href="#" class="gallery-item-link">Explore</a>
-        </div>
-      </div>
-      
-      <!-- Gallery Item 3 -->
-      <div class="gallery-item" data-category="simulation">
-        <div class="gallery-item-image" style="background-image: url('https://via.placeholder.com/500/345678')">
-          <div class="gallery-item-tags">
-            <span class="gallery-item-tag">Simulation</span>
-          </div>
-        </div>
-        <div class="gallery-item-content">
-          <h3 class="gallery-item-title">Glacial Flow Simulation</h3>
-          <p class="gallery-item-desc">Planned physics-informed neural network predicting ice movement patterns using multi-resolution satellite data.</p>
-          <a href="#" class="gallery-item-link">Explore</a>
-        </div>
-      </div>
-      
-      <!-- Gallery Item 4 -->
-      <div class="gallery-item" data-category="analysis">
-        <div class="gallery-item-image" style="background-image: url('https://via.placeholder.com/500/789012')">
-          <div class="gallery-item-tags">
-            <span class="gallery-item-tag">Analysis</span>
-          </div>
-        </div>
-        <div class="gallery-item-content">
-          <h3 class="gallery-item-title">Sound Mapping Data</h3>
-          <p class="gallery-item-desc">Planned crossmodal, multi-scale narrative interpretation of models for immersive analysis of continuous patterns.</p>
-          <a href="#" class="gallery-item-link">Explore</a>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <section class="research-themes">
-    <h2>Methodological Foundations</h2>
-    <ul>
-      <li>Adaptive windowing and feature extraction from complex signal data</li>
-      <li>Memory efficient recurrent architectures for time series classification</li>
-      <li>Physics informed constraints in neural network design</li>
-      <li>Dynamic state space modeling for behavioral transitions</li>
-      <li>Intermodal and multi-scale representations of continuous signal patterns</li>
-    </ul>
-  </section>
-
-  <section class="links">
-    <h2>Connect</h2>
-    <p>
-      <a href="https://github.com/gilraitses">GitHub</a> ·
-      <a href="mailto:gilraitses@gmail.com">Email</a> ·
-      <a href="https://www.linkedin.com/in/gilraitses/">LinkedIn</a>
-    </p>
-  </section>
   </div>
   
   <footer>
@@ -1850,13 +1881,19 @@
               node.userData.flashTimer = 0;
               
               // Dramatic flash effect
-              const intensity = node.userData.flashIntensity || 1.5;
+              const intensity = node.userData.flashIntensity || 2.0;
               node.material.emissiveIntensity = intensity;
-              node.scale.set(1.5, 1.5, 1.5);
+              node.scale.set(1.8, 1.8, 1.8);
               
-              // Random color for flashing - more vibrant
-              const hue = Math.random();
-              const color = new THREE.Color().setHSL(hue, 0.9, 0.7);
+              // Neon colors: green, yellow, electric blue
+              const neonColors = [
+                new THREE.Color(0x39ff14), // Neon green
+                new THREE.Color(0xffff00), // Neon yellow
+                new THREE.Color(0x7df9ff), // Electric blue
+                new THREE.Color(0x00ff88), // Mint green
+                new THREE.Color(0xff00ff)  // Magenta
+              ];
+              const color = neonColors[Math.floor(Math.random() * neonColors.length)];
               node.material.emissive.set(color);
               node.material.color.set(color);
               
@@ -2452,8 +2489,8 @@
       const trajectoriesGroup = new THREE.Group();
       backgroundGroup.add(trajectoriesGroup);
       
-      // Create larvae - fewer on mobile/low-end
-      const larvaeCount = capabilities.needsLowerEffects ? 50 : 100;
+      // Create larvae - many more for dense swarm effect
+      const larvaeCount = capabilities.needsLowerEffects ? 500 : 5000;
       const larvae = [];
       
       for (let i = 0; i < larvaeCount; i++) {
@@ -2472,19 +2509,21 @@
         const points = curve.getPoints(segmentCount);
         const larvaGeometry = new THREE.BufferGeometry().setFromPoints(points);
         
-        // Create glowing effect that mimics infrared footage
+        // Create glowing effect - bright neon larvae
+        const larvaColors = [0x39ff14, 0x7df9ff, 0x00ff88, 0xffffff]; // Neon green, electric blue, mint, white
         const larvaMaterial = new THREE.LineBasicMaterial({
-          color: 0xdddddd, // Slightly off-white for IR appearance
+          color: larvaColors[Math.floor(Math.random() * larvaColors.length)],
           linewidth: capabilities.needsLowerEffects ? 2 : 3,
-          opacity: capabilities.needsLowerEffects ? 0.7 : 0.85,
+          opacity: capabilities.needsLowerEffects ? 0.9 : 1.0,
           transparent: true
         });
         
         const larva = new THREE.Line(larvaGeometry, larvaMaterial);
         
-        // Create a glow effect using a point light - only on higher-end devices
+        // Create a glow effect using a point light - brighter neon glow
         if (!capabilities.needsLowerEffects) {
-          const glowLight = new THREE.PointLight(0xffffff, 0.5, 1);
+          const glowColor = larvaColors[Math.floor(Math.random() * larvaColors.length)];
+          const glowLight = new THREE.PointLight(glowColor, 1.5, 3);
           glowLight.position.set(larvaLength/2, 0, 0);
           larva.add(glowLight);
         }
