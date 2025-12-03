@@ -103,9 +103,24 @@
         max-width: none;
       }
       
-      /* Foundation cards on mobile - stack vertically */
+      /* Foundation cards on mobile - keep 3 columns but smaller */
       .foundations-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+      }
+      
+      .foundation-card {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+      }
+      
+      .foundation-card h3 {
+        font-size: 0.85rem;
+      }
+      
+      .foundation-card li {
+        font-size: 0.75rem;
+        margin-bottom: 0.4rem;
       }
       
       .theme-toggle {
@@ -486,7 +501,7 @@
       opacity: 0.9;
     }
     
-    @media (max-width: 1024px) {
+    @media (max-width: 600px) {
       .foundations-container {
         grid-template-columns: 1fr;
       }
