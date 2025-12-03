@@ -383,6 +383,23 @@
     section:hover {
       opacity: 1;
     }
+    
+    .foundations-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    .foundations-container .research-themes {
+      margin-bottom: 0;
+    }
+    
+    @media (max-width: 1024px) {
+      .foundations-container {
+        grid-template-columns: 1fr;
+      }
+    }
 
     h2 {
       color: #ffffff;
@@ -396,23 +413,35 @@
       transform: translateX(10px);
     }
 
-    .projects ul, .current ul, .research-themes ul {
+    .projects ul, .current ul {
       list-style-type: none;
       padding-left: 0.5rem;
     }
 
-    .projects li, .current li, .research-themes li {
+    .projects li, .current li {
       margin-bottom: 0.8rem;
       position: relative;
       padding-left: 1.5rem;
       transition: transform 0.2s ease;
     }
 
-    .projects li:hover, .current li:hover, .research-themes li:hover {
+    .projects li:hover, .current li:hover {
       transform: translateX(5px);
     }
+    
+    .research-themes ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
 
-    .projects li:before, .current li:before, .research-themes li:before {
+    .research-themes li {
+      margin-bottom: 0.8rem;
+      position: relative;
+      padding-left: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .projects li:before, .current li:before {
       content: "▹";
       position: absolute;
       left: 0;
@@ -420,8 +449,12 @@
       transition: transform 0.2s ease;
     }
 
-    .projects li:hover:before, .current li:hover:before, .research-themes li:hover:before {
+    .projects li:hover:before, .current li:hover:before {
       transform: scale(1.2);
+    }
+    
+    .research-themes li:before {
+      content: "";
     }
 
     footer {
@@ -1413,35 +1446,37 @@
       </div>
     </section>
 
-    <section class="research-themes">
-      <h2>Systems and Behavioral Neuroscience Foundations</h2>
-      <ul>
-        <li>Sensory-motor integration: how sensory inputs transform into behavioral outputs</li>
-        <li>Navigation and spatial cognition in three-dimensional environments</li>
-        <li>Attention, learning, and memory in adaptive behavior</li>
-        <li>Cross-species behavioral modeling and trajectory analysis</li>
-      </ul>
-    </section>
+    <div class="foundations-container">
+      <section class="research-themes">
+        <h2>Systems and Behavioral Neuroscience Foundations</h2>
+        <ul>
+          <li>Sensory-motor integration: how sensory inputs transform into behavioral outputs</li>
+          <li>Navigation and spatial cognition in three-dimensional environments</li>
+          <li>Attention, learning, and memory in adaptive behavior</li>
+          <li>Cross-species behavioral modeling and trajectory analysis</li>
+        </ul>
+      </section>
 
-    <section class="research-themes">
-      <h2>Theoretical Neuroscience Foundations</h2>
-      <ul>
-        <li>Harmonic analysis for acoustic structure in biosonar systems</li>
-        <li>Manifold theory for neural dynamics encoding space and social information</li>
-        <li>Representational geometry and predictive spatial maps</li>
-        <li>Network dynamics and circuit adaptation</li>
-      </ul>
-    </section>
+      <section class="research-themes">
+        <h2>Theoretical Neuroscience Foundations</h2>
+        <ul>
+          <li>Harmonic analysis for acoustic structure in biosonar systems</li>
+          <li>Manifold theory for neural dynamics encoding space and social information</li>
+          <li>Representational geometry and predictive spatial maps</li>
+          <li>Network dynamics and circuit adaptation</li>
+        </ul>
+      </section>
 
-    <section class="research-themes">
-      <h2>Machine Learning and AI Foundations</h2>
-      <ul>
-        <li>Adaptive windowing and feature extraction from complex signal data</li>
-        <li>Memory efficient recurrent architectures for time series classification</li>
-        <li>Dynamic state space modeling for behavioral transitions</li>
-        <li>Multimodal representation of continuous signal patterns</li>
-      </ul>
-    </section>
+      <section class="research-themes">
+        <h2>Machine Learning and AI Foundations</h2>
+        <ul>
+          <li>Adaptive windowing and feature extraction from complex signal data</li>
+          <li>Memory efficient recurrent architectures for time series classification</li>
+          <li>Dynamic state space modeling for behavioral transitions</li>
+          <li>Multimodal representation of continuous signal patterns</li>
+        </ul>
+      </section>
+    </div>
 
     <section class="links">
       <h2>Connect</h2>
