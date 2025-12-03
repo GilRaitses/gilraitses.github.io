@@ -76,8 +76,22 @@
         --text-color: #ffffff;
       }
       
-      .content, .gallery-item, .project-card, .foundation-card {
-        background: rgba(55, 60, 55, 1) !important;
+      .content {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.08) 0%,
+          rgba(255, 255, 255, 0.03) 50%,
+          rgba(255, 255, 255, 0.08) 100%
+        ) !important;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        color: #ffffff;
+      }
+      
+      .gallery-item, .project-card, .foundation-card {
+        background: rgba(255, 255, 255, 0.06) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         color: #ffffff;
       }
       
@@ -381,16 +395,30 @@
       max-width: 800px;
       margin: 2rem auto;
       padding: 1.5rem;
-      background: var(--content-bg);
-      border-radius: 8px;
-      box-shadow: var(--card-shadow);
-      backdrop-filter: blur(5px);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0.1) 100%
+      );
+      border-radius: 16px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       position: relative;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .content:hover {
       transform: translateY(-5px);
+      box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
     }
 
     .content section {
