@@ -1163,17 +1163,29 @@
       border-radius: 50%;
       font-size: 0.9rem;
       font-weight: bold;
-      box-shadow: 0 0 15px rgba(127, 255, 0, 0.6);
+      box-shadow: 0 0 20px rgba(127, 255, 0, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      z-index: 1;
+      z-index: 10;
+      cursor: pointer;
     }
     
     .gallery-item-link:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(127, 255, 0, 0.8);
+      transform: scale(1.15);
+      box-shadow: 0 0 30px rgba(127, 255, 0, 0.8);
+    }
+    
+    #expansion-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10000;
+      pointer-events: none;
+      display: none;
     }
     
     .gallery-item-link:hover {
