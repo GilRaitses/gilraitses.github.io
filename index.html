@@ -1096,11 +1096,12 @@
       align-items: center;
       gap: 10px;
       opacity: 0.7;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
     
     .keyboard-controls-hint:hover {
-      opacity: 1;
+      opacity: 1 !important;
+      transform: translateX(-50%) translateY(0) !important;
     }
     
     .key {
@@ -1737,31 +1738,6 @@
     &copy; 2025 Gil Raitses
   </footer>
 
-  <div class="keyboard-shortcuts">
-    <div class="shortcut-group">
-      <span class="shortcut-label">Camera:</span>
-      <span class="key">W</span>
-      <span class="key">A</span>
-      <span class="key">S</span>
-      <span class="key">D</span>
-    </div>
-    <div class="shortcut-group">
-      <span class="shortcut-label">Rotate:</span>
-      <span class="key">↑</span>
-      <span class="key">←</span>
-      <span class="key">↓</span>
-      <span class="key">→</span>
-    </div>
-    <div class="shortcut-group">
-      <span class="shortcut-label">Zoom:</span>
-      <span class="key">+</span>
-      <span class="key">-</span>
-    </div>
-    <div class="shortcut-group">
-      <span class="shortcut-label">Reset:</span>
-      <span class="key">R</span>
-    </div>
-  </div>
 
   <script>
     // Global variable to control animations
@@ -2342,11 +2318,12 @@
       camera.position.z = isMobile ? 25 : 30;
       cameraDistance = isMobile ? 25 : 30;
       
-      // Hide keyboard shortcuts after 5 seconds
+      // Hide keyboard hint after 5 seconds
       setTimeout(() => {
-        const keyboardShortcuts = document.querySelector('.keyboard-shortcuts');
-        if (keyboardShortcuts) {
-          keyboardShortcuts.classList.add('hidden');
+        const keyboardHint = document.querySelector('.keyboard-controls-hint');
+        if (keyboardHint) {
+          keyboardHint.style.opacity = '0';
+          keyboardHint.style.transform = 'translateX(-50%) translateY(20px)';
         }
       }, 5000);
       
