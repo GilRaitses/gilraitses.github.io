@@ -372,6 +372,8 @@
       display: inline-block;
       color: #c8fdff;
       text-shadow: 0 0 15px rgba(200, 253, 255, 0.4);
+      font-family: 'Didot', 'Bodoni MT', 'Cochin', 'Baskerville', serif;
+      font-weight: 400;
     }
 
     h1::after {
@@ -515,6 +517,22 @@
     
     .foundations-section {
       margin-bottom: 2rem;
+    }
+    
+    .collaborators-section {
+      margin-bottom: 2rem;
+    }
+    
+    .collaborators-intro {
+      opacity: 0.8;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+    
+    .collaborators-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
     }
     
     .foundation-card {
@@ -1509,7 +1527,7 @@
     <h1>Gil Raitses</h1>
     <div class="tagline">
       <span class="tagline-item">Sensory Integration</span>
-      <span class="tagline-item">Behavioral Analysis</span>
+      <span class="tagline-item">behavioral neuroscience</span>
       <span class="tagline-item">Cross-Species Cognition</span>
     </div>
   </header>
@@ -1662,6 +1680,14 @@
             <li>Multimodal representation of continuous signal patterns</li>
           </ul>
         </div>
+      </div>
+    </section>
+
+    <section class="collaborators-section">
+      <h2>Collaborators and Outreach</h2>
+      <p class="collaborators-intro">Researchers and labs whose work intersects with these foundations. Seeking connections for cross-disciplinary collaboration.</p>
+      <div class="collaborators-container">
+        <!-- Add collaborators here as you identify them -->
       </div>
     </section>
 
