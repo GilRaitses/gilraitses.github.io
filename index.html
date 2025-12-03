@@ -277,7 +277,7 @@
     }
 
     .dark-mode {
-      --bg-color: #121212;
+      --bg-color: #2d2d2d;
       --text-color: #e0e0e0;
       --primary-color: #7FFF00;
       --secondary-color: #7df9ff;
@@ -1701,7 +1701,7 @@
     
     // Initialize renderer
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0); // Transparent background
+    renderer.setClearColor(0x2d2d2d, 1); // Charcoal background
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
     
     // Create separate rendering groups for background and foreground
@@ -1721,7 +1721,7 @@
     camera.position.setZ(30);
     
     // Add some fog for depth
-    scene.fog = new THREE.FogExp2(0x000000, 0.01);
+    scene.fog = new THREE.FogExp2(0x2d2d2d, 0.01);
     
     // Initialize Drosophila larvae simulation as skybox
     function initDrosophilaBackground() {
