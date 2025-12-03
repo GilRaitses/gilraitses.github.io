@@ -1840,6 +1840,18 @@
         node.position.y = radius * Math.sin(phi) * Math.sin(theta);
         node.position.z = radius * Math.cos(phi);
         
+        // Assign each node a specific color
+        const nodeColors = [
+          new THREE.Color(0x7FFF00), // Chartreuse
+          new THREE.Color(0xffff00), // Yellow
+          new THREE.Color(0x7df9ff), // Electric blue
+          new THREE.Color(0xff00ff), // Magenta
+          new THREE.Color(0x00ffff), // Cyan
+          new THREE.Color(0xff6600), // Orange
+          new THREE.Color(0xf8d849)  // Golden
+        ];
+        const assignedColor = nodeColors[i % nodeColors.length];
+        
         // Add metadata to the node
         node.userData = {
           velocity: new THREE.Vector3(
@@ -1850,11 +1862,11 @@
           isAnchor: false,
           active: false,
           flashTimer: Math.random() * 100, // Random start time for flashing
-          flashInterval: 30 + Math.random() * 100, // More frequent flashing
-          flashDuration: 20 + Math.random() * 20, // Random flash duration
-          // Add flash intensity for more dramatic effects
-          flashIntensity: 1.5 + Math.random() * 1.0,
-          pulsePhase: Math.random() * Math.PI * 2
+          flashInterval: 20 + Math.random() * 150, // More variable timing
+          flashDuration: 15 + Math.random() * 30, // Variable duration
+          flashIntensity: 1.5 + Math.random() * 1.5,
+          pulsePhase: Math.random() * Math.PI * 2,
+          assignedColor: assignedColor // Store the node's color
         };
         
         // Add a point light to each node for extra glow
@@ -1931,15 +1943,8 @@
               node.material.emissiveIntensity = intensity;
               node.scale.set(1.8, 1.8, 1.8);
               
-              // Neon colors: chartreuse, yellow, electric blue
-              const neonColors = [
-                new THREE.Color(0x7FFF00), // Chartreuse
-                new THREE.Color(0xffff00), // Neon yellow
-                new THREE.Color(0x7df9ff), // Electric blue
-                new THREE.Color(0x00ff88), // Mint green
-                new THREE.Color(0xff00ff)  // Magenta
-              ];
-              const color = neonColors[Math.floor(Math.random() * neonColors.length)];
+              // Use the node's assigned color for flashing
+              const color = node.userData.assignedColor || new THREE.Color(0x7FFF00);
               node.material.emissive.set(color);
               node.material.color.set(color);
               
