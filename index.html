@@ -2628,7 +2628,9 @@
     // Update camera position based on current settings
     function updateCameraPosition() {
       // Calculate camera position using spherical coordinates
-      const phi = currentRotationX + Math.PI/2;  // Elevation angle
+      // Clamp rotation to avoid gimbal lock at poles
+      const clampedRotationX = Math.max(-Math.PI * 0.45, Math.min(Math.PI * 0.45, currentRotationX));
+      const phi = clampedRotationX + Math.PI/2;  // Elevation angle
       const theta = currentRotationY;            // Azimuthal angle
       
       // Update camera position
@@ -2682,9 +2684,10 @@
         cameraDistance = Math.min(maxDistance, cameraDistance + zoomSpeed);
       }
       
-      // Apply smooth easing to rotation
-      currentRotationX += (targetRotationX - currentRotationX) * 0.05;
-      currentRotationY += (targetRotationY - currentRotationY) * 0.05;
+      // Apply smooth easing to rotation with clamping
+      targetRotationX = Math.max(-Math.PI * 0.45, Math.min(Math.PI * 0.45, targetRotationX));
+      currentRotationX += (targetRotationX - currentRotationX) * 0.08;
+      currentRotationY += (targetRotationY - currentRotationY) * 0.08;
       
       // Update camera position
       updateCameraPosition();
