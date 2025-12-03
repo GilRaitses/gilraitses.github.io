@@ -275,6 +275,8 @@
       font-size: 2.5rem;
       position: relative;
       display: inline-block;
+      color: #f8d849;
+      text-shadow: 0 0 15px rgba(248, 216, 73, 0.6);
     }
 
     h1::after {
@@ -1001,7 +1003,7 @@
     
     .gallery-item {
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
+      border-radius: 0;
       overflow: hidden;
       transition: all 0.3s ease;
       transform-origin: center;
@@ -1075,17 +1077,13 @@
     }
     
     .gallery-item-title {
+      font-family: 'Didot', 'Bodoni MT', 'Cochin', 'Baskerville', serif;
       font-size: 1.6rem;
       margin-bottom: 0.7rem;
-      font-weight: 300;
-      color: #ffffff;
-      text-shadow: 0 0 8px rgba(127, 255, 0, 0.4);
-      text-align: center;
-    }
-    
-    .gallery-item-title.whale {
+      font-weight: 400;
       color: #f8d849;
       text-shadow: 0 0 10px rgba(248, 216, 73, 0.5);
+      text-align: center;
     }
     
     .gallery-item-desc {
@@ -1097,15 +1095,15 @@
     
     .gallery-item-link {
       align-self: flex-start;
-      background: var(--primary-color);
+      background: #ffff00;
       color: #000;
       text-decoration: none;
       padding: 0.5rem 1rem;
-      border-radius: 20px;
+      border-radius: 0;
       font-size: 0.8rem;
       transition: all 0.3s ease;
       font-weight: bold;
-      box-shadow: 0 0 10px rgba(127, 255, 0, 0.3);
+      box-shadow: 0 0 10px rgba(255, 255, 0, 0.4);
     }
     
     .gallery-item-link:hover {
