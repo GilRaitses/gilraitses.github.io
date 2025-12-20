@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Gil Raitses" />
+  <meta name="author" content="Devindi Goonawardhana" />
+  <meta name="author" content="Mirna Mihovilovic Skanata" />
+  <title>Temporal dynamics of mechanosensory behavior in Drosophila larvae</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    div.abstract {
+      margin: 2em 2em 2em 2em;
+      text-align: left;
+      font-size: 85%;
+    }
+    div.abstract-title {
+      font-weight: bold;
+      text-align: center;
+      padding: 0;
+      margin-bottom: 0.5em;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Temporal dynamics of mechanosensory behavior in<br />
+<em>Drosophila</em> larvae</h1>
+<p class="author">Gil Raitses</p>
+<p class="author">Devindi Goonawardhana</p>
+<p class="author">Mirna Mihovilovic Skanata</p>
+<div class="abstract">
+<div class="abstract-title">Abstract</div>
+<p>Navigating animals continuously integrate sensory information to
+decide when to initiate reorientation maneuvers. In <em>Drosophila</em>
+larvae, optogenetic activation of specific neural circuits suppresses
+forward locomotion and triggers turning behavior. An analytic LNP model
+is presented for predicting the timing of reorientation events under
+controlled LED stimulation. The model represents the temporal response
+as a difference of two gamma probability density functions, with a fast
+component at <span class="math inline">\(\tau_1 = 0.29\)</span> s and a
+slower component at <span class="math inline">\(\tau_2 = 3.81\)</span>
+s. The 6-parameter kernel approximates a flexible 12-basis raised-cosine
+reference with <span class="math inline">\(R^2 = 0.968\)</span>.
+Embedded in a run/turn trajectory simulator, the kernel matches observed
+turn rates of 1.88 vs 1.84 turns/min. The resulting timescale parameters
+distinguish fast sensory transduction from slow adaptation dynamics.</p>
+</div>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a>
+<ul>
+<li><a href="#larval-navigation-and-optogenetic-control"
+id="toc-larval-navigation-and-optogenetic-control">Larval Navigation and
+Optogenetic Control</a></li>
+<li><a href="#lnp-regression-and-the-role-of-temporal-kernels"
+id="toc-lnp-regression-and-the-role-of-temporal-kernels">LNP Regression
+and the Role of Temporal Kernels</a></li>
+<li><a href="#contribution" id="toc-contribution">Contribution</a></li>
+</ul></li>
+<li><a href="#methods" id="toc-methods">Methods</a>
+<ul>
+<li><a href="#experimental-data" id="toc-experimental-data">Experimental
+Data</a></li>
+<li><a href="#lnp-regression-model-structure"
+id="toc-lnp-regression-model-structure">LNP Regression Model
+Structure</a></li>
+<li><a href="#stimulus-onset-kernel-gamma-difference"
+id="toc-stimulus-onset-kernel-gamma-difference">Stimulus-Onset Kernel:
+Gamma-Difference</a></li>
+<li><a href="#stimulus-offset-kernel"
+id="toc-stimulus-offset-kernel">Stimulus-Offset Kernel</a></li>
+<li><a href="#event-definition" id="toc-event-definition">Event
+Definition</a></li>
+<li><a href="#rate-calibration" id="toc-rate-calibration">Rate
+Calibration</a></li>
+<li><a href="#trajectory-simulation"
+id="toc-trajectory-simulation">Trajectory Simulation</a></li>
+<li><a href="#validation-metrics" id="toc-validation-metrics">Validation
+Metrics</a></li>
+</ul></li>
+<li><a href="#results" id="toc-results">Results</a>
+<ul>
+<li><a href="#analytic-kernel-captures-temporal-structure"
+id="toc-analytic-kernel-captures-temporal-structure">Analytic Kernel
+Captures Temporal Structure</a></li>
+<li><a href="#lnp-model-reproduces-event-rates"
+id="toc-lnp-model-reproduces-event-rates">LNP Model Reproduces Event
+Rates</a></li>
+<li><a href="#trajectory-simulation-matches-behavioral-statistics"
+id="toc-trajectory-simulation-matches-behavioral-statistics">Trajectory
+Simulation Matches Behavioral Statistics</a></li>
+<li><a href="#sec:factorial" id="toc-sec:factorial">Factorial Analysis
+of Intensity and Background Effects</a></li>
+</ul></li>
+<li><a href="#discussion" id="toc-discussion">Discussion</a>
+<ul>
+<li><a href="#interpretability-of-the-gamma-difference-kernel"
+id="toc-interpretability-of-the-gamma-difference-kernel">Interpretability
+of the Gamma-Difference Kernel</a></li>
+<li><a href="#practical-utility" id="toc-practical-utility">Practical
+Utility</a></li>
+<li><a href="#condition-dependent-timescales"
+id="toc-condition-dependent-timescales">Condition-Dependent
+Timescales</a></li>
+<li><a href="#factorial-design-insights"
+id="toc-factorial-design-insights">Factorial Design Insights</a></li>
+<li><a href="#limitations" id="toc-limitations">Limitations</a></li>
+<li><a href="#alternative-explanations"
+id="toc-alternative-explanations">Alternative Explanations</a></li>
+<li><a href="#behavioral-variability-and-phenotype-identification"
+id="toc-behavioral-variability-and-phenotype-identification">Behavioral
+Variability and Phenotype Identification</a></li>
+<li><a href="#composite-phenotype-validation"
+id="toc-composite-phenotype-validation">Composite Phenotype
+Validation</a></li>
+<li><a href="#design-recommendations-by-kernel-type-and-phenotype-goal"
+id="toc-design-recommendations-by-kernel-type-and-phenotype-goal">Design
+Recommendations by Kernel Type and Phenotype Goal</a></li>
+<li><a href="#fisher-information-for-experimental-design"
+id="toc-fisher-information-for-experimental-design">Fisher Information
+for Experimental Design</a></li>
+<li><a href="#trial-to-trial-sensitization"
+id="toc-trial-to-trial-sensitization">Trial-to-Trial
+Sensitization</a></li>
+<li><a href="#future-directions" id="toc-future-directions">Future
+Directions</a></li>
+</ul></li>
+<li><a href="#conclusions" id="toc-conclusions">Conclusions</a></li>
+<li><a href="#acknowledgments"
+id="toc-acknowledgments">Acknowledgments</a></li>
+<li><a href="#data-and-code-availability"
+id="toc-data-and-code-availability">Data and Code Availability</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
+</ul>
+</nav>
+<h1 id="introduction">Introduction</h1>
+<h2 id="larval-navigation-and-optogenetic-control">Larval Navigation and
+Optogenetic Control</h2>
+<p><em>Drosophila</em> larvae navigate their environment using a
+characteristic locomotor pattern of forward crawling (runs) punctuated
+by reorientation maneuvers (turns) during which the animal samples new
+heading directions (Gershow et al., 2012; Gomez-Marin et al., 2011).
+Turn timing and direction are not random but modulated by sensory input,
+enabling larvae to perform gradient-based navigation (climbing and
+tracking) as well as phototaxis (Gershow et al., 2012; Kane et al.,
+2013).</p>
+<p>Optogenetic tools provide precise temporal control over neural
+activity, allowing researchers to probe how specific circuits influence
+behavioral decisions. In GMR61 larvae expressing channelrhodopsins, LED
+illumination activates neurons that suppress forward locomotion and
+increase the probability of reorientation events (Gepner et al., 2015).
+Understanding how turn probability evolves after stimulus onset and
+offset is central to modeling sensorimotor integration.</p>
+<h2 id="lnp-regression-and-the-role-of-temporal-kernels">LNP Regression
+and the Role of Temporal Kernels</h2>
+<p>Previous work has modeled larval turning probability using linear
+nonlinear Poisson (LNP) regression models with temporal basis functions
+(Paninski, 2004; Pillow et al., 2008; Hernandez-Nunez et al., 2015;
+Klein et al., 2015). LNP regression fits flexible temporal kernels to
+capture stimulus-response dynamics. Raised-cosine bases (smooth,
+overlapping bump functions centered at different time lags) with many
+parameters are common choices for the temporal kernel.</p>
+<p>Flexible basis representations give good predictive performance but
+offer little interpretability. A 12-parameter raised-cosine kernel may
+fit the data well but does not directly reveal the relevant timescales
+or separate the effects of sensory transduction and adaptation.</p>
+<figure id="fig:kernel">
+<img src="data/figures/figure1_kernel.png" style="width:75.0%" />
+<figcaption><strong>Analytic LNP kernel decomposition.</strong>
+<strong>(A)</strong> Full kernel K<span
+class="math inline">\(_{\text{on}}\)</span>(t) as a blue solid line; red
+shading marks suppression where K<span
+class="math inline">\(_{\text{on}}\)</span>(t) <span
+class="math inline">\(&lt; 0\)</span>. Peak suppression of <span
+class="math inline">\(-3.06\)</span> log-hazard units at <span
+class="math inline">\(t^* = 2.9\)</span> s corresponds to turn rate
+dropping to <span class="math inline">\(\sim\)</span>5% of baseline.
+<strong>(B)</strong> Component decomposition: fast excitatory component
+(green; <span class="math inline">\(\tau_1 = 0.29\)</span> s) captures
+rapid transduction; slow suppressive component (red; <span
+class="math inline">\(\tau_2 = 3.81\)</span> s) represents adaptation.
+Combined kernel (blue dashed) matches Panel A.</figcaption>
+</figure>
+<h2 id="contribution">Contribution</h2>
+<p>An analytic temporal kernel addresses the interpretability gap for
+LNP regression models of optogenetically-driven reorientation. The
+kernel is a difference of two gamma probability density functions:</p>
+<p><span class="math display">\[K_{\text{on}}(t) = A \cdot \Gamma(t;
+\alpha_1, \beta_1) - B \cdot \Gamma(t; \alpha_2, \beta_2)
+\label{eq:kernel}\]</span></p>
+<p>where <span class="math inline">\(\Gamma(t; \alpha, \beta)\)</span>
+denotes the gamma probability density function with shape <span
+class="math inline">\(\alpha\)</span> and scale <span
+class="math inline">\(\beta\)</span>.</p>
+<p>The gamma-difference kernel captures a fast excitatory component
+peaking at 0.16 s with mean <span class="math inline">\(\tau_1 =
+0.29\)</span> s, representing rapid sensory transduction, alongside a
+slow suppressive component peaking at 2.9 s with mean <span
+class="math inline">\(\tau_2 = 3.81\)</span> s, representing synaptic or
+network adaptation.</p>
+<p>The gamma-difference form arises naturally as the impulse response of
+cascaded first-order processes, making parameters directly interpretable
+in terms of processing stages and time constants.</p>
+<p>Validation against GMR61 data under 10 s peak / 20 s baseline LED
+stimulation supports kernel accuracy. The analytic form matches both the
+12-basis reference with <span class="math inline">\(R^2 = 0.968\)</span>
+and empirical event rates with ratio = 0.97. The kernel also drives a
+trajectory simulator that recapitulates observed behavior.</p>
+<h1 id="methods">Methods</h1>
+<h2 id="experimental-data">Experimental Data</h2>
+<p>Data were collected from GMR61 <em>Drosophila</em> larvae expressing
+channelrhodopsins. Animals were tracked at 20 Hz on an agar substrate
+while receiving optogenetic LED stimulation in a square-wave pattern: 10
+s at peak intensity, 20 s at baseline intensity (30 s cycle). The
+present analysis includes 55 tracks containing 1,407 reorientation-onset
+events from 2 experimental sessions under the 0-to-250 PWM condition
+with constant 7 PWM blue LED background.</p>
+<p>Throughout the paper, “stimulus onset” refers to the transition from
+baseline to peak LED intensity, while “stimulus offset” refers to the
+transition from peak back to baseline. For the 0-to-250 PWM condition,
+baseline intensity is 0 (LED off). For the 50-to-250 PWM condition used
+in factorial analyses, baseline intensity is 50 PWM (<span
+class="math inline">\({\sim}20\%\)</span> of maximum), representing
+reduced rather than absent stimulation. Figure <a
+href="#fig:psth_kernels" data-reference-type="ref"
+data-reference="fig:psth_kernels">2</a> shows the resulting
+peri-stimulus turn rate histograms for each experimental condition.</p>
+<figure id="fig:psth_kernels">
+<img src="data/figures/figure6_psth_kernels_combined.png"
+style="width:95.0%" />
+<figcaption><strong>Condition-specific temporal dynamics and model
+validation.</strong> <strong>Panels A–D:</strong> Peri-stimulus turn
+rate histograms for each experimental condition showing turn rate
+aligned to LED onset at time = 0. Pink shaded region indicates the
+peak-intensity period from 0–10 s. The 0-to-250 PWM conditions with
+Constant and Cycling backgrounds in panels A and B show pronounced
+pre-stimulus peaks and strong post-onset suppression. The 50-to-250 PWM
+conditions in panels C and D show weaker modulation, consistent with
+partial adaptation to elevated baseline intensity. Shaded bands indicate
+95% confidence intervals. <strong>Panel E:</strong> Empirical
+peri-stimulus turn rate with all four conditions overlaid showing
+condition-dependent suppression depth. <strong>Panel F:</strong> Direct
+comparison of empirical PSTH and LNP model prediction. The model
+captures the temporal dynamics of turn rate modulation including the
+initial transient peak at LED onset, deep suppression during peak
+intensity from 1–4 s, and gradual recovery. Model parameters t1 = 0.29 s
+and t2 = 3.81 s.</figcaption>
+</figure>
+<p>Reorientation events were detected using a curvature-threshold
+algorithm that identifies the onset of heading changes. The algorithm
+captures large sustained turns and brief head sweeps alike. Events with
+measurable duration exceeding 0.1 s were classified as “true turns”
+(<span class="math inline">\(N=319\)</span>) for behavioral
+interpretation.</p>
+<p>Trajectories were segmented into five behavioral states using
+rule-based algorithms adapted from Klein et al. (2015). Locomotion
+states include runs (forward motion with SpeedRunVel <span
+class="math inline">\(&gt; 0\)</span>) and pauses (speed below 0.1 mm/s
+for <span class="math inline">\(\geq 0.5\)</span> s). Reorientation
+events include turns (heading changes exceeding 30<span
+class="math inline">\(^\circ\)</span> within 1 s) and reorientations
+(turn onset frames for LNP modeling). Escape behaviors comprise reverse
+crawls (backward motion with SpeedRunVel <span
+class="math inline">\(&lt; 0\)</span> sustained for <span
+class="math inline">\(\geq 3\)</span> s). The five-state segmentation
+enables extraction of duration statistics for each behavioral class
+(Supplementary Figure S7).</p>
+<p>Of 701 total tracks across 14 experiments, 79 (11.3%) spanned the
+full 20-minute experiment and were used for individual variability
+analysis. Incomplete tracks were excluded to avoid right-censoring bias.
+A <span class="math inline">\(t\)</span>-test confirmed no significant
+difference in mean locomotor speed between complete and incomplete
+tracks (<span class="math inline">\(p = 0.24\)</span>), indicating the
+subset is representative. Population-level kernel parameters were
+estimated from all tracks using pooled event data.</p>
+<h2 id="lnp-regression-model-structure">LNP Regression Model
+Structure</h2>
+<p>Reorientation timing is modeled using linear nonlinear Poisson (LNP)
+regression, which describes the time-dependent probability that an event
+(here, a reorientation) occurs at time <span
+class="math inline">\(t\)</span>. The instantaneous rate is given
+by:</p>
+<p><span class="math display">\[\lambda(t) = \exp\left(\beta_0 +
+u_{\text{track}} + K_{\text{on}}(t_{\text{onset}}) +
+K_{\text{off}}(t_{\text{offset}})\right)
+\label{eq:hazard}\]</span></p>
+<p>where:</p>
+<ul>
+<li><p><span class="math inline">\(\beta_0 = -6.23\)</span>: Calibrated
+global intercept (log-rate baseline)</p></li>
+<li><p><span class="math inline">\(u_{\text{track}} \sim \mathcal{N}(0,
+\sigma^2)\)</span> with <span class="math inline">\(\sigma =
+0.47\)</span>: Track-specific random effect capturing individual
+variability</p></li>
+<li><p><span class="math inline">\(K_{\text{on}}(t)\)</span>:
+Stimulus-onset temporal kernel (response to LED intensity
+increase)</p></li>
+<li><p><span class="math inline">\(K_{\text{off}}(t)\)</span>:
+Stimulus-offset temporal kernel (response to LED intensity
+decrease)</p></li>
+</ul>
+<p>The model is fit as a negative-binomial GLM (NB-GLM) with logarithmic
+link, treating each video frame (<span class="math inline">\(dt =
+0.05\)</span> s) as a Bernoulli trial for event occurrence.</p>
+<h2 id="stimulus-onset-kernel-gamma-difference">Stimulus-Onset Kernel:
+Gamma-Difference</h2>
+<p>The stimulus-onset kernel <span
+class="math inline">\(K_{\text{on}}(t)\)</span> is parameterized as a
+difference of two gamma probability density functions (Equation <a
+href="#eq:kernel" data-reference-type="ref"
+data-reference="eq:kernel">[eq:kernel]</a>), where:</p>
+<p><span class="math display">\[\Gamma(t; \alpha, \beta) =
+\frac{t^{\alpha-1} e^{-t/\beta}}{\beta^\alpha
+\Gamma(\alpha)}\]</span></p>
+<p>is the gamma PDF with shape <span
+class="math inline">\(\alpha\)</span> and scale <span
+class="math inline">\(\beta\)</span>.</p>
+<div id="tab:params">
+<table>
+<caption>Fitted kernel parameters with 95% bootstrap confidence
+intervals.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Parameter</strong></th>
+<th style="text-align: left;"><strong>Value</strong></th>
+<th style="text-align: left;"><strong>95% CI</strong></th>
+<th style="text-align: left;"><strong>Interpretation</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(A\)</span></td>
+<td style="text-align: left;">0.456</td>
+<td style="text-align: left;">[0.409, 0.499]</td>
+<td style="text-align: left;">Fast component amplitude</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha_1\)</span></td>
+<td style="text-align: left;">2.22</td>
+<td style="text-align: left;">[1.93, 2.65]</td>
+<td style="text-align: left;">Fast shape (<span
+class="math inline">\(\sim\)</span>2 stages)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\beta_1\)</span></td>
+<td style="text-align: left;">0.132 s</td>
+<td style="text-align: left;">[0.102, 0.168]</td>
+<td style="text-align: left;">Fast timescale</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(B\)</span></td>
+<td style="text-align: left;">12.54</td>
+<td style="text-align: left;">[12.43, 12.66]</td>
+<td style="text-align: left;">Slow component amplitude</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha_2\)</span></td>
+<td style="text-align: left;">4.38</td>
+<td style="text-align: left;">[4.30, 4.46]</td>
+<td style="text-align: left;">Slow shape (<span
+class="math inline">\(\sim\)</span>4 stages)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\beta_2\)</span></td>
+<td style="text-align: left;">0.869 s</td>
+<td style="text-align: left;">[0.852, 0.890]</td>
+<td style="text-align: left;">Slow timescale</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure id="fig:validation">
+<img src="data/figures/figure2_validation.png" style="width:95.0%" />
+<figcaption><strong>LNP model validation against empirical
+data.</strong> The calibrated LNP model reproduces features of larval
+reorientation behavior. <strong>(A)</strong> Model hazard rate showing
+event probability over time relative to LED onset at time = 0. The model
+shows an initial excitatory peak followed by rapid suppression within
+0.5 s of LED activation, with yellow shaded region indicating
+peak-intensity period from 0–10 s. The model captures both the <span
+class="math inline">\({\sim}2\times\)</span> reduction in event rate
+during stimulation and the gradual recovery after LED offset at 10 s.
+<strong>(B)</strong> Suppression dynamics comparison. During
+peak-intensity phase, both empirical and simulated data show <span
+class="math inline">\(\sim\)</span>50% reduction in turn probability
+relative to baseline. Early suppression from 0–3 s and late suppression
+from 3–8 s are both captured within 5% of empirical values.
+<strong>(C)</strong> Simulated peri-stimulus turn rate from LNP model
+predictions across conditions. The model-predicted rates show
+condition-dependent suppression depth matching the amplitude parameters
+fitted to each condition. <strong>(D)</strong> Gamma-difference kernels
+fitted separately to each experimental condition. All four conditions
+share similar kernel shape with fast excitation followed by slow
+suppression, but differ in amplitude. The 0-to-250 PWM conditions show
+deeper suppression troughs than the 50-to-250 PWM conditions, consistent
+with the amplitude modulation observed in suppression
+dynamics.</figcaption>
+</figure>
+<p>The fast component peaks at 0.16 s with mean <span
+class="math inline">\(\tau_1 = \alpha_1 \beta_1 = 0.29\)</span> s, while
+the slow component peaks at 2.94 s with mean <span
+class="math inline">\(\tau_2 = \alpha_2 \beta_2 = 3.81\)</span> s.</p>
+<h2 id="stimulus-offset-kernel">Stimulus-Offset Kernel</h2>
+<p>A separate exponential kernel captures transient effects after LED
+intensity decreases:</p>
+<p><span class="math display">\[K_{\text{off}}(t) = D \cdot
+\exp(-t/\tau_{\text{off}})
+\label{eq:rebound}\]</span></p>
+<p>with <span class="math inline">\(D = -0.114\)</span> and <span
+class="math inline">\(\tau_{\text{off}} = 2.0\)</span> s. The negative
+coefficient represents continued suppression during recovery, with a
+half-life of 1.39 s.</p>
+<h2 id="event-definition">Event Definition</h2>
+<p>The LNP model was fit to all 1,407 inclusive onset events, comprising
+salient reorientations (“true turns”) as well as minor events such as
+head sweeps and curvature fluctuations.</p>
+<p>For trajectory simulation and behavioral interpretation, events were
+filtered to those with <code>turn_duration</code> <span
+class="math inline">\(&gt; 0.1\)</span> s (<span class="math inline">\(N
+= 319\)</span>, 23% of total). Fitting the LNP model to all events while
+focusing behavioral output on filtered events follows standard practice
+in larval navigation modeling.</p>
+<p>For the factorial extension (Section <a href="#sec:factorial"
+data-reference-type="ref" data-reference="sec:factorial">3.4</a>), 14
+experiments comprising 7,867 events across 701 tracks were pooled. Two
+experiments with anomalously high event counts (approximately <span
+class="math inline">\(10\)</span>–<span
+class="math inline">\(20\times\)</span> other sessions) were excluded
+because their annotation statistics were inconsistent with the remaining
+dataset.</p>
+<h2 id="rate-calibration">Rate Calibration</h2>
+<p>The NB-GLM intercept (<span class="math inline">\(\beta_0 =
+-6.76\)</span>) represents log-hazard per frame at 20 Hz. Discrete-time
+simulation with the raw intercept produced <span
+class="math inline">\(\sim\)</span>60% of empirical events. A
+calibration factor was applied:</p>
+<p><span class="math display">\[\beta_0^{\text{cal}} = \beta_0 +
+\log\left(\frac{N_{\text{emp}}}{N_{\text{sim}}}\right) = -6.76 +
+\log(1.695) = -6.23\]</span></p>
+<p>Global rate normalization preserves kernel dynamics (shape and
+timing) as well as relative condition effects while matching empirical
+event rates. All factorial contrasts are independent of the
+calibration.</p>
+<h2 id="trajectory-simulation">Trajectory Simulation</h2>
+<p>A run/turn state machine driven by the LNP model was implemented.
+During runs, the larva moves forward at 1.0 mm/s with Brownian heading
+noise (<span class="math inline">\(\sigma = 0.03\)</span> rad/<span
+class="math inline">\(\sqrt{\text{s}}\)</span>) and transition to a turn
+is governed by the instantaneous hazard <span
+class="math inline">\(\lambda(t)\)</span>. During turns, heading angle
+is sampled from <span class="math inline">\(\mathcal{N}(\mu = 7^\circ,
+\sigma = 86^\circ)\)</span> with duration sampled from a lognormal
+distribution (median <span class="math inline">\(= 1.1\)</span> s).
+Speed is reduced to <span class="math inline">\(0.4\times\)</span> the
+run speed and the larva returns to running after the turn duration
+elapses.</p>
+<p>The trajectory simulator uses the LNP model to drive run/turn
+transitions and reproduces event rates and timing. Spatial statistics
+such as path shapes and arena occupancy were not systematically
+validated. The simulator demonstrates hazard-driven timing rather than
+providing a fully calibrated locomotion model.</p>
+<figure id="fig:trajectories">
+<img src="data/figures/figure3_trajectories.png" style="width:95.0%" />
+<figcaption><strong>Trajectory comparison: simulated vs
+empirical.</strong> <strong>(A)</strong> Spatial trajectories over 20
+minutes showing runs punctuated by reorientation events. Blue segments
+indicate LED off periods and orange segments indicate LED on periods.
+Red circles mark turn onsets scaled by angle magnitude. The left two
+panels display LNP model simulations and the right panel displays an
+empirical GMR61 larva track. <strong>(B)</strong> Cumulative turn counts
+over time with yellow shading during LED on periods. Stochastic sampling
+produces individual track rates ranging from 6–13 turns/min in
+simulations and 12.7 turns/min in the empirical track shown. Pooled
+rates across all 20-minute tracks match closely at 10.98 turns/min for
+simulated data and 10.44 turns/min for empirical data.</figcaption>
+</figure>
+<h2 id="validation-metrics">Validation Metrics</h2>
+<p>Model performance was assessed through four metrics grouped by
+validation type: fit quality metrics include kernel <span
+class="math inline">\(R^2\)</span> and PSTH correlation, while rate
+matching metrics include rate ratio and suppression magnitude.</p>
+<h1 id="results">Results</h1>
+<h2 id="analytic-kernel-captures-temporal-structure">Analytic Kernel
+Captures Temporal Structure</h2>
+<p>The 6-parameter gamma-difference kernel closely approximates the
+12-parameter raised-cosine reference (Figure <a href="#fig:kernel"
+data-reference-type="ref" data-reference="fig:kernel">1</a>A). The
+analytic form achieves <span class="math inline">\(R^2 = 0.968\)</span>
+and cross-validated <span class="math inline">\(R^2 = 0.961\)</span>
+(5-fold, track-wise), demonstrating that the compact parameterization
+does not sacrifice predictive accuracy.</p>
+<p>The kernel shows characteristic biphasic dynamics visible in Figure
+<a href="#fig:kernel" data-reference-type="ref"
+data-reference="fig:kernel">1</a>B, with an initial brief increase in
+hazard from the fast component with <span class="math inline">\(\tau_1 =
+0.29\)</span> s followed by sustained suppression from the slow
+component with <span class="math inline">\(\tau_2 = 3.81\)</span> s. The
+fast component peaks at approximately 0.16 s post-stimulus, consistent
+with the latency of channelrhodopsin activation and first-order neural
+responses. The slow component dominates from 1–8 s, producing the
+characteristic suppression of reorientation probability during
+peak-intensity periods. The fast onset followed by sustained suppression
+is consistent with rapid sensory transduction giving way to slower
+synaptic adaptation.</p>
+<p>The stimulus-offset kernel (not shown) shows modest continued
+suppression after the return to baseline intensity, with a time constant
+of 2.0 s. The 2.0 s time constant indicates that return to baseline
+behavior is gradual rather than instantaneous, likely reflecting
+recovery from synaptic adaptation.</p>
+<h2 id="lnp-model-reproduces-event-rates">LNP Model Reproduces Event
+Rates</h2>
+<p>Simulation using the calibrated LNP model produces event counts
+closely matching empirical observations (Table <a href="#tab:validation"
+data-reference-type="ref" data-reference="tab:validation">2</a>; Figure
+<a href="#fig:validation" data-reference-type="ref"
+data-reference="fig:validation">3</a>).</p>
+<div id="tab:validation">
+<table>
+<caption>Validation metrics comparing simulated and empirical
+data.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Metric</strong></th>
+<th style="text-align: left;"><strong>Empirical</strong></th>
+<th style="text-align: left;"><strong>Simulated</strong></th>
+<th style="text-align: left;"><strong>Status</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Total events</td>
+<td style="text-align: left;">1,407</td>
+<td style="text-align: left;">1,371</td>
+<td style="text-align: left;">PASS</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rate ratio</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">0.974</td>
+<td style="text-align: left;">Target: 0.8–1.25</td>
+</tr>
+<tr>
+<td style="text-align: left;">Baseline rate</td>
+<td style="text-align: left;"><span
+class="math inline">\(\sim\)</span>1.9/min</td>
+<td style="text-align: left;"><span
+class="math inline">\(\sim\)</span>1.9/min</td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+<tr>
+<td style="text-align: left;">Peak rate</td>
+<td style="text-align: left;"><span
+class="math inline">\(\sim\)</span>1.0/min</td>
+<td style="text-align: left;"><span
+class="math inline">\(\sim\)</span>1.0/min</td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+<tr>
+<td style="text-align: left;">Suppression</td>
+<td style="text-align: left;"><span
+class="math inline">\(2.0\times\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(1.9\times\)</span></td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The peri-stimulus time histogram (PSTH) comparison reveals close
+agreement between model predictions and empirical observations (Figure
+<a href="#fig:validation" data-reference-type="ref"
+data-reference="fig:validation">3</a>B). The correlation between
+simulated and empirical event histograms is <span
+class="math inline">\(r = 0.84\)</span>, indicating good capture of
+temporal dynamics around stimulus transitions. The model correctly
+reproduces the temporal suppression profile from rapid onset (within 0.5
+s of LED activation; Figure <a href="#fig:validation"
+data-reference-type="ref" data-reference="fig:validation">3</a>A, yellow
+shaded region) through sustained <span
+class="math inline">\({\sim}2\times\)</span> reduction during peak
+intensity to gradual recovery following LED offset.</p>
+<p>The simulated turn rate comparison (Figure <a href="#fig:validation"
+data-reference-type="ref" data-reference="fig:validation">3</a>C–D)
+shows strong agreement between model predictions and empirical
+observations. The hazard function achieves <span
+class="math inline">\(R^2 = 0.962\)</span>, confirming that the
+gamma-difference kernel captures the underlying temporal dynamics rather
+than merely matching aggregate statistics.</p>
+<h2 id="trajectory-simulation-matches-behavioral-statistics">Trajectory
+Simulation Matches Behavioral Statistics</h2>
+<p>The run/turn simulator driven by the LNP model produces realistic
+larval trajectories that recapitulate features of empirical behavior
+(Figure <a href="#fig:trajectories" data-reference-type="ref"
+data-reference="fig:trajectories">4</a>; Figure <a
+href="#fig:distributions" data-reference-type="ref"
+data-reference="fig:distributions">5</a>). Key behavioral statistics
+match empirical observations (Table <a href="#tab:trajectory"
+data-reference-type="ref" data-reference="tab:trajectory">3</a>).</p>
+<div id="tab:trajectory">
+<table>
+<caption>Trajectory simulation statistics.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Metric</strong></th>
+<th style="text-align: left;"><strong>Simulated</strong></th>
+<th style="text-align: left;"><strong>Empirical</strong></th>
+<th style="text-align: left;"><strong>Match</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Turn rate</td>
+<td style="text-align: left;">1.88/min</td>
+<td style="text-align: left;">1.84/min</td>
+<td style="text-align: left;">98%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Mean turn angle</td>
+<td style="text-align: left;"><span
+class="math inline">\(7^\circ\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(7^\circ\)</span></td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+<tr>
+<td style="text-align: left;">Turn duration</td>
+<td style="text-align: left;">1.1 s median</td>
+<td style="text-align: left;">1.1 s median</td>
+<td style="text-align: left;">MATCH</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure id="fig:distributions">
+<img src="data/figures/turn_distributions.png" style="width:95.0%" />
+<figcaption><strong>Empirical turn angle and duration
+distributions.</strong> Parameters extracted from 319 filtered events
+with turn duration <span class="math inline">\(&gt; 0.1\)</span> s used
+to parameterize the trajectory simulator. <strong>(A)</strong> Turn
+angle distribution: heading changes show high variability with slight
+rightward bias. A von Mises distribution shown as a red solid curve with
+<span class="math inline">\(\kappa = 0.62\)</span> provides the best
+fit, while a normal distribution shown as a green dashed curve with
+<span class="math inline">\(\mu = 7^\circ\)</span> and <span
+class="math inline">\(\sigma = 86^\circ\)</span> provides an adequate
+alternative fit. The mean absolute turn angle is <span
+class="math inline">\(69^\circ\)</span>, indicating substantial heading
+changes during reorientation. The small positive bias may reflect
+asymmetry in the experimental setup or intrinsic larval handedness.
+<strong>(B)</strong> Turn duration distribution: event durations follow
+a lognormal distribution shown as a red curve with shape <span
+class="math inline">\(s = 0.59\)</span>, scale <span
+class="math inline">\(= 1.29\)</span> s, and median = 1.1 s. Durations
+range from 0.1–6.8 s, with most turns completing within 2 s. Gamma and
+exponential fits not shown provided poorer fits to the right tail. The
+angle and duration distributions enable realistic stochastic simulation
+of turn kinematics without assuming fixed values.</figcaption>
+</figure>
+<p>Simulated trajectories reproduce the characteristic run-and-turn
+locomotion pattern observed in larvae (Figure <a
+href="#fig:trajectories" data-reference-type="ref"
+data-reference="fig:trajectories">4</a>A). During LED on periods, turn
+suppression extends run segments, matching the empirical observation
+that optogenetic activation reduces reorientation frequency. The
+cumulative turn counts in Figure <a href="#fig:trajectories"
+data-reference-type="ref" data-reference="fig:trajectories">4</a>B
+confirm that simulated and empirical rates converge over the 20-minute
+observation window despite stochastic variability in individual
+tracks.</p>
+<p>The turn angle distribution in Figure <a href="#fig:distributions"
+data-reference-type="ref" data-reference="fig:distributions">5</a>A
+shows high variability with <span class="math inline">\(\sigma =
+86^\circ\)</span> and a slight rightward bias of <span
+class="math inline">\(\mu = 7^\circ\)</span>, consistent with the
+exploratory nature of larval navigation. The turn duration distribution
+in Figure <a href="#fig:distributions" data-reference-type="ref"
+data-reference="fig:distributions">5</a>B follows a lognormal form with
+median 1.1 s, matching empirically observed turn durations. The turn
+angle and duration distributions were extracted from 319 filtered events
+with duration <span class="math inline">\(&gt; 0.1\)</span> s and used
+to parameterize the trajectory simulator.</p>
+<h2 id="sec:factorial">Factorial Analysis of Intensity and Background
+Effects</h2>
+<p>To assess generalization beyond the reference condition, the model
+was extended to a <span class="math inline">\(2\times2\)</span>
+factorial design varying LED1 intensity (0-to-250 vs 50-to-250 PWM) and
+LED2 background pattern (Constant 7 PWM vs Cycling 5–15 PWM). The
+factorial analysis pooled 14 experiments comprising 701 tracks and 7,867
+events across all four conditions (Figure <a href="#fig:factorial"
+data-reference-type="ref" data-reference="fig:factorial">6</a>).</p>
+<p>The factorial model extends the hazard function with
+condition-specific modulation:</p>
+<p><span class="math display">\[\log \lambda(t) = \beta_0 + \beta_I
+\cdot I + \beta_C \cdot C + \beta_{IC} \cdot (I \times C) + (\alpha +
+\alpha_I \cdot I + \alpha_C \cdot C) \cdot K_{\text{on}}(t) + \gamma
+\cdot K_{\text{off}}(t)
+\label{eq:factorial}\]</span></p>
+<p>where <span class="math inline">\(I\)</span> indicates the 50-to-250
+intensity condition and <span class="math inline">\(C\)</span> indicates
+the cycling background condition.</p>
+<div id="tab:factorial">
+<table>
+<caption>Factorial model coefficient estimates with 95% confidence
+intervals. All effects are statistically significant at <span
+class="math inline">\(p &lt; 0.05\)</span>.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Effect</strong></th>
+<th style="text-align: left;"><strong>Coefficient</strong></th>
+<th style="text-align: left;"><strong>95% CI</strong></th>
+<th style="text-align: left;"><strong>Hazard Ratio</strong></th>
+<th style="text-align: left;"><strong>Interpretation</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\beta_I\)</span> (Intensity)</td>
+<td style="text-align: left;"><span
+class="math inline">\(-0.199\)</span></td>
+<td style="text-align: left;"><span class="math inline">\([-0.266,
+-0.132]\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(0.82\times\)</span></td>
+<td style="text-align: left;">Lower baseline hazard</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\beta_C\)</span> (Cycling)</td>
+<td style="text-align: left;"><span
+class="math inline">\(-0.108\)</span></td>
+<td style="text-align: left;"><span class="math inline">\([-0.174,
+-0.042]\)</span></td>
+<td style="text-align: left;"><span
+class="math inline">\(0.90\times\)</span></td>
+<td style="text-align: left;">Lower baseline hazard</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\beta_{IC}\)</span> (Interaction)</td>
+<td style="text-align: left;"><span
+class="math inline">\(-0.119\)</span></td>
+<td style="text-align: left;"><span class="math inline">\([-0.218,
+-0.019]\)</span></td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">Synergistic reduction</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha\)</span> (Kernel amplitude)</td>
+<td style="text-align: left;"><span
+class="math inline">\(1.005\)</span></td>
+<td style="text-align: left;"><span class="math inline">\([0.899,
+1.110]\)</span></td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">Baseline suppression</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha_I\)</span> (Intensity mod.)</td>
+<td style="text-align: left;"><span
+class="math inline">\(-0.665\)</span></td>
+<td style="text-align: left;"><span class="math inline">\([-0.773,
+-0.557]\)</span></td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;"><span class="math inline">\(-66\%\)</span>
+suppression</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha_C\)</span> (Cycling mod.)</td>
+<td style="text-align: left;"><span
+class="math inline">\(0.152\)</span></td>
+<td style="text-align: left;"><span class="math inline">\([0.050,
+0.254]\)</span></td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;"><span class="math inline">\(+15\%\)</span>
+suppression</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\gamma\)</span> (Rebound)</td>
+<td style="text-align: left;"><span
+class="math inline">\(1.669\)</span></td>
+<td style="text-align: left;"><span class="math inline">\([0.470,
+2.869]\)</span></td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">Post-offset enhancement</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure id="fig:factorial">
+<img src="data/figures/figure5_factorial.png" style="width:95.0%" />
+<figcaption><strong>Factorial analysis of intensity and background
+effects.</strong> Extension of the LNP model to a <span
+class="math inline">\(2\times2\)</span> factorial design with 14
+experiments, 701 tracks, and 7,867 events reveals condition-specific
+modulation of suppression amplitude. <strong>(A)</strong> Heatmap of
+suppression amplitude <span class="math inline">\(\alpha + \alpha_I
+\cdot I + \alpha_C \cdot C\)</span> across the four experimental
+conditions. Values range from 0.34 for 50-to-250 | Constant with weakest
+suppression to 1.16 for 0-to-250 | Cycling with strongest suppression,
+representing a 3.4-fold range. Rows show background pattern with
+Constant 7 PWM vs Cycling 5–15 PWM; columns show LED1 intensity step
+with 0-to-250 vs 50-to-250 PWM. Blue indicates weaker suppression; red
+indicates stronger suppression. <strong>(B)</strong> Forest plot of
+factorial coefficient estimates with 95% confidence intervals. All
+effects are statistically significant with <span class="math inline">\(p
+&lt; 0.05\)</span>, marked with asterisks. Key findings: (1) Intensity
+modulation with <span class="math inline">\(\alpha_I = -0.665\)</span>
+indicates 66% weaker suppression for the 50-to-250 condition, consistent
+with partial adaptation to baseline illumination. (2) Cycling background
+modulation with <span class="math inline">\(\alpha_C = +0.152\)</span>
+indicates 15% stronger suppression with oscillating LED2, suggesting
+reduced adaptation. (3) The baseline effects with <span
+class="math inline">\(\beta_I = -0.199\)</span> and <span
+class="math inline">\(\beta_C = -0.108\)</span> show 18% and 10%
+reduction in overall hazard respectively. (4) A synergistic interaction
+with <span class="math inline">\(\beta_{IC} = -0.119\)</span> indicates
+greater-than-additive effects when both manipulations are combined. The
+rebound coefficient <span class="math inline">\(\gamma = 1.67\)</span>
+is positive, indicating enhanced event probability after LED
+offset.</figcaption>
+</figure>
+<p>The factorial analysis reveals that both experimental manipulations
+significantly modulate the optogenetic response (Table <a
+href="#tab:factorial" data-reference-type="ref"
+data-reference="tab:factorial">4</a>; Figure <a href="#fig:factorial"
+data-reference-type="ref" data-reference="fig:factorial">6</a>).</p>
+<p>The 50-to-250 condition shows 66% weaker suppression amplitude with
+<span class="math inline">\(\alpha_I = -0.665\)</span> and <span
+class="math inline">\(p &lt; 0.001\)</span>. The 66% reduction in
+suppression amplitude is consistent with partial adaptation: larvae
+pre-exposed to 50 PWM baseline illumination exhibit reduced sensitivity
+to the subsequent intensity step, suggesting that the sensory pathway
+has already partially adapted to the ambient light level.</p>
+<p>The cycling background with LED2 oscillating 5–15 PWM increases
+suppression amplitude by 15% with <span class="math inline">\(\alpha_C =
+0.152\)</span> and <span class="math inline">\(p = 0.004\)</span>. The
+modest gain increase may reflect background-dependent modulation of
+circuit excitability, possibly through reduced adaptation or temporal
+contrast effects. The specific mechanism remains to be determined.</p>
+<p>A modest interaction with <span class="math inline">\(\beta_{IC} =
+-0.119\)</span> and <span class="math inline">\(p = 0.019\)</span>
+suggests slightly greater-than-additive baseline reduction when both
+manipulations are combined. Given limited statistical power for
+detecting small interactions (estimated <span
+class="math inline">\(\sim\)</span>30–40% power for the observed effect
+size), the interaction is presented as exploratory and conclusions are
+not based on the finding.</p>
+<p>The condition-specific suppression amplitudes in Figure <a
+href="#fig:factorial" data-reference-type="ref"
+data-reference="fig:factorial">6</a>A range from 0.34 for 50-to-250
+Constant with weakest suppression to 1.16 for 0-to-250 Cycling with
+strongest suppression, representing a 3.4-fold range across
+conditions.</p>
+<p>Per-condition kernel fits reveal that the fast timescale <span
+class="math inline">\(\tau_1\)</span> varies 4-fold across conditions
+(0.26–1.18 s; Figure <a href="#fig:timescale_variability"
+data-reference-type="ref"
+data-reference="fig:timescale_variability">7</a>), while the slow
+timescale <span class="math inline">\(\tau_2\)</span> remains stable
+(3.7–4.5 s). The stability of <span
+class="math inline">\(\tau_2\)</span> alongside variable <span
+class="math inline">\(\tau_1\)</span> suggests that baseline
+illumination selectively modulates sensory transduction speed without
+affecting adaptation dynamics.</p>
+<p>Leave-one-experiment-out cross-validation yielded a mean rate ratio
+of <span class="math inline">\(1.03 \pm 0.31\)</span> across 12 held-out
+experiments (58% within the 0.8–1.25 target range), indicating
+reasonable but imperfect generalization. The substantial
+inter-experiment variance (<span class="math inline">\(\sigma =
+0.31\)</span>) suggests that individual session effects remain a source
+of unexplained variation.</p>
+<h1 id="discussion">Discussion</h1>
+<h2
+id="interpretability-of-the-gamma-difference-kernel">Interpretability of
+the Gamma-Difference Kernel</h2>
+<p>The gamma-difference parameterization has a clear biological
+interpretation. The shape parameters (<span
+class="math inline">\(\alpha_1 \approx 2\)</span>, <span
+class="math inline">\(\alpha_2 \approx 4\)</span>) suggest two-stage and
+four-stage cascades of first-order processes for the fast and slow
+components. Shape parameters of 2 and 4 are consistent with multi-stage
+signal transduction, where rapid sensory processing involves
+photoreceptor activation with 2 stages while slow circuit adaptation
+involves synaptic summation with 4 stages.</p>
+<p>These timescales match known neurophysiological processes: the fast
+timescale (<span class="math inline">\(\tau_1 = 0.29\)</span> s)
+corresponds to channelrhodopsin activation latency and first-order
+neural responses, while the slow timescale (<span
+class="math inline">\(\tau_2 = 3.81\)</span> s) matches adaptation
+processes observed in sensory circuits.</p>
+<h2 id="practical-utility">Practical Utility</h2>
+<p>The analytic kernel supports direct parameter comparison across
+conditions and allows testing whether experimental manipulations affect
+the fast or slow component. Simulations run directly without requiring
+precomputed basis functions.</p>
+<figure id="fig:timescale_variability">
+<img src="data/figures/timescale_variability.png" style="width:95.0%" />
+<figcaption><strong>Timescale variability across conditions.</strong>
+(A) Forest plot of fast timescale <span
+class="math inline">\(\tau_1\)</span> showing 4-fold range from 0.26 s
+to 1.18 s. (B) Forest plot of slow timescale <span
+class="math inline">\(\tau_2\)</span> showing relative stability at
+3.7–4.5 s. (C) <span class="math inline">\(\tau_1\)</span> vs <span
+class="math inline">\(\tau_2\)</span> scatter revealing condition
+clustering. (D) Kernel shapes by condition, with 50-to-250 Constant
+(green) showing the most delayed peak.</figcaption>
+</figure>
+<h2 id="condition-dependent-timescales">Condition-Dependent
+Timescales</h2>
+<p>The fast timescale <span class="math inline">\(\tau_1\)</span> shows
+condition-dependence, ranging from 0.26 s (0-to-250 Cycling) to 1.18 s
+(50-to-250 Constant). The 4-fold range in <span
+class="math inline">\(\tau_1\)</span> suggests that baseline neural
+excitation modulates the speed of sensory transduction. In contrast, the
+slow timescale <span class="math inline">\(\tau_2\)</span> remains
+relatively stable (3.7–4.5 s) across conditions, indicating that
+synaptic adaptation operates on an intrinsic circuit timescale
+independent of stimulus parameters.</p>
+<p>The 50-to-250 Constant condition, which has persistent low-level LED
+activation, produces the slowest fast component. The slowed fast
+component may reflect partial adaptation of the rapid sensory pathway
+under tonic stimulation, reducing the contrast of stimulus onset and
+slowing the initial response.</p>
+<h2 id="factorial-design-insights">Factorial Design Insights</h2>
+<p>The extension to a <span class="math inline">\(2\times2\)</span>
+factorial design reveals a dissociation between stable properties such
+as kernel shape and timescales in contrast to condition-dependent
+properties such as amplitude. Stable kernel shape suggests that circuit
+dynamics are intrinsic to the GMR61 pathway, while gain modulation
+reflects sensory context.</p>
+<p>The partial adaptation effect shows 66% weaker suppression for
+50-to-250, matching ratio-based scaling as described by the
+Weber-Fechner law, where response magnitude depends on the intensity
+ratio rather than the absolute level. The cycling background enhancement
+produces 15% stronger suppression and may reflect background-dependent
+gain modulation; possible mechanisms include reduced steady-state
+adaptation or temporal contrast effects, though the specific circuit
+basis remains to be determined.</p>
+<p>Notably, baseline hazard and LED1-driven suppression gain are
+dissociable. Intensity manipulation affects both properties by reducing
+baseline turning alongside suppression amplitude, in contrast to cycling
+background manipulation which reduces baseline while increasing
+suppression gain. The dissociation indicates that tonic excitability and
+stimulus-locked modulation are independently tunable circuit
+properties.</p>
+<h2 id="limitations">Limitations</h2>
+<p>Although point estimates of <span
+class="math inline">\(\tau_1\)</span> span approximately 4-fold across
+conditions (0.26–1.18 s), formal tests for heterogeneity based on
+bootstrap resampling do not reach significance (Cochran’s <span
+class="math inline">\(Q\)</span> <span class="math inline">\(p =
+0.252\)</span>; <span class="math inline">\(I^2 = 27\%\)</span>,
+moderate heterogeneity). The observed range may reflect genuine
+biological variation or estimator noise given the sample size. The <span
+class="math inline">\(\tau_1\)</span> variation is therefore interpreted
+as a hypothesis for future investigation rather than a demonstrated
+effect. Effect size analysis (Supplementary Material) reveals that the
+largest pairwise difference (0-to-250 Cycling vs 50-to-250 Constant)
+corresponds to Hedges’ <span class="math inline">\(g = 3.1\)</span>
+(large effect), but overlapping confidence intervals preclude strong
+claims about condition-specific timescales.</p>
+<p>While the factorial model captures main effects well with mean rate
+ratio = 1.03, the 58% leave-one-out pass rate with 8/14 experiments
+within <span class="math inline">\(\pm\)</span>25% of target does not
+significantly exceed chance with binomial <span class="math inline">\(p
+= 0.39\)</span>. The 58% pass rate indicates modest rather than strong
+out-of-sample validation, likely reflecting substantial
+session-to-session variability from experimental factors such as agar
+moisture and larval developmental stage not captured by the model.</p>
+<p>The primary analysis uses a fixed-effects NB-GLM that pools across
+experiments. A robustness check using NB-GLMM with random track
+intercepts (Supplementary Table S2b) showed that the kernel parameters
+differ by less than 3.5% between models, with random effect SD <span
+class="math inline">\(= 0.59\)</span> indicating substantial
+between-track variation in baseline rate.</p>
+<p>Reorientation events were defined using
+<code>is_reorientation_start</code> from the tracking pipeline, yielding
+7,288 events across all factorial conditions. Of these, 77% have zero
+measured duration, representing onset events including micro head
+sweeps, while 23% have duration <span class="math inline">\(&gt;
+0.1\)</span> s and qualify as true turns. The LNP model was fit to all
+events to maximize power; trajectory simulations use only the filtered
+subset.</p>
+<p>Time-rescaling analysis showed modest deviation from the ideal
+Poisson model with KS test <span class="math inline">\(p = 0.17\)</span>
+and mean deviation 1.3%, within acceptable limits for point process
+models. Remaining deviation may reflect short-term dependencies such as
+refractoriness. An explicit post-event kernel could improve IEI fits but
+would not change the main LED1-driven suppression dynamics.</p>
+<p>The run/turn simulator omits edge avoidance as well as head sweeps
+and speed gradients. The simplified dynamics suffice for demonstrating
+hazard-driven timing but limit biomechanical realism.</p>
+<p>Using Mason Klein’s reverse crawl detection algorithm with
+SpeedRunVel <span class="math inline">\(&lt; 0\)</span> for <span
+class="math inline">\(\geq 3\)</span> s, 1,853 reversal events were
+identified across all 14 experiments, comprising 2.3% of total
+observation time. Reverse crawls show the <em>opposite</em> LED
+modulation from reorientations: LED stimulation <em>increases</em>
+reverse crawl probability by 14% (<span
+class="math inline">\(\chi^2\)</span> test <span class="math inline">\(p
+&lt; 0.001\)</span>), with a pronounced spike to 7% in the first 0–5 s
+after LED onset before declining below baseline. The pattern suggests a
+biphasic escape response with immediate backward locomotion followed by
+suppression of turning. A three-state model including run, turn, and
+reverse states could capture the full behavioral repertoire but is
+beyond the current scope.</p>
+<p>Event detection relies on fixed thresholds of 30<span
+class="math inline">\(^\circ\)</span> for turns, 0.5 s for pauses, and 3
+s for reverse crawls that have not been formally sensitivity-tested.
+Changes in stimulus intensity may alter movement kinematics such that
+fixed thresholds misclassify events differently across conditions,
+potentially biasing <span class="math inline">\(\tau_1\)</span>
+estimates. Threshold robustness analysis with <span
+class="math inline">\(\pm\)</span>20% variation and model refitting is
+warranted to confirm that the reported timescale differences are not
+detection artifacts.</p>
+<h2 id="alternative-explanations">Alternative Explanations</h2>
+<p>The interpretation that baseline illumination modulates sensory
+transduction speed <span class="math inline">\(\tau_1\)</span> and gain
+amplitude is presented as a hypothesis consistent with the data, not a
+firm conclusion. Several alternative explanations cannot be
+excluded:</p>
+<p>The <span class="math inline">\(\tau_1\)</span> variation admits
+several alternative explanations. Behavioral state confounds represent
+one possibility, as larvae in high-intensity or high-background
+conditions may differ in arousal, fatigue, or adaptation states that
+affect reaction time independently of sensory transduction. Event
+detection artifacts offer another explanation, since fixed turn-angle
+thresholds applied to conditions with different movement kinematics
+could bias which events are detected and when, shifting apparent <span
+class="math inline">\(\tau_1\)</span> without reflecting true sensory
+dynamics. Track selection bias cannot be excluded, as the 79 complete
+tracks comprising 11% of total used for variability analysis may differ
+systematically from incomplete tracks, though speed comparisons show no
+significant difference (<span class="math inline">\(p = 0.24\)</span>).
+Fitting noise may also contribute, given the non-significant
+heterogeneity test (<span class="math inline">\(p = 0.252\)</span>);
+some of the apparent <span class="math inline">\(\tau_1\)</span> range
+may reflect estimator variance rather than genuine biological
+differences.</p>
+<p>The amplitude variation also admits alternative explanations. Motor
+decision probability represents one possibility, as the suppression
+amplitude may reflect the probability of initiating a reorientation
+given a stimulus as a motor decision rather than purely sensory gain
+modulation. State occupancy differences offer another explanation, since
+conditions that promote more running versus pausing could shift apparent
+amplitude due to different baseline behavioral distributions. Model
+mis-specification cannot be excluded, as a gamma-difference kernel that
+cannot capture all relevant temporal structure such as
+non-stationarities or individual differences may show amplitude
+compensation for unmodeled dynamics.</p>
+<p>Testing these alternative explanations would require genetic
+manipulations to change baseline excitation or hazard-model analyses
+that include covariates for speed and run history as well as time since
+experiment start.</p>
+<h2 id="behavioral-variability-and-phenotype-identification">Behavioral
+Variability and Phenotype Identification</h2>
+<p>The event duration distributions (Supplementary Figure S7) reveal
+condition-dependent differences in behavioral timing that may serve as
+phenotypic signatures. Pause durations are significantly longer in
+50-to-250 conditions (<span class="math inline">\(p &lt; 0.001\)</span>,
+Kruskal-Wallis), suggesting that baseline illumination affects not only
+reorientation probability but also the temporal structure of exploratory
+pauses. Turn durations also vary significantly across conditions (<span
+class="math inline">\(p &lt; 0.001\)</span>), while run durations show
+only marginal differences (<span class="math inline">\(p =
+0.08\)</span>).</p>
+<p>Event durations varied significantly for turns and pauses in contrast
+to runs which showed only marginal differences, suggesting that
+kernel-derived timescales <span class="math inline">\(\tau_1\)</span>
+and <span class="math inline">\(\tau_2\)</span> combined with event
+duration statistics could provide a multidimensional behavioral
+fingerprint for phenotype identification. Animals with similar
+stimulus-response dynamics in kernel shape but different behavioral
+tempo in event durations may represent distinct behavioral phenotypes
+within the same genotype. Future work should leverage complete tracks
+spanning the full experiment to establish individual-level variability
+bounds before attempting phenotype clustering.</p>
+<h2 id="composite-phenotype-validation">Composite Phenotype
+Validation</h2>
+<p>Simulation-based validation tested whether continuous phenotype
+dimensions can be recovered from behavioral measures under realistic
+experimental conditions. Two latent phenotype dimensions were simulated:
+Precision (modulating ON/OFF hazard ratio) and Burstiness (modulating
+event clustering via self-excitation). Recovery was assessed across
+baseline hazard levels and target event counts.</p>
+<p><strong>Precision phenotype recovery.</strong> The Precision
+dimension showed robust recovery across all conditions tested. Factor
+analysis recovered true Precision scores with correlations of 0.63–0.89,
+with higher correlations at elevated baseline hazards (Table <a
+href="#tab:composite_validation" data-reference-type="ref"
+data-reference="tab:composite_validation">[tab:composite_validation]</a>).
+Direct correlation between true Precision and the ON/OFF ratio measure
+ranged from 0.62–0.83. Statistical power to detect a 0.5 SD difference
+in Precision reached 100% across all conditions, indicating that timing
+precision can be reliably phenotyped under current experimental
+parameters.</p>
+<p><strong>Burstiness phenotype recovery.</strong> The Burstiness
+dimension showed baseline-dependent recovery. At the current baseline
+hazard (<span class="math inline">\(-3.5\)</span>, corresponding to
+<span class="math inline">\(\sim\)</span>0.03 events/s), Burstiness
+correlations were negligible (0.04–0.09) with 0% power. At intermediate
+baseline (<span class="math inline">\(-2.5\)</span>, <span
+class="math inline">\(\sim\)</span>0.08 events/s), correlations remained
+low (0.07–0.10). Only at elevated baseline (<span
+class="math inline">\(-1.5\)</span>, <span
+class="math inline">\(\sim\)</span>0.22 events/s) did Burstiness become
+recoverable with correlations of 0.28–0.48 and 100% power. The direct
+correlation between true Burstiness and IEI-CV ranged from 0.07 at low
+baseline to 0.48 at high baseline.</p>
+<p><strong>Implications for phenotyping.</strong> The asymmetric
+recovery of Precision versus Burstiness reflects the differential
+information content of sparse event data. Precision operates through
+systematic ON/OFF rate modulation, which accumulates information across
+stimulus cycles regardless of total event count. Burstiness operates
+through temporal clustering patterns, which require sufficient events to
+statistically distinguish clustered from regular processes. The current
+experimental design (baseline hazard <span class="math inline">\(\approx
+-3.5\)</span>) can reliably phenotype timing precision but cannot
+phenotype burstiness without approximately 10-fold increase in event
+rate through either elevated stimulus intensity or extended recording
+duration.</p>
+<h2 id="design-recommendations-by-kernel-type-and-phenotype-goal">Design
+Recommendations by Kernel Type and Phenotype Goal</h2>
+<p>Simulation results across kernel regimes and baseline conditions
+yield specific design recommendations (Table <a
+href="#tab:design_recommendations" data-reference-type="ref"
+data-reference="tab:design_recommendations">5</a>).</p>
+<div id="tab:design_recommendations">
+<table>
+<caption><strong>Experimental design recommendations by kernel type and
+phenotype goal.</strong></caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Condition</strong></th>
+<th style="text-align: left;"><strong>Recommended Design</strong></th>
+<th style="text-align: left;"><strong>Rationale</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="3" style="text-align: left;"><em>By kernel type (A/B
+ratio):</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Excitatory (A/B <span
+class="math inline">\(&gt; 1\)</span>)</td>
+<td style="text-align: left;">Burst trains (10<span
+class="math inline">\(\times\)</span>0.5s)</td>
+<td style="text-align: left;">Repeated sampling of excitatory peak</td>
+</tr>
+<tr>
+<td style="text-align: left;">Balanced (A/B <span
+class="math inline">\(\approx 1\)</span>)</td>
+<td style="text-align: left;">Medium pulses (4<span
+class="math inline">\(\times\)</span>1s)</td>
+<td style="text-align: left;">Captures full kernel shape</td>
+</tr>
+<tr>
+<td style="text-align: left;">Inhibitory (A/B <span
+class="math inline">\(&lt; 0.5\)</span>)</td>
+<td style="text-align: left;">Single long pulse (10s)</td>
+<td style="text-align: left;">Avoids inhibitory accumulation</td>
+</tr>
+<tr>
+<td colspan="3" style="text-align: left;"><em>By phenotype
+goal:</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Timing precision</td>
+<td style="text-align: left;">Current design adequate</td>
+<td style="text-align: left;">ON/OFF ratio robust at low counts</td>
+</tr>
+<tr>
+<td style="text-align: left;">Burstiness/clustering</td>
+<td style="text-align: left;">Increase baseline 10<span
+class="math inline">\(\times\)</span></td>
+<td style="text-align: left;">Requires <span
+class="math inline">\(&gt;\)</span>100 events/track</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\tau_1\)</span> estimation</td>
+<td style="text-align: left;">Not recommended</td>
+<td style="text-align: left;">Structurally unidentifiable</td>
+</tr>
+<tr>
+<td colspan="3" style="text-align: left;"><em>By baseline
+hazard:</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Low (<span class="math inline">\(b =
+-3.5\)</span>, 0.03/s)</td>
+<td style="text-align: left;">Precision phenotyping only</td>
+<td style="text-align: left;"><span class="math inline">\(r =
+0.63\)</span>–<span class="math inline">\(0.80\)</span>, power =
+100%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Medium (<span class="math inline">\(b =
+-2.5\)</span>, 0.08/s)</td>
+<td style="text-align: left;">Precision + weak burstiness</td>
+<td style="text-align: left;">Burstiness <span class="math inline">\(r
+\approx 0.10\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">High (<span class="math inline">\(b =
+-1.5\)</span>, 0.22/s)</td>
+<td style="text-align: left;">Both phenotypes recoverable</td>
+<td style="text-align: left;">Burstiness <span class="math inline">\(r =
+0.28\)</span>–<span class="math inline">\(0.48\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="fisher-information-for-experimental-design">Fisher Information
+for Experimental Design</h2>
+<p>Fisher Information quantifies how much information an experimental
+design provides about a parameter of interest. For point process models,
+the Fisher Information for parameter <span
+class="math inline">\(\theta\)</span> (here, <span
+class="math inline">\(\tau_1\)</span>) is:</p>
+<p><span class="math display">\[I(\theta) = \int_0^T
+\left(\frac{\partial \log \lambda(t; \theta)}{\partial \theta}\right)^2
+\lambda(t; \theta) \, dt
+\label{eq:fisher}\]</span></p>
+<p>where <span class="math inline">\(\lambda(t; \theta)\)</span> is the
+instantaneous hazard rate. For the gamma-difference kernel, this
+becomes:</p>
+<p><span class="math display">\[I(\tau_1) = \int_0^T
+\left(\frac{\partial K(t; \tau_1)}{\partial \tau_1}\right)^2
+\exp(\beta_0 + K(t; \tau_1)) \, dt\]</span></p>
+<p>The integrand has two components: (1) the squared sensitivity of the
+kernel to <span class="math inline">\(\tau_1\)</span>, which is largest
+where the kernel is changing most rapidly with respect to <span
+class="math inline">\(\tau_1\)</span>, and (2) the hazard rate, which
+weights contributions by expected event density.</p>
+<p><strong>Interpretation for the current design.</strong> For the GMR61
+kernel with <span class="math inline">\(A/B \approx 0.125\)</span>, the
+kernel derivative <span class="math inline">\(\partial K / \partial
+\tau_1\)</span> is largest in the brief excitatory window (<span
+class="math inline">\(t \approx 0.2\)</span>–<span
+class="math inline">\(0.4\)</span> s after LED onset). However, this
+window contributes minimally to Fisher Information because:</p>
+<ol>
+<li><p>The hazard <span class="math inline">\(\lambda(t)\)</span> during
+this window is only <span class="math inline">\(\sim\)</span>1.5<span
+class="math inline">\(\times\)</span> baseline due to the small
+excitatory amplitude (<span class="math inline">\(A =
+1.5\)</span>).</p></li>
+<li><p>The inhibitory component (<span class="math inline">\(B =
+12\)</span>) rapidly dominates, suppressing <span
+class="math inline">\(\lambda(t)\)</span> to <span
+class="math inline">\(\sim\)</span>0.5<span
+class="math inline">\(\times\)</span> baseline for most of the ON
+period.</p></li>
+<li><p>Short pulses (0.5 s) capture only the onset transient, missing
+the informative early excitatory peak that occurs at <span
+class="math inline">\(t \approx \tau_1\)</span>.</p></li>
+</ol>
+<p>Simulation across kernel regimes reveals that Fisher Information for
+<span class="math inline">\(\tau_1\)</span> under the current design is
+approximately 4.6 for continuous 10 s ON versus 1.2 for medium pulses
+(4<span class="math inline">\(\times\)</span>1 s)—a 4-fold reduction.
+The Cramér-Rao bound implies that the minimum variance of any unbiased
+estimator is <span class="math inline">\(1/I(\tau_1)\)</span>, so
+designs with lower Fisher Information necessarily produce
+higher-variance parameter estimates.</p>
+<p><strong>Design-kernel interaction.</strong> The key insight from
+kernel regime analysis is that pulse trains that maximize Fisher
+information for balanced or excitatory kernels can paradoxically
+<em>reduce</em> power for inhibition-dominated kernels. The current
+GMR61 kernel (A/B <span class="math inline">\(\approx 0.125\)</span>)
+falls in the strongly inhibitory regime where short pulses spend most
+time in the suppressed state and inhibition accumulates across
+successive pulses. For this kernel type, a single continuous ON period
+or a small number of longer pulses (<span
+class="math inline">\(\geq\)</span>1 s) with gaps <span
+class="math inline">\(\geq \tau_2\)</span> yields more informative
+events than burst protocols.</p>
+<h2 id="trial-to-trial-sensitization">Trial-to-Trial Sensitization</h2>
+<p>Analysis of fractional behavior usage across repeated LED pulses
+revealed a systematic sensitization effect not captured by the
+stationary kernel assumption. Turn fraction increased approximately 2-3
+fold over the 20-minute experiment. At pulse 0, turn fraction ranged
+from 8-28% across conditions; by pulse 17, it reached 37-78%. All
+conditions showed significant positive slopes with <span
+class="math inline">\(p &lt; 0.001\)</span> for linear trend. Cycling
+background conditions showed faster sensitization with slopes of <span
+class="math inline">\(+0.029\)</span> to <span
+class="math inline">\(+0.031\)</span> per pulse compared to constant
+background conditions with slopes of <span
+class="math inline">\(+0.015\)</span> to <span
+class="math inline">\(+0.021\)</span> per pulse. Pause fraction and
+reverse crawl fraction remained relatively flat across pulses,
+indicating that the sensitization effect is specific to turning behavior
+rather than a general arousal change. The increasing turn propensity
+over time suggests that animals become more responsive to the LED
+stimulus with repeated exposure, possibly through sensitization of the
+reorientation circuit. Future models may need to incorporate
+trial-to-trial non-stationarity to fully capture behavioral dynamics
+across extended experiments.</p>
+<h2 id="future-directions">Future Directions</h2>
+<p>Several extensions would enhance the model, including temporal
+refinements such as a refractory kernel for post-event suppression
+alongside a random-effects GLMM for track-level heterogeneity, spatial
+extensions such as edge avoidance for bounded arenas alongside
+chemotaxis integration for gradient navigation, and downstream
+applications such as phenotype clustering using kernel parameters and
+event duration features.</p>
+<h1 id="conclusions">Conclusions</h1>
+<p>An analytic LNP kernel for optogenetically-driven larval
+reorientation is presented that combines interpretability with
+predictive accuracy. The 6-parameter gamma-difference form captures two
+biologically meaningful timescales <span class="math inline">\(\tau_1 =
+0.29\)</span> s and <span class="math inline">\(\tau_2 = 3.81\)</span> s
+and reproduces empirical event statistics with high fidelity with rate
+ratio <span class="math inline">\(= 0.97\)</span> and <span
+class="math inline">\(R^2 = 0.968\)</span>.</p>
+<p>Extension to a <span class="math inline">\(2\times2\)</span>
+factorial design with 14 experiments, 701 tracks, and 7,867 events
+reveals conserved kernel shape alongside condition-dependent amplitude,
+with baseline intensity effects showing 66% suppression reduction for
+50-to-250 PWM in contrast to background pattern effects showing 15%
+suppression increase for cycling. All factorial effects are
+statistically significant, indicating that the model can quantify
+condition-specific modulation of sensorimotor processing.</p>
+<p>Embedded in a run/turn trajectory simulator, the model generates
+realistic larval behavior that matches observed turn rates of 1.88 vs
+1.84 turns/min. The LNP model framework provides a starting point for
+quantitative analysis of sensorimotor processing across experimental
+conditions and genotypes.</p>
+<h1 class="unnumbered" id="acknowledgments">Acknowledgments</h1>
+<p>The mechanosensory behavioral assays are part of ongoing research in
+the Mihovilovic Skanata NeuroBioPhysics Laboratory at Syracuse
+University, which investigates neural computation and sensorimotor
+integration in Drosophila larvae. Mason Klein developed the reverse
+crawl detection algorithm and behavioral state segmentation methods that
+formed the foundation of this analysis. Marc Gershow authored MAGAT
+Analyzer (Gershow et al., 2012), used for trajectory extraction and
+preprocessing. The simulation modeling components were developed as part
+of a Simulation Modeling and Analysis course project under the
+instruction of Ki Young Jeong, whose guidance on simulation theory
+foundations shaped the methodology.</p>
+<p><strong>Author Contributions:</strong> G.R.: Conceptualization,
+Methodology, Software, Formal Analysis, Validation, Visualization,
+Writing Original Draft, Writing Review &amp; Editing. D.G.:
+Investigation, Data Curation. M.M.S.: Resources, Supervision, Funding
+Acquisition.</p>
+<h1 class="unnumbered" id="data-and-code-availability">Data and Code
+Availability</h1>
+<p>All code and processed data are available at <a
+href="https://github.com/GilRaitses/indysim"
+class="uri">https://github.com/GilRaitses/indysim</a> (InDySim:
+Interface Dynamics Simulation Model). Data preprocessing used magatfairy
+(<a href="https://github.com/GilRaitses/magatfairy"
+class="uri">https://github.com/GilRaitses/magatfairy</a>) for converting
+MAGAT Analyzer MATLAB exports to HDF5 and retrovibez (<a
+href="https://github.com/GilRaitses/retrovibez"
+class="uri">https://github.com/GilRaitses/retrovibez</a>) for reverse
+crawl detection.</p>
+<h1 class="unnumbered" id="references">References</h1>
+<ol>
+<li><p>Gepner R, Mihovilovic Skanata M, Berber NM, Dacosta M, Kadaba AD,
+Rubin GM, Clark DA (2015). Computations underlying <em>Drosophila</em>
+photo-taxis, odor-taxis, and multi-sensory integration. <em>eLife</em>
+4:e06229.</p></li>
+<li><p>Gershow M, Berck M, Mathew D, Luo L, Kane EA, Carlson JR, Samuel
+ADT (2012). Controlling airborne cues to study small animal navigation.
+<em>Nature Methods</em> 9:290–296.</p></li>
+<li><p>Gomez-Marin A, Stephens GJ, Louis M (2011). Active sampling and
+decision making in <em>Drosophila</em> chemotaxis. <em>Nature
+Communications</em> 2:441.</p></li>
+<li><p>Hernandez-Nunez L, Belina J, Klein M, Si G, Claus L, Carlson JR,
+Samuel ADT (2015). Reverse-correlation analysis of navigation dynamics
+in <em>Drosophila</em> larva using optogenetics. <em>eLife</em>
+4:e06225.</p></li>
+<li><p>Kane EA, Gershow M, Afonso B, Larderet I, Klein M, Carter AR, de
+Bivort BL, Sprecher SG, Samuel ADT (2013). Sensorimotor structure of
+<em>Drosophila</em> larva phototaxis. <em>PNAS</em>
+110:E3868–E3877.</p></li>
+<li><p>Klein M, Afonso B, Vonner AJ, Hernandez-Nunez L, Berck M, Taber
+CJ, Sprecher SG, Gershow M, Garrity PA, Samuel ADT (2015). Sensory
+determinants of behavioral dynamics in <em>Drosophila</em> thermotaxis.
+<em>PNAS</em> 112:E220–E229.</p></li>
+<li><p>Paninski L (2004). Maximum likelihood estimation of cascade
+point-process neural encoding models. <em>Network: Computation in Neural
+Systems</em> 15:243–262.</p></li>
+<li><p>Pillow JW, Shlens J, Paninski L, Sher A, Litke AM, Chichilnisky
+EJ, Simoncelli EP (2008). Spatio-temporal correlations and visual
+signalling in a complete neuronal population. <em>Nature</em>
+454:995–999.</p></li>
+</ol>
+</body>
+</html>

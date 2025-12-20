@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Supplementary Materials Temporal dynamics of mechanosensory behavior in Drosophila larvae</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Supplementary Materials<br />
+Temporal dynamics of mechanosensory behavior in<br />
+<em>Drosophila</em> larvae</h1>
+</header>
+<h1 class="unnumbered"
+id="table-s1-leave-one-experiment-out-cross-validation-results">Table
+S1: Leave-One-Experiment-Out Cross-Validation Results</h1>
+<p>Leave-one-experiment-out cross-validation was performed to assess
+model generalization. For each of 14 experiments, the factorial NB-GLM
+was fit on the remaining 13 experiments and used to predict event rates
+for the held-out experiment.</p>
+<div id="tab:cv">
+<table>
+<caption>Table S1: Cross-validation results. Rate ratio within 0.8–1.25
+indicates acceptable generalization. Pass rate = 58%.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Condition</strong></th>
+<th style="text-align: right;"><strong>Empirical</strong></th>
+<th style="text-align: right;"><strong>Predicted</strong></th>
+<th style="text-align: right;"><strong>Rate Ratio</strong></th>
+<th style="text-align: left;"><strong>Status</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="5" style="text-align: left;"><em>0-to-250 | Constant
+(n=2)</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 1</td>
+<td style="text-align: right;">737</td>
+<td style="text-align: right;">785</td>
+<td style="text-align: right;">1.066</td>
+<td style="text-align: left;">Pass</td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 2</td>
+<td style="text-align: right;">670</td>
+<td style="text-align: right;">629</td>
+<td style="text-align: right;">0.938</td>
+<td style="text-align: left;">Pass</td>
+</tr>
+<tr>
+<td colspan="5" style="text-align: left;"><em>0-to-250 | Cycling
+(n=4)</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 1</td>
+<td style="text-align: right;">555</td>
+<td style="text-align: right;">921</td>
+<td style="text-align: right;">1.659</td>
+<td style="text-align: left;">Fail</td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 2</td>
+<td style="text-align: right;">488</td>
+<td style="text-align: right;">395</td>
+<td style="text-align: right;">0.809</td>
+<td style="text-align: left;">Pass</td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 3</td>
+<td style="text-align: right;">822</td>
+<td style="text-align: right;">603</td>
+<td style="text-align: right;">0.733</td>
+<td style="text-align: left;">Fail</td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 4</td>
+<td style="text-align: right;">545</td>
+<td style="text-align: right;">534</td>
+<td style="text-align: right;">0.981</td>
+<td style="text-align: left;">Pass</td>
+</tr>
+<tr>
+<td colspan="5" style="text-align: left;"><em>50-to-250 | Constant
+(n=4)</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 1</td>
+<td style="text-align: right;">766</td>
+<td style="text-align: right;">603</td>
+<td style="text-align: right;">0.787</td>
+<td style="text-align: left;">Fail</td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 2</td>
+<td style="text-align: right;">571</td>
+<td style="text-align: right;">937</td>
+<td style="text-align: right;">1.641</td>
+<td style="text-align: left;">Fail</td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 3</td>
+<td style="text-align: right;">657</td>
+<td style="text-align: right;">655</td>
+<td style="text-align: right;">0.997</td>
+<td style="text-align: left;">Pass</td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 4</td>
+<td style="text-align: right;">446</td>
+<td style="text-align: right;">305</td>
+<td style="text-align: right;">0.684</td>
+<td style="text-align: left;">Fail</td>
+</tr>
+<tr>
+<td colspan="5" style="text-align: left;"><em>50-to-250 | Cycling
+(n=2)</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 1</td>
+<td style="text-align: right;">477</td>
+<td style="text-align: right;">553</td>
+<td style="text-align: right;">1.160</td>
+<td style="text-align: left;">Pass</td>
+</tr>
+<tr>
+<td style="text-align: left;">Exp 2</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">478</td>
+<td style="text-align: right;">0.862</td>
+<td style="text-align: left;">Pass</td>
+</tr>
+<tr>
+<td colspan="5" style="text-align: left;"><strong>Summary</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Mean <span
+class="math inline">\(\pm\)</span> SD</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">1.03 <span
+class="math inline">\(\pm\)</span> 0.31</td>
+<td style="text-align: left;">7/12 Pass</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 class="unnumbered" id="table-s2-model-comparison">Table S2: Model
+Comparison</h1>
+<div id="tab:model_comparison">
+<table>
+<caption>Table S2: Model comparison. The fixed-effects model was used
+for all reported analyses. GLMM with random track intercepts is included
+as a robustness check.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Model</strong></th>
+<th style="text-align: right;"><strong>Parameters</strong></th>
+<th style="text-align: right;"><strong>AIC</strong></th>
+<th style="text-align: right;"><strong>Deviance</strong></th>
+<th style="text-align: left;"><strong>Notes</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Fixed-effects NB-GLM</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">114,814</td>
+<td style="text-align: right;">94,592</td>
+<td style="text-align: left;">Primary model</td>
+</tr>
+<tr>
+<td style="text-align: left;">NB-GLMM (1|track)</td>
+<td style="text-align: right;">9 + 623 RE</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: left;">Random intercepts</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 class="unnumbered" id="table-s2b-glmm-robustness-check">Table S2b:
+GLMM Robustness Check</h1>
+<p>A Negative Binomial GLMM with random track intercepts was fit using
+Bambi/PyMC to verify that the main findings are robust to hierarchical
+structure.</p>
+<div id="tab:glmm_comparison">
+<table>
+<caption>Table S2b: Comparison of key parameters between fixed-effects
+NB-GLM and NB-GLMM. The kernel amplitude effects (<span
+class="math inline">\(\alpha\)</span>, <span
+class="math inline">\(\alpha_I\)</span>, <span
+class="math inline">\(\alpha_C\)</span>) differ by less than 3.5%,
+confirming that the main findings are robust to inclusion of random
+intercepts. The random effect SD of 0.59 indicates substantial
+between-track variation in baseline event rate.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Parameter</strong></th>
+<th style="text-align: right;"><strong>Fixed-Effects</strong></th>
+<th style="text-align: right;"><strong>GLMM</strong></th>
+<th style="text-align: right;"><strong>Change</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha\)</span> (kernel amplitude)</td>
+<td style="text-align: right;">1.005</td>
+<td style="text-align: right;">0.971</td>
+<td style="text-align: right;"><span
+class="math inline">\(-3.4\%\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha_I\)</span> (intensity effect)</td>
+<td style="text-align: right;"><span
+class="math inline">\(-0.665\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(-0.655\)</span></td>
+<td style="text-align: right;"><span
+class="math inline">\(+1.5\%\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha_C\)</span> (cycling effect)</td>
+<td style="text-align: right;">0.152</td>
+<td style="text-align: right;">0.148</td>
+<td style="text-align: right;"><span
+class="math inline">\(-2.5\%\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\gamma\)</span> (rebound)</td>
+<td style="text-align: right;">1.669</td>
+<td style="text-align: right;">1.408</td>
+<td style="text-align: right;"><span
+class="math inline">\(-15.7\%\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">Random effect SD (<span
+class="math inline">\(\sigma_{\text{track}}\)</span>)</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">0.59</td>
+<td style="text-align: right;">—</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 class="unnumbered"
+id="table-s3-condition-specific-suppression-amplitudes">Table S3:
+Condition-Specific Suppression Amplitudes</h1>
+<p>The kernel amplitude varies across conditions while maintaining
+invariant shape and timescales:</p>
+<div id="tab:amplitudes">
+<table>
+<caption>Table S3: Suppression amplitudes computed as <span
+class="math inline">\(\alpha + \alpha_I \cdot I + \alpha_C \cdot
+C\)</span>.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Condition</strong></th>
+<th style="text-align: right;"><strong>Amplitude</strong></th>
+<th style="text-align: right;"><strong>Events</strong></th>
+<th style="text-align: right;"><strong>Tracks</strong></th>
+<th style="text-align: left;"><strong>Interpretation</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">0-to-250 | Constant</td>
+<td style="text-align: right;">1.005</td>
+<td style="text-align: right;">1,407</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: left;">Reference condition</td>
+</tr>
+<tr>
+<td style="text-align: left;">0-to-250 | Cycling</td>
+<td style="text-align: right;">1.157</td>
+<td style="text-align: right;">2,410</td>
+<td style="text-align: right;">214</td>
+<td style="text-align: left;">+15% (cycling enhancement)</td>
+</tr>
+<tr>
+<td style="text-align: left;">50-to-250 | Constant</td>
+<td style="text-align: right;">0.340</td>
+<td style="text-align: right;">2,440</td>
+<td style="text-align: right;">187</td>
+<td style="text-align: left;"><span class="math inline">\(-\)</span>66%
+(partial adaptation)</td>
+</tr>
+<tr>
+<td style="text-align: left;">50-to-250 | Cycling</td>
+<td style="text-align: right;">0.492</td>
+<td style="text-align: right;">1,031</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: left;">Combined effects</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 class="unnumbered" id="figure-s1-residual-diagnostics">Figure S1:
+Residual Diagnostics</h1>
+<figure id="fig:diagnostics">
+<img src="data/figures/factorial_diagnostics/factorial_diagnostics.png"
+style="width:90.0%" />
+<figcaption><strong>Factorial model diagnostics.</strong> (A) Pearson
+residuals vs fitted values show no systematic pattern. (B) Deviance
+residuals vs fitted values. (C) Q-Q plot of Pearson residuals against
+theoretical normal quantiles. (D) Residual distributions by condition
+show similar spread across all four experimental conditions. Residual
+mean = 0.0001, SD = 1.01.</figcaption>
+</figure>
+<h1 class="unnumbered" id="figure-s2-time-rescaling-test">Figure S2:
+Time-Rescaling Test</h1>
+<p>The time-rescaling test assesses whether the fitted hazard model
+produces inter-event intervals consistent with a Poisson process. Under
+the correct model, rescaled inter-event times should follow Exp(1), and
+their cumulative distribution should be uniform.</p>
+<figure id="fig:time_rescaling">
+<img src="data/figures/factorial_diagnostics/time_rescaling.png"
+style="width:70.0%" />
+<figcaption><strong>Time-rescaling test.</strong> Empirical cumulative
+distribution of rescaled inter-event times (blue) compared to expected
+uniform distribution (red dashed). Gray shading indicates 95% confidence
+band. KS test: <span class="math inline">\(D = 0.041\)</span>, <span
+class="math inline">\(p = 0.17\)</span>. Mean deviation = 1.3%,
+indicating adequate model fit.</figcaption>
+</figure>
+<h1 class="unnumbered" id="diagnostic-statistics">Diagnostic
+Statistics</h1>
+<ul>
+<li><p><strong>Pearson residuals:</strong> Mean = 0.0001, SD = 1.01,
+Skew = 40.7, Kurtosis = 2440</p></li>
+<li><p><strong>Large residuals:</strong> 7,288 observations (0.09%) with
+<span class="math inline">\(|r| &gt; 3\)</span></p></li>
+<li><p><strong>Time-rescaling:</strong> KS statistic = 0.041, p = 0.17,
+mean deviation = 1.3%</p></li>
+</ul>
+<p>The high skewness and kurtosis of residuals reflect the zero-inflated
+nature of event data (most frames have no events). The time-rescaling
+test passes at conventional significance levels, supporting the adequacy
+of the hazard model specification.</p>
+<h1 class="unnumbered"
+id="table-s4-kernel-parameters-with-bootstrap-confidence-intervals">Table
+S4: Kernel Parameters with Bootstrap Confidence Intervals</h1>
+<p>Bootstrap resampling (100 track-level resamples) was used to estimate
+95% confidence intervals for all kernel parameters.</p>
+<div id="tab:bootstrap">
+<table>
+<caption>Table S4: Gamma-difference kernel parameters with 95% bootstrap
+confidence intervals (100 track-level resamples). The narrow CIs for
+slow component parameters reflect strong identifiability.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Parameter</strong></th>
+<th style="text-align: right;"><strong>Estimate</strong></th>
+<th style="text-align: right;"><strong>95% CI</strong></th>
+<th style="text-align: right;"><strong>Interpretation</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(A\)</span>
+(fast amplitude)</td>
+<td style="text-align: right;">0.456</td>
+<td style="text-align: right;">[0.409, 0.499]</td>
+<td style="text-align: right;">Excitatory component weight</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha_1\)</span> (fast shape)</td>
+<td style="text-align: right;">2.22</td>
+<td style="text-align: right;">[1.93, 2.65]</td>
+<td style="text-align: right;"><span
+class="math inline">\(\sim\)</span>2 processing stages</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\beta_1\)</span> (fast scale, s)</td>
+<td style="text-align: right;">0.132</td>
+<td style="text-align: right;">[0.102, 0.168]</td>
+<td style="text-align: right;">Stage time constant</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(B\)</span>
+(slow amplitude)</td>
+<td style="text-align: right;">12.54</td>
+<td style="text-align: right;">[12.43, 12.66]</td>
+<td style="text-align: right;">Suppressive component weight</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha_2\)</span> (slow shape)</td>
+<td style="text-align: right;">4.38</td>
+<td style="text-align: right;">[4.30, 4.46]</td>
+<td style="text-align: right;"><span
+class="math inline">\(\sim\)</span>4 processing stages</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\beta_2\)</span> (slow scale, s)</td>
+<td style="text-align: right;">0.869</td>
+<td style="text-align: right;">[0.852, 0.890]</td>
+<td style="text-align: right;">Stage time constant</td>
+</tr>
+<tr>
+<td colspan="4" style="text-align: left;"><em>Derived
+timescales</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\tau_1\)</span> (fast mean, s)</td>
+<td style="text-align: right;">0.294</td>
+<td style="text-align: right;">[0.268, 0.326]</td>
+<td style="text-align: right;">Fast component timescale</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\tau_2\)</span> (slow mean, s)</td>
+<td style="text-align: right;">3.81</td>
+<td style="text-align: right;">[3.79, 3.84]</td>
+<td style="text-align: right;">Slow component timescale</td>
+</tr>
+<tr>
+<td style="text-align: left;">Peak fast (s)</td>
+<td style="text-align: right;">0.162</td>
+<td style="text-align: right;">[0.147, 0.181]</td>
+<td style="text-align: right;">Time of fast peak</td>
+</tr>
+<tr>
+<td style="text-align: left;">Peak slow (s)</td>
+<td style="text-align: right;">2.94</td>
+<td style="text-align: right;">[2.93, 2.96]</td>
+<td style="text-align: right;">Time of slow peak</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 class="unnumbered" id="table-s5-turn-distribution-parameters">Table
+S5: Turn Distribution Parameters</h1>
+<p>Turn angle and duration distributions from 319 filtered events (turn
+duration <span class="math inline">\(&gt; 0.1\)</span> s) were used to
+parameterize trajectory simulation.</p>
+<div id="tab:turns">
+<table>
+<caption>Table S5: Turn angle and duration statistics from 319 filtered
+reorientation events. Turn angles follow a normal distribution with
+slight rightward bias. Turn durations follow a lognormal distribution
+with median 1.1 s.</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Metric</strong></th>
+<th style="text-align: right;"><strong>Value</strong></th>
+<th style="text-align: right;"><strong>95% Range</strong></th>
+<th style="text-align: left;"><strong>Best-Fit
+Distribution</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="4" style="text-align: left;"><em>Turn Angle</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Mean</td>
+<td style="text-align: right;"><span
+class="math inline">\(6.8^\circ\)</span></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;">Normal(<span class="math inline">\(\mu =
+6.8^\circ\)</span>, <span class="math inline">\(\sigma =
+86.2^\circ\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;">SD</td>
+<td style="text-align: right;"><span
+class="math inline">\(86.2^\circ\)</span></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">Absolute mean</td>
+<td style="text-align: right;"><span
+class="math inline">\(68.6^\circ\)</span></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td colspan="4" style="text-align: left;"><em>Turn Duration</em></td>
+</tr>
+<tr>
+<td style="text-align: left;">Mean</td>
+<td style="text-align: right;">1.55 s</td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;">Lognormal(<span class="math inline">\(s =
+0.59\)</span>, scale <span class="math inline">\(= 1.29\)</span> s)</td>
+</tr>
+<tr>
+<td style="text-align: left;">Median</td>
+<td style="text-align: right;">1.10 s</td>
+<td style="text-align: right;">[0.30, 6.85] s</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">SD</td>
+<td style="text-align: right;">1.06 s</td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 class="unnumbered"
+id="figure-s3-reverse-crawl-led-modulation">Figure S3: Reverse Crawl LED
+Modulation</h1>
+<p>Reverse crawl detection using Mason Klein’s algorithm (SpeedRunVel
+<span class="math inline">\(&lt; 0\)</span> for <span
+class="math inline">\(\geq 3\)</span> s) identified 1,853 reversal
+events across all 14 experiments. In contrast to reorientations (which
+are suppressed by LED), reverse crawls are <em>increased</em> during LED
+stimulation.</p>
+<figure id="fig:reverse_crawl">
+<img src="data/figures/reverse_crawl_led_modulation.png"
+style="width:95.0%" />
+<figcaption><strong>LED modulation of reverse crawl behavior.</strong>
+(A) Reverse crawl percentage during baseline (2.11%) vs peak-intensity
+(2.40%), showing a 14% increase (<span
+class="math inline">\(\chi^2\)</span> test <span class="math inline">\(p
+&lt; 0.001\)</span>). (B) Time-resolved analysis reveals a pronounced
+spike to 6.7–7.2% in the first 0–5 s after stimulus onset, declining
+below baseline (<span class="math inline">\(&lt; 1\%\)</span>) after 10
+s. (C) Comparison of behavioral state durations: reverse crawls (2.29%
+of time) exceed reorientations (0.09% of time) by 25-fold.</figcaption>
+</figure>
+<h1 class="unnumbered"
+id="figure-s4-reverse-crawl-detection-validation">Figure S4: Reverse
+Crawl Detection Validation</h1>
+<p>Reverse crawl detection was validated against the original MATLAB
+code (mason_analysis.m) on Track 2 of the reference experiment.</p>
+<figure id="fig:reverse_validation">
+<img src="data/figures/reverse_crawl_validation_vs_matlab.png"
+style="width:95.0%" />
+<figcaption><strong>Validation of reverse crawl detection.</strong> (A)
+SpeedRunVel time series for Track 2 with detected reversals marked. (B)
+Zoom on first reversal showing exact match between Python (shaded
+region) and MATLAB (green dashed lines). (C) Comparison table: all 5
+reversals in Track 2 match MATLAB output within 0.1 s, confirming
+algorithm correctness.</figcaption>
+</figure>
+<h1 class="unnumbered" id="figure-s5-psth-model-validation">Figure S5:
+PSTH Model Validation</h1>
+<p>The peri-stimulus time histogram (PSTH) provides a visual comparison
+of model predictions against empirical event rates aligned to LED
+onset.</p>
+<figure id="fig:psth">
+<img src="data/figures/psth_comparison.png" style="width:90.0%" />
+<figcaption><strong>PSTH model validation.</strong> Empirical event rate
+(black) and model-predicted rate (red) aligned to stimulus onset (time =
+0). Gray shading indicates peak-intensity period (0–10 s). The model
+captures the rapid suppression within 0.5 s of stimulus onset, the
+sustained suppression during peak intensity, and the gradual recovery
+after stimulus offset. PSTH correlation <span class="math inline">\(r =
+0.84\)</span>.</figcaption>
+</figure>
+<h1 class="unnumbered"
+id="table-s6-per-condition-kernel-parameters">Table S6: Per-Condition
+Kernel Parameters</h1>
+<p>The gamma-difference kernel was fit separately to each of the four
+experimental conditions in the <span
+class="math inline">\(2\times2\)</span> factorial design. Bootstrap
+confidence intervals (95%) were computed from 200 resamples.</p>
+<div id="tab:per_condition">
+<table>
+<caption>Table S6: Per-condition kernel parameters with 95% bootstrap
+CIs.</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Condition</th>
+<th style="text-align: center;"><span
+class="math inline">\(\tau_1\)</span> (s)</th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: center;"><span
+class="math inline">\(\tau_2\)</span> (s)</th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: center;"><span
+class="math inline">\(R^2\)</span></th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">0-to-250 Constant</td>
+<td style="text-align: center;">0.32</td>
+<td style="text-align: center;">[0.23, 1.01]</td>
+<td style="text-align: center;">3.73</td>
+<td style="text-align: center;">[3.02, 4.08]</td>
+<td style="text-align: center;">0.94</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">0-to-250 Cycling</td>
+<td style="text-align: center;">0.26</td>
+<td style="text-align: center;">[0.23, 0.71]</td>
+<td style="text-align: center;">4.20</td>
+<td style="text-align: center;">[3.79, 4.51]</td>
+<td style="text-align: center;">0.96</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">50-to-250 Constant</td>
+<td style="text-align: center;"><strong>1.18</strong></td>
+<td style="text-align: center;">[0.69, 2.21]</td>
+<td style="text-align: center;">4.53</td>
+<td style="text-align: center;">[3.64, 5.44]</td>
+<td style="text-align: center;">0.95</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: left;">50-to-250 Cycling</td>
+<td style="text-align: center;">0.44</td>
+<td style="text-align: center;">[0.23, 0.87]</td>
+<td style="text-align: center;">4.50</td>
+<td style="text-align: center;">[3.69, 5.19]</td>
+<td style="text-align: center;">0.81</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Key finding:</strong> The 50-to-250 Constant condition shows
+a 4-fold slower fast timescale (<span class="math inline">\(\tau_1 =
+1.18\)</span> s vs <span class="math inline">\({\sim}0.3\)</span> s),
+suggesting that baseline neural excitation modulates sensory
+transduction speed.</p>
+<h1 class="unnumbered" id="table-s7-model-comparison">Table S7: Model
+Comparison</h1>
+<div id="tab:kernel_comparison">
+<table>
+<caption>Table S7: Comparison of kernel parameterizations by
+goodness-of-fit.</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Parameters</th>
+<th style="text-align: center;"><span
+class="math inline">\(R^2\)</span></th>
+<th style="text-align: center;">AIC</th>
+<th style="text-align: left;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Raised Cosine (12 basis)</td>
+<td style="text-align: center;">12</td>
+<td style="text-align: center;">0.974</td>
+<td style="text-align: center;"><span
+class="math inline">\(-3386\)</span></td>
+<td style="text-align: left;">Overparameterized</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Gamma-Difference</strong></td>
+<td style="text-align: center;"><strong>6</strong></td>
+<td style="text-align: center;"><strong>0.968</strong></td>
+<td style="text-align: center;"><strong><span
+class="math inline">\(-357\)</span></strong></td>
+<td style="text-align: left;"><strong>Biologically
+interpretable</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">Alpha-Difference</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.950</td>
+<td style="text-align: center;">108</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr>
+<td style="text-align: left;">Double Exponential</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">0.811</td>
+<td style="text-align: center;">1432</td>
+<td style="text-align: left;">No shape control</td>
+</tr>
+<tr>
+<td style="text-align: left;">Single Exponential</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"><span
+class="math inline">\(&lt;0\)</span></td>
+<td style="text-align: center;">1007</td>
+<td style="text-align: left;">Too simple</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The gamma-difference model achieves near-optimal fit quality (<span
+class="math inline">\(R^2 = 0.968\)</span>) with half the parameters of
+the raised-cosine basis, while providing biological interpretability
+(timescales map to neural processes).</p>
+<p><em>Note:</em> The single exponential model shows <span
+class="math inline">\(R^2 &lt; 0\)</span> because it cannot capture the
+biphasic (suppression-then-recovery) kernel shape. A negative <span
+class="math inline">\(R^2\)</span> indicates the model performs worse
+than predicting the mean, which is expected when fitting a monotonic
+decay to a non-monotonic target.</p>
+<h1 class="unnumbered"
+id="figure-s7-event-duration-distributions">Figure S7: Event Duration
+Distributions</h1>
+<p>Event durations from Mason Klein run tables and trajectory
+segmentation characterize the temporal structure of larval behavior
+across conditions.</p>
+<figure id="fig:event_durations">
+<img src="data/figures/event_durations.png" style="width:95.0%" />
+<figcaption><strong>Event duration distributions by condition.</strong>
+Boxplots showing durations of four behavioral event types across the
+four experimental conditions. <strong>(A)</strong> Run durations from
+Klein run tables (column <code>runT</code>); no significant condition
+effect (Kruskal-Wallis <span class="math inline">\(p = 0.08\)</span>).
+<strong>(B)</strong> Turn durations show significant condition effects
+(<span class="math inline">\(p &lt; 0.001\)</span>).
+<strong>(C)</strong> Pause durations vary significantly across
+conditions (<span class="math inline">\(p &lt; 0.001\)</span>), with
+50-to-250 conditions showing longer pauses. <strong>(D)</strong> Event
+counts by condition and type. These distributions may inform future
+phenotype identification.</figcaption>
+</figure>
+<h1 class="unnumbered"
+id="figure-s8-fractional-behavior-by-pulse">Figure S8: Fractional
+Behavior by Pulse</h1>
+<p>Behavioral state fractions (run, pause, turn, reverse crawl) were
+computed for each pulse across the 20-minute experiments. The stacked
+bar plots reveal systematic shifts in behavioral allocation over
+successive pulses.</p>
+<figure id="fig:fractional_behavior">
+<img src="data/figures/fractional_behavior_by_pulse.png"
+style="width:95.0%" />
+<figcaption><strong>Fractional behavior by pulse across
+conditions.</strong> Forward crawling dominates behavioral allocation at
+approximately 75% of time, with turning at 20%, reverse crawls at 3%,
+and pauses at 1.5%. Two trends emerge across successive pulses. First,
+turn and pause fractions increase progressively while forward crawling
+decreases, consistent with trial-to-trial sensitization to repeated
+stimulation. Second, the 50-to-250 conditions show elevated reverse
+crawl fractions compared to 0-to-250 conditions, with the difference
+becoming pronounced after pulse 6. The cycling background conditions
+show slightly higher variability in behavioral allocation compared to
+constant background conditions.</figcaption>
+</figure>
+</body>
+</html>

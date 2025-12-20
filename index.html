@@ -1115,6 +1115,156 @@
       }
     }
 
+    /* Research gallery styles */
+    .research-gallery {
+      margin-top: 2rem;
+      padding: 2rem 0;
+    }
+    
+    .research-gallery h2 {
+      text-align: center;
+      font-family: 'Didot', 'Bodoni MT', 'Cochin', 'Baskerville', serif;
+      font-weight: 400;
+      color: #f8d849;
+      text-shadow: 0 0 10px rgba(248, 216, 73, 0.5);
+      margin-bottom: 2rem;
+    }
+    
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .research-item {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(127, 255, 0, 0.3);
+      box-shadow: 0 0 15px rgba(127, 255, 0, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .research-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px rgba(127, 255, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.2);
+      border-color: rgba(127, 255, 0, 0.6);
+    }
+    
+    .research-item-image {
+      height: 200px;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: rgba(255, 255, 255, 0.95);
+      position: relative;
+    }
+    
+    .research-item-tags {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      gap: 5px;
+    }
+    
+    .research-item-tag {
+      background: rgba(0, 0, 0, 0.7);
+      color: #7FFF00;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .research-item-content {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .research-item-title {
+      font-family: 'Avenir Next', 'Avenir', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+    
+    .research-item-authors {
+      font-size: 0.9rem;
+      color: #8aeef5;
+      margin-bottom: 0.8rem;
+      font-style: italic;
+    }
+    
+    .research-item-desc {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+      line-height: 1.5;
+    }
+    
+    .research-item-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .research-item-link {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #7FFF00;
+      color: #000;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      text-shadow: none;
+    }
+    
+    .research-item-link:hover {
+      background: #9FFF40;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(127, 255, 0, 0.4);
+    }
+    
+    .research-item-link.secondary {
+      background: transparent;
+      border: 1px solid #7FFF00;
+      color: #7FFF00;
+    }
+    
+    .research-item-link.secondary:hover {
+      background: rgba(127, 255, 0, 0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .research-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .research-item-image {
+        height: 150px;
+      }
+      
+      .research-item-title {
+        font-size: 1rem;
+      }
+    }
+
     /* Project gallery styles */
     .project-gallery {
       margin-top: 3rem;
@@ -1546,6 +1696,50 @@
       <span class="tagline-item">Cross-Species Cognition</span>
     </div>
   </header>
+
+  <section class="research-gallery">
+    <h2>Research</h2>
+    
+    <div class="research-grid">
+      <!-- Manuscript 1: Temporal dynamics -->
+      <div class="research-item" data-category="manuscript">
+        <div class="research-item-image" style="background-image: url('research/manuscript1-preview.png');">
+          <div class="research-item-tags">
+            <span class="research-item-tag">Manuscript</span>
+            <span class="research-item-tag">2025</span>
+          </div>
+        </div>
+        <div class="research-item-content">
+          <h3 class="research-item-title">Temporal dynamics of mechanosensory behavior in Drosophila larvae</h3>
+          <p class="research-item-authors">Gil Raitses, Mirna Mihovilovic Skanata</p>
+          <p class="research-item-desc">Analysis of larval mechanosensory responses using point-process models and kernel estimation methods.</p>
+          <div class="research-item-links">
+            <a href="research/manuscript1/main.html" class="research-item-link" target="_blank">Read Paper</a>
+            <a href="research/manuscript1/supplement.html" class="research-item-link secondary" target="_blank">Supplement</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manuscript 2: Phenotyping Guidelines -->
+      <div class="research-item" data-category="manuscript">
+        <div class="research-item-image" style="background-image: url('research/manuscript2-preview.png');">
+          <div class="research-item-tags">
+            <span class="research-item-tag">Manuscript</span>
+            <span class="research-item-tag">2025</span>
+          </div>
+        </div>
+        <div class="research-item-content">
+          <h3 class="research-item-title">Quantitative Guidelines for Behavioral Phenotyping from Sparse Point-Process Data</h3>
+          <p class="research-item-authors">Gil Raitses, Mirna Mihovilovic Skanata</p>
+          <p class="research-item-desc">Guidelines for experimental design and statistical analysis of behavioral time series data.</p>
+          <div class="research-item-links">
+            <a href="research/manuscript2/main.html" class="research-item-link" target="_blank">Read Paper</a>
+            <a href="research/manuscript2/supplement.html" class="research-item-link secondary" target="_blank">Supplement</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="project-gallery">
     <h2>Projects</h2>
