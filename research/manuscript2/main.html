@@ -274,14 +274,18 @@ s_{k+1}\)</span></td>
 </div>
 <h2 id="empirical-data-quality-control">Empirical Data Quality
 Control</h2>
-<h3 id="track-segmentation-validation">Track Segmentation
-Validation</h3>
-<p>Empirical larval trajectories undergo MAGAT segmentation to identify
-behavioral states including runs, reorientations, and head swings, and
-generate the Klein run table, a canonical record of all run segments and
-their associated reorientation events. The segmentation step is required
-for kernel fitting because it defines the reorientation onset events
-used as the dependent variable.</p>
+<h3 id="empirical-data-processing">Empirical Data Processing</h3>
+<p>Empirical larval trajectories were processed using methods
+established in the main study. Trajectory extraction and behavioral
+state segmentation were performed using MAGAT Analyzer (Gershow et al.,
+2012), which identifies behavioral states including runs,
+reorientations, and head swings. Reverse crawl detection was performed
+using the algorithm developed by Mason Klein, which identifies
+reorientation events from trajectory data. The Klein run table provides
+a canonical record of all run segments and their associated
+reorientation events. This segmentation step is required for kernel
+fitting because it defines the reorientation onset events used as the
+dependent variable in the hazard model.</p>
 <p>A critical data quality issue was identified. Of 701 unique
 experiment-track pairs in the consolidated dataset, only 424 (60.5%)
 successfully passed MAGAT segmentation. The remaining 277 tracks (39.5%)
@@ -476,6 +480,21 @@ advantages over parametric fitting. Parameters are regularized by joint
 training across all tracks. The model learns kernel shape without
 assuming gamma-difference form. Deep learning naturally handles noisy
 inputs.</p>
+<figure id="fig:shrinkage">
+<embed src="core/fig3_hierarchical_shrinkage.png" />
+<figcaption><strong>Hierarchical Bayesian modeling reveals population
+homogeneity.</strong> <strong>(A)</strong> Caterpillar plot showing 95%
+credible intervals for <span class="math inline">\(\tau_1\)</span> for
+all 256 tracks, sorted by posterior mean. Orange intervals (22 tracks,
+8.6%) have CIs that exclude the population mean; gray intervals (234
+tracks, 91.4%) are consistent with the population. The vertical red line
+marks the population mean (<span class="math inline">\(\tau_1 =
+0.63\)</span>s). <strong>(B)</strong> MLE vs Bayesian <span
+class="math inline">\(\tau_1\)</span> estimates. Extreme MLE values (up
+to 5s) are shrunk toward the population mean (<span
+class="math inline">\(\approx\)</span>0.65s) by the hierarchical
+prior.</figcaption>
+</figure>
 <h2 id="hierarchical-bayesian-model">Hierarchical Bayesian Model</h2>
 <p>Given the limitations of independent track-level fitting, a
 hierarchical Bayesian model jointly estimates population and individual
@@ -491,11 +510,12 @@ class="math inline">\(\sigma_{\tau_2}\)</span> simultaneously with
 individual parameters. Individual <span
 class="math inline">\(\tau_1\)</span> estimates are then pulled toward
 <span class="math inline">\(\mu_{\tau_1}\)</span> in proportion to their
-uncertainty. A track with 5 events is pulled strongly toward the
-population mean, while a track with 50 events retains more of its
-individual signal. The resulting posterior distributions for each
-individual include credible intervals that account for both measurement
-uncertainty and population variability.</p>
+uncertainty (Figure <a href="#fig:shrinkage" data-reference-type="ref"
+data-reference="fig:shrinkage">2</a>). A track with 5 events is pulled
+strongly toward the population mean, while a track with 50 events
+retains more of its individual signal. The resulting posterior
+distributions for each individual include credible intervals that
+account for both measurement uncertainty and population variability.</p>
 <p>At the population level, hyperpriors specify: <span
 class="math display">\[\begin{aligned}
 \mu_{\tau_1} &amp;\sim \text{Normal}(\log(0.3), 0.5) \notag \\
@@ -522,39 +542,30 @@ class="math inline">\(\hat{R}\)</span> statistics and effective sample
 size.</p>
 <h2 id="sec:power_analysis">Power Analysis</h2>
 <p>Power analysis answers a fundamental question: <em>How much data is
-needed to reliably detect a real difference?</em> This section explains
-the concepts and methodology.</p>
+needed to reliably detect a real difference?</em></p>
 <h3 id="two-types-of-errors">Two Types of Errors</h3>
 <p>When claiming that an individual larva differs from the population,
-two types of mistakes are possible:</p>
-<h4 id="type-i-error-false-positive.">Type I error (false
-positive).</h4>
-<p>Claiming a larva is “different” when it is actually typical. For
-example, a larva with true <span class="math inline">\(\tau_1 =
-0.63\)</span> s matching the population average happens to produce an
-unusual pattern of events by chance. The method incorrectly flags it as
-a fast responder.</p>
-<p>The Type I error rate should be controlled at a pre-specified level,
+two types of mistakes are possible. Type I error occurs when a larva is
+claimed to be different when it is actually typical. For example, a
+larva with true <span class="math inline">\(\tau_1 = 0.63\)</span> s
+matching the population average happens to produce an unusual pattern of
+events by chance. The method incorrectly flags it as a fast responder.
+The Type I error rate should be controlled at a pre-specified level,
 conventionally 5%. Among larvae that are truly typical, at most 5%
 should be wrongly flagged as different.</p>
-<h4 id="type-ii-error-false-negative.">Type II error (false
-negative).</h4>
-<p>Failing to detect a larva that is genuinely different. For example, a
-true fast responder with <span class="math inline">\(\tau_1 =
-0.43\)</span> s produces events that happen to look average, and the
-method misses it.</p>
-<p><strong>Power</strong> is defined as <span class="math inline">\(1 -
-\text{Type II error rate}\)</span>, i.e., the probability of correctly
-detecting a true difference. A power of 80% means that among larvae that
-are genuinely fast responders, 80% are correctly identified.</p>
-<h3 id="why-this-matters-for-phenotyping">Why This Matters for
-Phenotyping</h3>
-<p>If power is low, then even if fast responders exist, we will miss
-most of them. An observed 8% could represent a genuine 8% subpopulation
-if power is high, a small fraction of a much larger subpopulation if
-power is low, or entirely false positives if Type I error is not
-controlled. Power analysis determines which interpretation is
-plausible.</p>
+<p>Type II error occurs when failing to detect a larva that is genuinely
+different. For example, a true fast responder with <span
+class="math inline">\(\tau_1 = 0.43\)</span> s produces events that
+happen to look average, and the method misses it. Power is defined as
+one minus the Type II error rate, which equals the probability of
+correctly detecting a true difference. A power of 80% means that among
+larvae that are genuinely fast responders, 80% are correctly
+identified.</p>
+<p>If power is low, then even if fast responders exist, most will be
+missed. An observed 8% could represent a genuine 8% subpopulation if
+power is high, a small fraction of a much larger subpopulation if power
+is low, or entirely false positives if Type I error is not controlled.
+Power analysis determines which interpretation is plausible.</p>
 <h3 id="simulation-based-power-calculation">Simulation-Based Power
 Calculation</h3>
 <p>Since analytical power formulas do not exist for this nonlinear
@@ -570,8 +581,9 @@ bootstrap. Type I error was computed as the proportion of population
 tracks whose CI incorrectly excluded 0.63 s, which should be
 approximately 5%. Power was computed as the proportion of fast-responder
 tracks whose CI correctly excluded 0.63 s, which should increase with
-event count.</p>
-<h3 id="technical-details">Technical Details</h3>
+event count (Figure <a href="#fig:power_analysis"
+data-reference-type="ref"
+data-reference="fig:power_analysis">3</a>).</p>
 <p>Three methodological choices are critical for reliable power
 estimation. Confidence intervals were computed via parametric bootstrap
 because standard resampling fails for point processes. Events are not
@@ -584,6 +596,18 @@ the 2.5th to 97.5th percentile across 200 bootstrap samples. If a
 larva’s CI excludes the population mean, response timing differs
 significantly from average. The width of the CI determines ability to
 detect differences.</p>
+<figure id="fig:power_analysis">
+<embed src="fig5_power_analysis.png" />
+<figcaption><strong>Power analysis quantifies detection
+capability.</strong> <strong>(A)</strong> Power to detect fast
+responders increases monotonically with event count. At the current
+median of 18 events per track, power is approximately 20–30%. To achieve
+80% power for detecting a <span class="math inline">\(\Delta\tau_1 =
+0.2\)</span> s difference, approximately 100–120 events per track are
+required. <strong>(B)</strong> Type I error rate remains controlled near
+the nominal 5% level across all event counts, confirming that the
+parametric bootstrap procedure is well-calibrated.</figcaption>
+</figure>
 <p>The point-process log-likelihood includes both event contributions
 and a penalty for time without events: <span class="math display">\[\log
 L = \sum_{i=1}^{N} \log \lambda(t_i) - \int_0^T \lambda(t) \, dt
@@ -595,43 +619,43 @@ rates.</p>
 <p>The 6-parameter kernel produces a non-convex likelihood surface, so
 MLE was initialized from 18 grid points spanning parameter ranges <span
 class="math inline">\(\tau_1 \in \{0.3, 0.6, 0.9\}\)</span> s, <span
-class="math inline">\(\tau_2 \in \{1.0, 2.0, 3.0\}\)</span> s, and <span
+class="math inline">\(\tau_2 \in \{1.0, 2.0, 3.0\}\)</span> s and <span
 class="math inline">\(A/B \in \{1.0, 2.0\}\)</span>. The optimization
 with highest log-likelihood was retained. Without multi-start
 initialization, approximately 15–20% of tracks converged to local
 minima. Additional implementation details including GPU vectorization
 are documented in the code repository.</p>
-<h3 id="interpreting-the-results">Interpreting the Results</h3>
 <p>If the analysis is well-calibrated, Type I error should remain
 approximately 5% regardless of event count since the threshold is set to
-achieve this. Power should increase as event count increases. The key
-output is the event count required to achieve 80% power. If this value
-exceeds the typical 18–25 events in the data, the data are under-powered
-for individual-level phenotyping.</p>
+achieve this, as confirmed in Figure <a href="#fig:power_analysis"
+data-reference-type="ref" data-reference="fig:power_analysis">3</a>.
+Power increases monotonically with event count. The key output is the
+event count required to achieve 80% power. If this value exceeds the
+typical 18–25 events in the data, the data are under-powered for
+individual-level phenotyping.</p>
 <h2 id="sec:ppc">Posterior Predictive Checks</h2>
 <p>Posterior predictive checks (PPC) were performed to validate the
 hierarchical Bayesian model. For each of 256 tracks, 100 posterior
 samples of <span class="math inline">\((\tau_1, \tau_2)\)</span> were
 drawn. For each sample, a synthetic event train was simulated using the
 Bernoulli process. Summary statistics were computed for each simulation
-including event count, mean inter-stimulus interval (ISI), ISI variance,
+including event count, mean inter-stimulus interval (ISI), ISI variance
 and PSTH correlation with observed data.</p>
 <p>The model was considered adequate if <span
 class="math inline">\(\geq\)</span>90% of tracks had observed statistics
 falling within the 95% posterior predictive interval for at least two of
 three metrics.</p>
 <h2 id="sec:model_selection">Model Selection</h2>
-<p>Model comparison was performed between the full 6-parameter model (A,
-<span class="math inline">\(\alpha_1\)</span>, <span
+<p>Model comparison was performed between the full 6-parameter model
+with A, <span class="math inline">\(\alpha_1\)</span>, <span
 class="math inline">\(\beta_1\)</span>, B, <span
-class="math inline">\(\alpha_2\)</span>, <span
-class="math inline">\(\beta_2\)</span> estimated per track) and a
-reduced 2-parameter model (<span class="math inline">\(\tau_1\)</span>,
-<span class="math inline">\(\tau_2\)</span> estimated per track; A, B
-fixed at population values). Both models were fitted via MLE to all
-tracks. The Bayesian Information Criterion (BIC) and Akaike Information
-Criterion (AIC) were computed: <span
-class="math display">\[\begin{aligned}
+class="math inline">\(\alpha_2\)</span>, and <span
+class="math inline">\(\beta_2\)</span> estimated per track and a reduced
+2-parameter model with <span class="math inline">\(\tau_1\)</span> and
+<span class="math inline">\(\tau_2\)</span> estimated per track while A
+and B were fixed at population values. Both models were fitted via MLE
+to all tracks. The Bayesian Information Criterion and Akaike Information
+Criterion were computed: <span class="math display">\[\begin{aligned}
 \text{BIC} &amp;= k \ln(n) - 2 \ln(\hat{L}) \\
 \text{AIC} &amp;= 2k - 2 \ln(\hat{L})
 \end{aligned}\]</span> where <span class="math inline">\(k\)</span> is
@@ -653,9 +677,12 @@ population estimates; CV <span class="math inline">\(&gt;\)</span>20%
 indicates significant experiment-specific effects.</p>
 <h2 id="statistical-analysis">Statistical Analysis</h2>
 <p>All analyses were performed in Python 3.14. Kernel fitting used
-<code>scipy.optimize</code>. Clustering used <code>scikit-learn</code>.
-Data manipulation used <code>pandas</code> and <code>numpy</code>.
-Custom validation functions handled turn rate detection.</p>
+<code>scipy.optimize</code>. Hierarchical Bayesian inference used
+<code>NumPyro</code> with JAX backend. GPU-accelerated computations
+leveraged JAX for vectorized kernel evaluations and bootstrap sampling.
+Clustering used <code>scikit-learn</code>. Data manipulation used
+<code>pandas</code> and <code>numpy</code>. Custom validation functions
+handled turn rate detection.</p>
 <h1 id="results">Results</h1>
 <h2 id="tracks-meet-quality-criteria">260 Tracks Meet Quality
 Criteria</h2>
@@ -820,33 +847,18 @@ dynamics. Dashed line indicates population mean.</figcaption>
 </figure>
 <p>The validation failures and hierarchical shrinkage shown in Figure <a
 href="#fig:summary" data-reference-type="ref"
-data-reference="fig:summary">2</a> demonstrate that apparent phenotypic
+data-reference="fig:summary">4</a> demonstrate that apparent phenotypic
 clusters are artifacts of sparse data rather than genuine individual
 differences. The hierarchical Bayesian model reveals that most tracks
 are consistent with the population mean, with only 8.6% identified as
 genuine outliers.</p>
-<figure id="fig:shrinkage">
-<embed src="core/fig3_hierarchical_shrinkage.png" />
-<figcaption><strong>Hierarchical Bayesian modeling reveals population
-homogeneity.</strong> <strong>(A)</strong> Caterpillar plot showing 95%
-credible intervals for <span class="math inline">\(\tau_1\)</span> for
-all 256 tracks, sorted by posterior mean. Orange intervals (22 tracks,
-8.6%) have CIs that exclude the population mean; gray intervals (234
-tracks, 91.4%) are consistent with the population. The vertical red line
-marks the population mean (<span class="math inline">\(\tau_1 =
-0.63\)</span>s). <strong>(B)</strong> MLE vs Bayesian <span
-class="math inline">\(\tau_1\)</span> estimates. Extreme MLE values (up
-to 5s) are shrunk toward the population mean (<span
-class="math inline">\(\approx\)</span>0.65s) by the hierarchical
-prior.</figcaption>
-</figure>
 <p>Figure <a href="#fig:shrinkage" data-reference-type="ref"
-data-reference="fig:shrinkage">3</a> shows how hierarchical Bayesian
+data-reference="fig:shrinkage">2</a> shows how hierarchical Bayesian
 estimation shrinks extreme MLE estimates toward the population mean. The
 22 outlier tracks identified by the hierarchical model represent
 candidate fast responders (Figure <a href="#fig:fast_responders"
 data-reference-type="ref"
-data-reference="fig:fast_responders">4</a>).</p>
+data-reference="fig:fast_responders">5</a>).</p>
 <figure id="fig:fast_responders">
 <embed src="core/fig4_fast_responders.png" />
 <figcaption><strong>Candidate fast responders.</strong>
@@ -887,7 +899,7 @@ Information content per event matters equally. Burst stimulation yields
 substantially higher Fisher Information for <span
 class="math inline">\(\tau_1\)</span> compared to continuous stimulation
 (Figure <a href="#fig:identifiability" data-reference-type="ref"
-data-reference="fig:identifiability">5</a>). The mechanism relates to
+data-reference="fig:identifiability">6</a>). The mechanism relates to
 information localization. The excitatory component peaks early after LED
 onset and carries nearly all <span class="math inline">\(\tau_1\)</span>
 information. Continuous stimulation samples this early window once per
@@ -920,7 +932,7 @@ on Kernel Regime</h2>
 stimulation designs reveals that optimal protocol depends on kernel
 regime (Figure <a href="#fig:design_comparison"
 data-reference-type="ref"
-data-reference="fig:design_comparison">6</a>).</p>
+data-reference="fig:design_comparison">7</a>).</p>
 <figure id="fig:design_comparison">
 <embed src="fig_design_comparison_summary.png" />
 <figcaption><strong>Design recommendations depend on kernel
@@ -942,7 +954,7 @@ counts increase dramatically with A/B ratio: 17 events at A/B = 0.125 vs
 0.5.</figcaption>
 </figure>
 <p>Figure <a href="#fig:stimulation_schematic" data-reference-type="ref"
-data-reference="fig:stimulation_schematic">7</a> illustrates the four
+data-reference="fig:stimulation_schematic">8</a> illustrates the four
 stimulation designs compared.</p>
 <p>For inhibitory-dominated kernels with A/B at or below 0.25, burst
 stimulation is optimal. At the current experimental parameters (A/B =
@@ -1009,14 +1021,14 @@ Information content per event matters equally. Burst stimulation yields
 substantially higher Fisher Information for <span
 class="math inline">\(\tau_1\)</span> compared to continuous stimulation
 (Figure <a href="#fig:identifiability" data-reference-type="ref"
-data-reference="fig:identifiability">5</a>). The mechanism relates to
+data-reference="fig:identifiability">6</a>). The mechanism relates to
 information localization. The excitatory component peaks early after LED
 onset and carries nearly all <span class="math inline">\(\tau_1\)</span>
 information. Continuous stimulation samples this early window once per
 cycle, while burst stimulation samples it multiple times. The systematic
 design comparison across kernel regimes (Figure <a
 href="#fig:design_comparison" data-reference-type="ref"
-data-reference="fig:design_comparison">6</a>) reveals that optimal
+data-reference="fig:design_comparison">7</a>) reveals that optimal
 protocols depend on whether the kernel is inhibition-dominated or
 excitation-dominated.</p>
 <p>The optimal design depends on kernel regime. For inhibition-dominated
