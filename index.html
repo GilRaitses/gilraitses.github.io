@@ -1132,9 +1132,9 @@
     
     .research-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-      max-width: 1000px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
     }
@@ -1250,7 +1250,14 @@
       background: rgba(127, 255, 0, 0.1);
     }
     
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
+      .research-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 600px) {
       .research-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -1735,6 +1742,24 @@
           <div class="research-item-links">
             <a href="research/manuscript2/main.html" class="research-item-link" target="_blank">Read Paper</a>
             <a href="research/manuscript2/supplement.html" class="research-item-link secondary" target="_blank">Supplement</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Manuscript 3: pax nyc -->
+      <div class="research-item" data-category="manuscript">
+        <div class="research-item-image" style="background-image: url('research/pax-preview.png');">
+          <div class="research-item-tags">
+            <span class="research-item-tag">Manuscript</span>
+            <span class="research-item-tag">2025</span>
+          </div>
+        </div>
+        <div class="research-item-content">
+          <h3 class="research-item-title">pax nyc: Perceptual Stress Routing in Urban Environments</h3>
+          <p class="research-item-authors">Gil Raitses</p>
+          <p class="research-item-desc">Multi-scale signal processing for learned heuristic pathfinding. Real-time urban sensing with perceptual stress optimization.</p>
+          <div class="research-item-links">
+            <a href="research/pax-manuscript/main.html" class="research-item-link" target="_blank">Read Paper</a>
           </div>
         </div>
       </div>

@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Gil Raitses Syracuse University MS Applied Human-Centered AI gjraitse@syr.edu Introduction to Artificial Intelligence Prof. Andrew C. Lee Student ID: 131 Fall 2025" />
+  <title>pax nyc: Perceptual Stress Routing in Urban Environments</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    div.abstract {
+      margin: 2em 2em 2em 2em;
+      text-align: left;
+      font-size: 85%;
+    }
+    div.abstract-title {
+      font-weight: bold;
+      text-align: center;
+      padding: 0;
+      margin-bottom: 0.5em;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">pax nyc: Perceptual Stress Routing in Urban
+Environments</h1>
+<p class="author">Gil Raitses<br />
+Syracuse University<br />
+MS Applied Human-Centered AI<br />
+<code>gjraitse@syr.edu</code><br />
+Introduction to Artificial Intelligence<br />
+Prof. Andrew C. Lee<br />
+Student ID: 131<br />
+Fall 2025</p>
+<div class="abstract">
+<div class="abstract-title">Abstract</div>
+<p>Standard pedestrian navigation systems optimize for distance or
+travel time, ignoring the perceptual experience of walking through urban
+environments. This work describes pax nyc, a framework for computing
+pedestrian routes that account for perceptual stress alongside
+geographic distance. The system processes imagery from 82 traffic
+cameras distributed across a midtown Manhattan corridor, extracting
+features through detection models YOLO and Detectron2 alongside a
+semantic encoder CLIP and computing stress scores grounded in
+psychophysical principles.</p>
+<p>The primary finding is a robust diurnal stress pattern: peak stress
+occurs at 15:00 with mean 0.381, and a raised-cosine temporal kernel
+explains 98% of hourly variance. The midday effect of Hedges’ <span
+class="math inline">\(g = 0.50\)</span> substantially exceeds the
+rush-hour effect of <span class="math inline">\(g = 0.17\)</span>,
+indicating that time of day explains more stress variance than spatial
+location. Avenue-level differences, while statistically detectable, are
+practically small at <span class="math inline">\(\eta^2 =
+4.2\%\)</span>.</p>
+<p>A weighted A* search algorithm generates routes that trade path
+length against accumulated stress. Routing parameters were calibrated
+via differential evolution to reproduce expert-preferred corridors
+(6-1/2 Avenue) while avoiding high-activity zones (Theater District).
+Under the calibrated stress metric, routing achieves 45% stress
+reduction compared to baseline while adding 11% distance.
+Leave-one-camera-out validation shows 78% of held-out cameras predicted
+within 25% of observed stress, adequate for corridor-scale routing.
+Phase 2 with 356 Manhattan cameras and Phase 3 with 967 citywide cameras
+have been collected for future scaling.</p>
+</div>
+</header>
+<h1 id="introduction">Introduction</h1>
+<p>Standard pedestrian navigation systems optimize for distance or
+travel time, treating all routes as equivalent in experiential quality.
+The equivalence assumption ignores temporal and spatial variation in
+pedestrian stress caused by crowding, traffic exposure, and
+infrastructure conditions. The present study addresses whether
+perceptual stress can be quantified from traffic camera imagery and
+incorporated into routing algorithms.</p>
+<p>Theoretical foundations exist in crowd psychology and environmental
+perception. Hall’s proxemic theory <span class="citation"
+data-cites="hall1966"></span> established that interpersonal distance
+affects comfort through intimate (0–0.5m), personal (0.5–1.2m), social
+(1.2–3.6m), and public (<span class="math inline">\(&gt;\)</span>3.6m)
+zones. Karamouzas et al. <span class="citation"
+data-cites="karamouzas2014"></span> demonstrated that pedestrian
+collision avoidance follows a universal power law with exponent <span
+class="math inline">\(\beta \approx 2.5\)</span>. Proxemic zones and
+power-law dynamics inform the stress computation method developed in
+this study.</p>
+<p>The study area encompasses midtown Manhattan from 42nd to 59th
+Street, 3rd to 9th Avenue, including Grand Central Terminal, Times
+Square, Rockefeller Center, and Carnegie Hall. Data collection used 82
+NYC DOT traffic cameras over one week (November 10–17, 2025) at
+30-minute intervals, yielding 25,941 observations.</p>
+<figure id="fig:overview">
+<img src="figure1_temporal_spatial.png" style="width:95.0%" />
+<figcaption><strong>Temporal and spatial stress dynamics in Midtown
+Manhattan.</strong> Stress varies more by time of day than by spatial
+location across the study corridor. <strong>(A)</strong> Study area
+showing 82 NYC DOT traffic cameras from 42nd to 59th Street, 3rd to 9th
+Avenue. <strong>(B)</strong> Effect sizes showing temporal effects
+(green) exceed spatial effects (red). Midday vs morning: <span
+class="math inline">\(g = 0.50\)</span>; Park vs Madison: <span
+class="math inline">\(g = -0.01\)</span>. <strong>(C)</strong> Diurnal
+stress profile with peak at 15:00 (mean 0.381) and trough at 04:00 (mean
+0.252). <strong>(D)</strong> Leave-one-camera-out validation with <span
+class="math inline">\(r = 0.28\)</span>.</figcaption>
+</figure>
+<p>Three principal findings emerge from this analysis. First, pedestrian
+stress exhibits pronounced diurnal variation, with peak stress at 15:00
+and minimum at 04:00; a raised-cosine temporal kernel explains 98% of
+hourly variance, and midday stress exceeds morning stress by Hedges’
+<span class="math inline">\(g = 0.50\)</span>. Second, incorporating
+stress into weighted A* search reduces accumulated route stress by 45%
+with only 11% distance increase, using parameters calibrated via
+differential evolution to reproduce expert-preferred corridors. Third,
+spatial interpolation validation achieves 78% of held-out cameras
+predicted within 25% of observed values, indicating adequate accuracy
+for corridor-scale routing while acknowledging substantial local
+variation (<span class="math inline">\(r = 0.28\)</span>). The
+methodology extends to Phase 2 (356 Manhattan cameras) and Phase 3 (967
+citywide cameras), both collected and processed.</p>
+<h1 id="methods">Methods</h1>
+<h2 id="data-collection">Data Collection</h2>
+<p>The NYC Department of Transportation maintains a network of traffic
+cameras across the five boroughs. For this study, 82 cameras within the
+midtown corridor were selected based on geographic coverage of the study
+area from 42nd to 59th Street and 3rd to 9th Avenue.</p>
+<div id="tab:phases">
+<table>
+<caption>Data collection phases</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Phase</th>
+<th style="text-align: left;">Cameras</th>
+<th style="text-align: left;">Images</th>
+<th style="text-align: left;">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Phase 1</td>
+<td style="text-align: left;">82</td>
+<td style="text-align: left;"><span
+class="math inline">\(\sim\)</span>14,795</td>
+<td style="text-align: left;">Evaluated</td>
+</tr>
+<tr>
+<td style="text-align: left;">Phase 2 (Manhattan)</td>
+<td style="text-align: left;">356</td>
+<td style="text-align: left;"><span
+class="math inline">\(\sim\)</span>45,409</td>
+<td style="text-align: left;">Collected</td>
+</tr>
+<tr>
+<td style="text-align: left;">Phase 3 (Citywide)</td>
+<td style="text-align: left;">967</td>
+<td style="text-align: left;"><span
+class="math inline">\(\sim\)</span>590,725</td>
+<td style="text-align: left;">Collected</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Image collection was automated using AWS Lambda functions triggered
+by EventBridge at 30-minute intervals. Images were stored in S3 buckets
+and processed on GPU instances for feature extraction.</p>
+<h2 id="feature-extraction">Feature Extraction</h2>
+<p>Two detection models and one semantic encoder extract complementary
+features from each camera image. YOLO v8n <span class="citation"
+data-cites="redmon2016"></span> performs object detection for
+pedestrians, vehicles, and bicycles, providing counts and bounding boxes
+for crowd density estimation. CLIP ViT-B/32 <span class="citation"
+data-cites="radford2021"></span> generates 512-dimensional semantic
+embeddings that capture scene-level characteristics such as commercial
+versus residential land use and busy versus calm atmosphere. Detectron2
+<span class="citation" data-cites="wu2019"></span> provides instance
+segmentation for precise pedestrian spacing measurements and crowd
+density estimation.</p>
+<h2 id="stress-computation">Stress Computation</h2>
+<p>Spacing stress follows a power law validated by personal-space
+psychophysics:</p>
+<p><span class="math display">\[\sigma_{\text{spacing}} =
+\left(\frac{d}{PS}\right)^{-\beta}, \quad \beta \approx 2.5
+\label{eq:spacing}\]</span></p>
+<p>where <span class="math inline">\(d\)</span> is the minimum
+inter-pedestrian distance and <span class="math inline">\(PS =
+0.65\)</span>m is the personal space radius <span class="citation"
+data-cites="hall1966"></span>.</p>
+<div id="tab:proxemic">
+<table>
+<caption>Proxemic stress thresholds</caption>
+<thead>
+<tr>
+<th style="text-align: left;">State</th>
+<th style="text-align: left;">Spacing</th>
+<th style="text-align: left;">Stress</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Comfortable</td>
+<td style="text-align: left;"><span class="math inline">\(&gt;\)</span>
+1.2m</td>
+<td style="text-align: left;"><span
+class="math inline">\(\approx\)</span> 0.0</td>
+</tr>
+<tr>
+<td style="text-align: left;">Crowded</td>
+<td style="text-align: left;">0.5–1.0m</td>
+<td style="text-align: left;">0.3–0.7</td>
+</tr>
+<tr>
+<td style="text-align: left;">Crushed</td>
+<td style="text-align: left;"><span class="math inline">\(&lt;\)</span>
+0.5m</td>
+<td style="text-align: left;"><span
+class="math inline">\(\approx\)</span> 1.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The composite stress score combines multiple factors:</p>
+<p><span class="math display">\[\sigma = 0.35 \cdot
+\sigma_{\text{spacing}} + 0.20 \cdot \sigma_{\text{infra}} + 0.25 \cdot
+\frac{n_{\text{ped}}}{50} + 0.20 \cdot \frac{n_{\text{veh}}}{20}
+\label{eq:composite}\]</span></p>
+<p>where <span class="math inline">\(\sigma_{\text{infra}}\)</span>
+captures infrastructure quality and <span
+class="math inline">\(n_{\text{ped}}\)</span>, <span
+class="math inline">\(n_{\text{veh}}\)</span> are pedestrian and vehicle
+counts. Feature weights are learned via ridge regression with <span
+class="math inline">\(\alpha = 19.31\)</span> selected by 5-fold
+cross-validation, reducing effective degrees of freedom from 18 to
+approximately 9. This penalty-based regularization complements the
+constraint-based regularization imposed by the psychophysics formula,
+which enforces domain-consistent relationships that data-driven
+shrinkage alone cannot guarantee.</p>
+<h2 id="spatial-interpolation">Spatial Interpolation</h2>
+<p>Intersection stress is assigned using a multi-scale approach that
+combines street context with spatial proximity. The primary method
+assigns stress based on cameras located on the same named street (e.g.,
+Park Avenue, Madison Avenue), computing the average stress across all
+cameras on that street. Street-based assignment enables block-by-block
+navigation that respects urban structure, avoiding the zone-to-zone
+navigation artifacts that occur with pure nearest-neighbor
+assignment.</p>
+<p>When no cameras exist on the same street, the system falls back to
+inverse-distance weighting (IDW) interpolation using the <span
+class="math inline">\(k=5\)</span> nearest cameras. The IDW weight for
+camera <span class="math inline">\(i\)</span> at distance <span
+class="math inline">\(d_i\)</span> is:</p>
+<p><span class="math display">\[w_i = \frac{1}{d_i +
+\epsilon}\]</span></p>
+<p>where <span class="math inline">\(\epsilon = 10^{-6}\)</span>
+prevents division by zero. The interpolated stress is:</p>
+<p><span class="math display">\[\sigma_{\text{intersection}} =
+\frac{\sum_{i=1}^{k} w_i \sigma_i}{\sum_{i=1}^{k} w_i}\]</span></p>
+<p>The hybrid approach balances street-level coherence (via street-based
+averaging) with spatial continuity (via IDW fallback), ensuring that all
+intersections receive stress assignments even in areas with sparse
+camera coverage.</p>
+<figure id="fig:spatial">
+<img src="figure2_spatial.png" style="width:95.0%" />
+<figcaption><strong>Spatial structure of the stress field (raw
+camera-derived stress).</strong> Avenue-level differences explain only
+4.2% of variance; within-avenue variation dominates.
+<strong>(A)</strong> Voronoi tessellation stress heatmap from 82 camera
+observations with cell colors indicating camera-level mean stress.
+<strong>(B)</strong> 3D topological visualization showing stress
+elevation across the corridor with street and avenue labels.
+<strong>(C)</strong> Park versus Madison Avenue stress profiles show no
+significant difference (<span class="math inline">\(g = -0.011\)</span>,
+CI [<span class="math inline">\(-0.38\)</span>, <span
+class="math inline">\(0.41\)</span>]). Note: routing improvements appear
+only under the regularized metric (with groove/basin discounts), not in
+this raw data.</figcaption>
+</figure>
+<h2 id="pathfinding-algorithm">Pathfinding Algorithm</h2>
+<p>The stress field operates at four scales: (1) camera-level stress
+from image features, (2) intersection-level stress via hybrid
+interpolation, (3) edge-level stress as the average of endpoint
+intersections, and (4) route-level stress as a length-weighted
+integral.</p>
+<p>Edge stress is computed as the average of the stress at its two
+endpoint intersections:</p>
+<p><span class="math display">\[\sigma_e = \frac{1}{2}(\sigma_u +
+\sigma_v)
+\label{eq:edge_stress}\]</span></p>
+<p>where <span class="math inline">\(\sigma_u\)</span> and <span
+class="math inline">\(\sigma_v\)</span> are the intersection stresses at
+nodes <span class="math inline">\(u\)</span> and <span
+class="math inline">\(v\)</span>. The routing algorithm uses weighted A*
+search <span class="citation" data-cites="hart1968"></span> with a
+stress-modified cost function:</p>
+<p><span class="math display">\[\text{cost}(e) = d_e + \alpha \cdot
+\sigma_e
+\label{eq:cost}\]</span></p>
+<p>where <span class="math inline">\(d_e\)</span> is edge distance,
+<span class="math inline">\(\sigma_e\)</span> is edge stress, and <span
+class="math inline">\(\alpha\)</span> controls the distance-stress
+trade-off. The parameter <span class="math inline">\(\alpha\)</span> is
+calibrated via grid search to achieve substantial stress reduction
+(<span class="math inline">\(\geq\)</span>30–40%) while limiting
+distance increase to <span class="math inline">\(\leq\)</span>3–5%.</p>
+<p>Route stress is computed as a length-weighted integral over all edges
+in the path:</p>
+<p><span class="math display">\[\sigma_{\text{route}} = \sum_{e \in
+\text{path}} d_e \cdot \sigma_e
+\label{eq:route_stress}\]</span></p>
+<p>Length-weighted integration is more physically meaningful than
+summing node stresses, as it accounts for the distance traveled through
+each stress level. The A* heuristic uses <span
+class="math inline">\(f(n) = g(n) + h(n)\)</span> where <span
+class="math inline">\(g(n)\)</span> is accumulated cost from start
+(including distance and stress penalties), and <span
+class="math inline">\(h(n) = \text{Manhattan\_distance}(n,
+\text{goal})\)</span> is the admissible distance-only heuristic. Stress
+is not included in the heuristic to preserve admissibility.</p>
+<h2 id="temporal-integration">Temporal Integration</h2>
+<p>Spatial stress is adjusted by a multiplicative temporal factor that
+captures diurnal patterns in pedestrian stress. The temporal factor
+<span class="math inline">\(f(h)\)</span> for hour <span
+class="math inline">\(h\)</span> is derived from the hourly stress
+profile (R² = 0.98) and normalized so that the mean factor across all
+hours equals 1.0:</p>
+<p><span class="math display">\[\sigma_{\text{effective}}(h) =
+\sigma_{\text{spatial}} \cdot f(h)
+\label{eq:temporal}\]</span></p>
+<p>The temporal factor ranges from approximately 0.80 (off-peak hours,
+e.g., 3–4 AM) to 1.21 (peak hours, e.g., 3 PM), reflecting the 17%
+increase in stress during rush hours (<span class="math inline">\(g =
+0.17\)</span>, <span class="math inline">\(p &lt; 10^{-27}\)</span>).
+Multiplicative adjustment enables time-of-day routing without
+introducing additional hyperparameters, as the temporal factor is
+applied at query time based on the requested departure hour.</p>
+<h2 id="calibrated-regularization">Calibrated Regularization</h2>
+<p>The system supports two modes: raw interpolated stress (from
+camera-derived features only) and regularized stress (with
+domain-knowledge corrections). The regularization layer applies
+calibrated boosts and discounts based on urban domain knowledge,
+including theater district avoidance, pedestrian corridor preferences,
+and avenue-level basin/ridge detection. High-stress barriers (ridges)
+are identified using multi-scale analysis with ridge_score <span
+class="math inline">\(&gt; 0.75\)</span> boosted to stress <span
+class="math inline">\(\geq 0.8\)</span>. Low-stress channels (basins)
+with basin_score <span class="math inline">\(&gt; 0.6\)</span> receive
+stress reduction to 0.3–0.5.</p>
+<p>Routing parameters were calibrated via differential evolution to
+match four user-preferred routes across the study corridor. The
+optimization objective combined waypoint coverage and region
+avoidance:</p>
+<p><span class="math display">\[\mathcal{L} = 0.6 \cdot
+\text{waypoint\_coverage} + 0.4 \cdot
+\text{zone\_avoidance}\]</span></p>
+<p>The four calibration routes were: (1) Grand Central to Carnegie Hall
+via 6-1/2 Avenue, (2) Times Square to Rockefeller Center avoiding
+Broadway, (3) Penn Station to Grand Central via Madison Avenue avoiding
+the Empire State Building area, and (4) Bryant Park to Central Park
+South via 6-1/2 Avenue. Each route specified preferred waypoints and
+zones to avoid, reflecting the user’s mental model of comfortable
+walking paths.</p>
+<div id="tab:calibrated-params">
+<table>
+<caption>Parameters calibrated from four user-preferred routes</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: center;">Value</th>
+<th style="text-align: center;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(\alpha\)</span> (stress weight)</td>
+<td style="text-align: center;">0.033</td>
+<td style="text-align: center;">Cost trade-off</td>
+</tr>
+<tr>
+<td style="text-align: left;">Theater District boost</td>
+<td style="text-align: center;">+5%</td>
+<td style="text-align: center;">Avoid 7th Ave 42nd–49th</td>
+</tr>
+<tr>
+<td style="text-align: left;">Tourist hotspot boost</td>
+<td style="text-align: center;">+7%</td>
+<td style="text-align: center;">Avoid ESB/Herald Square</td>
+</tr>
+<tr>
+<td style="text-align: left;">6-1/2 Ave groove discount</td>
+<td style="text-align: center;"><span
+class="math inline">\(-\)</span>35%</td>
+<td style="text-align: center;">Prefer pedestrian corridor</td>
+</tr>
+<tr>
+<td style="text-align: left;">Madison Ave discount</td>
+<td style="text-align: center;"><span
+class="math inline">\(-\)</span>2%</td>
+<td style="text-align: center;">Slight preference</td>
+</tr>
+<tr>
+<td style="text-align: left;">Side street discount</td>
+<td style="text-align: center;"><span
+class="math inline">\(-\)</span>5%</td>
+<td style="text-align: center;">Prefer minor cross streets</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The calibrated parameters encode walking preferences, which may
+reflect a combination of crowd avoidance, sidewalk quality, and
+aesthetic factors not directly captured by camera-derived stress.
+Multi-route calibration reveals consistent patterns: strong preference
+for the 6-1/2 Avenue pedestrian corridor and avoidance of tourist-heavy
+zones.</p>
+<h1 id="results">Results</h1>
+<h2 id="temporal-dynamics">Temporal Dynamics</h2>
+<p>Stress exhibits a pronounced diurnal pattern across the study
+corridor. Figure <a href="#fig:overview" data-reference-type="ref"
+data-reference="fig:overview">1</a>C shows hourly mean stress with 95%
+confidence intervals.</p>
+<div id="tab:diurnal">
+<table>
+<caption>Diurnal stress pattern characteristics</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: center;">Value</th>
+<th style="text-align: center;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Peak hour</td>
+<td style="text-align: center;">15:00</td>
+<td style="text-align: center;">0.381 mean stress</td>
+</tr>
+<tr>
+<td style="text-align: left;">Trough hour</td>
+<td style="text-align: center;">04:00</td>
+<td style="text-align: center;">0.252 mean stress</td>
+</tr>
+<tr>
+<td style="text-align: left;">Daily range</td>
+<td style="text-align: center;">0.129</td>
+<td style="text-align: center;">51% of trough value</td>
+</tr>
+<tr>
+<td style="text-align: left;">Temporal kernel <span
+class="math inline">\(R^2\)</span></td>
+<td style="text-align: center;">0.979</td>
+<td style="text-align: center;">Raised-cosine basis, 12 functions</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The 15:00 peak suggests tourist and lunch-crowd dynamics rather than
+traditional commuter rush hours. Temporal effect sizes confirm the
+diurnal pattern.</p>
+<div id="tab:temporal-effects">
+<table>
+<caption>Temporal effect sizes, Hedges’ <span
+class="math inline">\(g\)</span> with 95% CI</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Comparison</th>
+<th style="text-align: center;">Hedges’ <span
+class="math inline">\(g\)</span></th>
+<th style="text-align: center;">95% CI</th>
+<th style="text-align: center;">Magnitude</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Midday vs Morning</td>
+<td style="text-align: center;">0.498</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">Medium</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rush vs Off-peak</td>
+<td style="text-align: center;">0.168</td>
+<td style="text-align: center;">[0.124, 0.214]</td>
+<td style="text-align: center;">Small</td>
+</tr>
+<tr>
+<td style="text-align: left;">Weekend effect</td>
+<td style="text-align: center;"><span
+class="math inline">\(-0.189\)</span></td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">Small</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The midday effect of <span class="math inline">\(g = 0.50\)</span>
+substantially exceeds the rush-hour effect of <span
+class="math inline">\(g = 0.17\)</span>, indicating that time-of-day
+variation is dominated by mid-afternoon crowding rather than commuter
+patterns. Weekend stress is slightly lower than weekday stress.</p>
+<h2 id="spatial-interpolation-validation">Spatial Interpolation
+Validation</h2>
+<p>Leave-one-camera-out cross-validation assesses the reliability of
+interpolated stress fields:</p>
+<div id="tab:loco">
+<table>
+<caption>LOCO validation metrics</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: center;">Simple LOCO</th>
+<th style="text-align: center;">Buffered LOCO at 150m</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">RMSE</td>
+<td style="text-align: center;">0.180</td>
+<td style="text-align: center;">0.156</td>
+</tr>
+<tr>
+<td style="text-align: left;">MAE</td>
+<td style="text-align: center;">0.147</td>
+<td style="text-align: center;">0.122</td>
+</tr>
+<tr>
+<td style="text-align: left;">% within 25%</td>
+<td style="text-align: center;">68.3%</td>
+<td style="text-align: center;">78.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">Correlation <span
+class="math inline">\(r\)</span></td>
+<td style="text-align: center;">0.280</td>
+<td style="text-align: center;">—</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Buffered LOCO excludes nearby cameras from training, providing a more
+conservative estimate. The 78% within-tolerance rate indicates adequate
+corridor-scale prediction. The modest correlation of <span
+class="math inline">\(r = 0.28\)</span> indicates substantial local
+variation not captured by spatial interpolation. The stress field is
+reliable at corridor scale but too coarse for block-level
+predictions.</p>
+<h2 id="route-comparison">Route Comparison</h2>
+<p>The primary evaluation compares routes from Grand Central Terminal at
+42nd Street and Park Avenue to Carnegie Hall at 57th Street and 7th
+Avenue.</p>
+<div id="tab:route-comparison">
+<table>
+<caption>Route comparison: Grand Central to Carnegie Hall (raw and
+regularized metrics)</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Route</th>
+<th style="text-align: center;">Nodes</th>
+<th style="text-align: center;">Distance</th>
+<th style="text-align: center;">Raw Stress</th>
+<th style="text-align: center;">Regularized Stress</th>
+<th style="text-align: center;">Theater</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Baseline A*</td>
+<td style="text-align: center;">18</td>
+<td style="text-align: center;">2,083m</td>
+<td style="text-align: center;">9.00</td>
+<td style="text-align: center;">11.25</td>
+<td style="text-align: center;">0 nodes</td>
+</tr>
+<tr>
+<td style="text-align: left;">Stress-aware A*</td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">3,277m</td>
+<td style="text-align: center;">9.50</td>
+<td style="text-align: center;">6.53</td>
+<td style="text-align: center;">0 nodes</td>
+</tr>
+<tr>
+<td colspan="2" style="text-align: left;">Change</td>
+<td style="text-align: center;">+57%</td>
+<td style="text-align: center;"><span
+class="math inline">\(-\)</span>6%</td>
+<td style="text-align: center;"><span
+class="math inline">\(-\)</span>42%</td>
+<td style="text-align: center;">—</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Under the regularized stress metric (with groove and basin
+discounts), the stress-aware approach reduces accumulated stress by 42%,
+from 11.25 to 6.53. However, under raw camera-derived stress (no
+regularization), the stress-aware route shows a 6% <em>increase</em>
+from 9.00 to 9.50. The improvement under the regularized metric reflects
+the effect of domain knowledge encoded via discounts, not underlying
+differences in camera-measured stress. Both routes avoid the Theater
+District, and the stress-aware route uses six nodes on the 6-1/2 Avenue
+pedestrian corridor.</p>
+<figure id="fig:routing">
+<img src="figure3_routing.png" style="width:95.0%" />
+<figcaption><strong>Stress-aware routing from Grand Central to Carnegie
+Hall.</strong> Routing parameters were calibrated to prefer the 6-1/2
+Avenue pedestrian corridor. <strong>(A)</strong> Route comparison
+showing baseline A* (dashed) and stress-aware A* (green) on
+Voronoi-colored stress field. The stress-aware route uses six nodes on
+the 6-1/2 Avenue corridor. Cell colors indicate regularized stress from
+low (green) to high (red). <strong>(B)</strong> Pareto frontier showing
+distance-stress trade-off under regularized metric. <strong>(C)</strong>
+Route statistics comparing distance, stress, and path complexity. Note:
+stress reduction appears under the regularized metric; raw
+camera-derived stress shows no improvement.</figcaption>
+</figure>
+<h2 id="spatial-structure">Spatial Structure</h2>
+<p>Avenue-level stress differences are statistically detectable but
+practically small:</p>
+<div id="tab:heterogeneity">
+<table>
+<caption>Avenue heterogeneity analysis</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Statistic</th>
+<th style="text-align: center;">Value</th>
+<th style="text-align: center;">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">ANOVA <span
+class="math inline">\(F\)</span></td>
+<td style="text-align: center;">106.78</td>
+<td style="text-align: center;"><span class="math inline">\(p &lt;
+0.001\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;">Effect size <span
+class="math inline">\(\eta^2\)</span></td>
+<td style="text-align: center;">0.042</td>
+<td style="text-align: center;">Avenues explain 4.2% of variance</td>
+</tr>
+<tr>
+<td style="text-align: left;">Cochran’s <span
+class="math inline">\(Q\)</span></td>
+<td style="text-align: center;">0.34</td>
+<td style="text-align: center;"><span class="math inline">\(p =
+0.999\)</span>, no heterogeneity</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span
+class="math inline">\(I^2\)</span></td>
+<td style="text-align: center;">0.0%</td>
+<td style="text-align: center;">Within-avenue variation dominates</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The data did not reveal evidence that Park Avenue is less stressful
+than Madison Avenue at the image level. Park mean was 0.322 and Madison
+mean was 0.323, with Hedges’ <span class="math inline">\(g =
+-0.011\)</span> and 95% CI from <span
+class="math inline">\(-0.38\)</span> to <span
+class="math inline">\(0.41\)</span>. Any difference between avenues, if
+present, is smaller than the data can reliably resolve. Within-avenue
+temporal and local variation dominates avenue-level differences.</p>
+<p>Initial visualizations suggested a low-stress groove along 54th
+Street between Park and 6th Avenue. The linear channel did not reach
+statistical significance and should be treated as exploratory rather
+than validated. Routing parameters were calibrated via differential
+evolution so that the algorithm follows a known low-stress pedestrian
+corridor (6-1/2 Avenue) while avoiding a manually defined Theater
+District region. This official pedestrian street runs through the
+interior of blocks between 6th and 7th Avenues from 51st to 57th Street.
+The calibration demonstrates that black-box optimization can tune
+routing heuristics to match expert-preferred corridors, though the
+parameters encode domain knowledge rather than purely data-driven stress
+differences.</p>
+<h2 id="pareto-frontier-analysis">Pareto Frontier Analysis</h2>
+<p>Exploring the distance-stress trade-off reveals a Pareto frontier of
+non-dominated routes:</p>
+<div id="tab:pareto">
+<table>
+<caption>Pareto frontier: Distance-stress trade-offs</caption>
+<thead>
+<tr>
+<th style="text-align: left;">Configuration</th>
+<th style="text-align: center;">Distance in meters</th>
+<th style="text-align: center;">Total Stress</th>
+<th style="text-align: center;">Pareto Optimal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Shortest path</td>
+<td style="text-align: center;">1,247</td>
+<td style="text-align: center;">23.79</td>
+<td style="text-align: center;">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left;">Balanced</td>
+<td style="text-align: center;">1,312</td>
+<td style="text-align: center;">17.45</td>
+<td style="text-align: center;">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left;">Low stress</td>
+<td style="text-align: center;">1,389</td>
+<td style="text-align: center;">12.94</td>
+<td style="text-align: center;">Yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The low-stress route adds 11% distance, or 142 meters, while reducing
+stress by 45%. Whether this trade-off is worthwhile depends on user
+preferences and physical ability.</p>
+<h1 id="discussion">Discussion</h1>
+<h2 id="key-findings">Key Findings</h2>
+<p>The most robust finding is the pronounced diurnal stress pattern with
+peak at 15:00. The mid-afternoon peak suggests tourist and lunch-crowd
+dynamics rather than traditional commuter rush hours. The 15:00 peak in
+Midtown Manhattan aligns with when tourists are most active and when
+lunch crowds from nearby offices overlap with shopping activity. Time of
+day explains substantially more stress variance than avenue location.
+The midday versus morning effect of <span class="math inline">\(g =
+0.50\)</span> exceeds the rush-hour effect of <span
+class="math inline">\(g = 0.17\)</span> by a factor of three. Routing
+systems that ignore time-of-day variation miss a major share of what
+makes routes stressful.</p>
+<p>The system converts camera feeds into a latent stress field
+approximating human experience. Feature extraction uses YOLO and
+Detectron2 for detection, with CLIP providing semantics. A
+psychophysics-based formula computes stress scores. Weighted A* search
+then routes through the resulting cost field. The approach approximates
+what walking a route feels like, not merely how long it takes. Standard
+navigation optimizes distance or time, assuming paths of equal length
+provide equivalent experiences. The stress-aware formulation rejects
+that assumption. A route through Times Square differs qualitatively from
+Park Avenue, and 45% stress reduction at the route level reflects that
+difference in quantitative terms.</p>
+<p>Ridge-basin analysis transforms an opaque cost field into
+interpretable structures. The terminology mirrors ridge regression:
+stress penalties regularize pure distance optimization, and the
+resulting cost landscape exhibits ridges and grooves that direct
+efficient search. The data did not reveal evidence that Park Avenue is
+less stressful than Madison Avenue at the image level, with Hedges’
+<span class="math inline">\(g = -0.011\)</span> and 95% CI from <span
+class="math inline">\(-0.38\)</span> to <span
+class="math inline">\(0.41\)</span>. Any avenue-level differences, if
+present, are smaller than the data can reliably resolve. Avenue location
+explains only 4.2% of variance, and within-avenue temporal and local
+variation dominates. Multi-route calibration provides face validity.
+Routing parameters were tuned via differential evolution to reproduce
+four user-preferred routes, revealing consistent preference patterns:
+35% stress discount for the 6-1/2 Avenue pedestrian corridor and 5–7%
+stress penalties for tourist-heavy zones (Theater District, Empire State
+Building area).</p>
+<h2 id="trade-offs-and-biological-parallels">Trade-offs and Biological
+Parallels</h2>
+<p>The objective explicitly balances efficiency against wellbeing.
+Parameter <span class="math inline">\(\alpha\)</span> controls the
+comfort-speed trade-off. At zero, pure distance optimization applies. At
+high values, routes become constrained to low-stress corridors. Pareto
+analysis reveals the trade-off structure. Low-stress routing adds 11%
+distance, or 142 meters, while reducing stress by 45%. Whether
+worthwhile depends on user preferences and physical ability. The
+framework makes trade-offs explicit rather than hidden. Future
+deployment would benefit from user studies calibrating <span
+class="math inline">\(\alpha\)</span> to population preferences.</p>
+<p>Stress-aware routing shares structure with biological navigation. In
+both systems, a scalar perceptual field induces asymmetric transition
+probabilities. Favorable moves are encouraged, and unfavorable moves are
+suppressed. Consider larval phototaxis. A Drosophila larva modulates
+turning probability based on light. Moving up-gradient, turn probability
+decreases. The hazard function depends on perceptual stimulus. The
+stress-aware router faces analogous structure: high-stress streets
+increase effective cost, favoring turns into lower-stress corridors. The
+mathematical parallel is navigation as gradient-biased motion through a
+perceptual landscape. Power-law stress finds justification here, as
+ethological perceptual kernels exhibit similar forms. The parallel
+should not be overstated. Humans differ from larvae, and deliberate
+planning differs from reflexive control. Nevertheless, shared
+computational principles suggest broad biological relevance.</p>
+<h2 id="toward-learned-stress-functions">Toward Learned Stress
+Functions</h2>
+<p>The current system calibrates routing parameters to expert-preferred
+corridors rather than learning stress weights from behavioral data.
+Initial attempts to learn stress weights from camera features produced
+near-zero coefficients with counterintuitive signs (e.g., more vehicles
+associated with lower stress). Three factors explain this failure: (1)
+insufficient preference data—four user-preferred routes provide too few
+constraints to estimate 17 feature weights; (2) spatial
+confounding—paired comparisons between avenues conflate location with
+features; and (3) correlated features—vehicle density correlates with
+infrastructure quality (<span class="math inline">\(r = 0.67\)</span>),
+producing unstable coefficients.</p>
+<p>A methodologically sound approach requires controlled paired
+comparisons that isolate single feature contrasts: same latitude with
+different avenue, same avenue with different block, temporal contrasts
+within location, and infrastructure contrasts with matched crowd
+density. With 10–15 pairs per type, a 45-pair design would provide
+adequate pairs per feature for stable estimation. Bradley-Terry pairwise
+comparison models can estimate feature weights via maximum likelihood,
+with regularization preventing overfitting.</p>
+<p>Several statistical techniques would strengthen future preference
+learning. Principal component analysis transforms correlated features
+into orthogonal components, avoiding the confounding that plagued
+raw-feature optimization. Cluster bootstrap resamples at the camera
+level for valid confidence intervals. Bayesian optimization can
+efficiently search the weight space when function evaluations are
+expensive. If controlled preference experiments are infeasible, external
+data sources such as 311 complaints, walkability surveys, GPS traces, or
+physiological sensing could provide supervised signal.</p>
+<p>Despite the limitations of preference learning, the current system
+demonstrates that temporal structure is learnable (<span
+class="math inline">\(R^2 = 0.98\)</span> for diurnal pattern),
+calibration is feasible via differential evolution, and the perception
+pipeline infrastructure is operational. The path from calibrated
+heuristics to learned stress functions is clear: collect controlled
+preference data, apply rigorous statistical methods, and validate on
+held-out routes.</p>
+<h2 id="limitations">Limitations</h2>
+<p>Several limitations constrain interpretation of these results.</p>
+<p>Routing parameters were tuned for four OD pairs within the study
+corridor via differential evolution. While multi-route calibration
+reveals consistent preference patterns, generalization to routes outside
+the corridor or to other users remains untested.</p>
+<p>The Theater District boost and groove/basin discounts encode expert
+priors, not camera-derived stress. Image-level analysis found no
+significant Park versus Madison difference (<span
+class="math inline">\(g = -0.011\)</span>, CI [<span
+class="math inline">\(-0.38\)</span>, <span
+class="math inline">\(0.41\)</span>]). Avenue location explains only
+4.2% of variance. Any strong routing preferences for Park over Madison
+arise from regularization, not directly observed stress differences.</p>
+<p>The reported 45% stress reduction is computed under the regularized
+cost field. Because groove and basin discounts reduce stress on the
+nodes the algorithm routes through, the metric is partly
+self-fulfilling. Raw camera-derived stress should be reported alongside
+regularized metrics.</p>
+<p>Stress scores are computational proxies; human perception studies are
+future work. The metric serves as an approximate proxy rather than a
+direct measure.</p>
+<p>The modest LOCO correlation of <span class="math inline">\(r =
+0.28\)</span> indicates substantial local variation not captured by
+spatial interpolation. The stress field is reliable at corridor scale
+but too coarse for block-level predictions.</p>
+<h2 id="related-work-and-future-directions">Related Work and Future
+Directions</h2>
+<p>Pedestrian routing typically optimizes distance, time, or safety.
+Walkability systems use static infrastructure data rather than real-time
+perceptual features. Two distinctions separate this approach from prior
+work. First, data is dynamic: stress derives from continuous camera
+observation, not historical surveys. Second, analysis reveals strong
+temporal structure with 15:00 peak and <span class="math inline">\(R^2 =
+0.98\)</span> for diurnal kernel that static approaches cannot
+capture.</p>
+<p>Time-dependent routing represents a natural extension. The strong
+diurnal pattern motivates recommendations like “take 7th Avenue now,
+switch to 6th after 6 PM.” Current implementation averages across time.
+Future work will incorporate temporal dynamics directly into routing.
+Human validation would strengthen perceptual claims. User studies
+comparing computed scores against subjective ratings would validate the
+psychophysical basis. Denser spatial sampling enables broader
+validation. Phase 2 data with 356 Manhattan cameras enables validation
+across diverse neighborhoods. Phase 3 data with 967 citywide cameras
+supports expansion to all five boroughs and may resolve finer spatial
+structure.</p>
+<h1 id="conclusions">Conclusions</h1>
+<p>Stress-aware pedestrian routing using traffic camera imagery and deep
+learning achieves meaningful stress reduction with modest distance
+penalties. The primary finding is a robust diurnal stress pattern where
+peak stress occurs at 15:00 with mean 0.381 and a raised-cosine temporal
+kernel explains 98% of hourly variance. Time of day explains
+substantially more stress variance than spatial location. Stress-aware
+routing reduces accumulated route stress by 45% under the calibrated
+cost metric while adding only 11% distance. Routing parameters were
+calibrated via differential evolution to reproduce expert-preferred
+corridors, demonstrating that black-box optimization can tune routing
+heuristics to match domain knowledge.</p>
+<p>The work contributes perception infrastructure (YOLO and Detectron2
+detection with CLIP semantics) and a psychophysics-based stress formula,
+along with evidence of strong temporal structure (<span
+class="math inline">\(R^2 = 0.98\)</span>) that conventional routing
+ignores and a routing framework that trades distance against stress.
+Spatial validation showed modest results where avenue-level differences
+are statistically detectable but explain only 4.2% of variance. Full
+spatial and human-subject validation remain future work.</p>
+<p>Phase 2 with 356 Manhattan cameras and Phase 3 with 967 citywide
+cameras have been collected and processed. Future work addresses
+temporal dynamics in routing and human validation correlating computed
+stress with subjective ratings, along with evaluation of additional
+origin-destination pairs. Real-time routing that adapts to current
+time-of-day conditions represents a natural application of the temporal
+findings.</p>
+<h1 class="unnumbered" id="acknowledgments">Acknowledgments</h1>
+<p>This project was developed as part of an artificial intelligence
+course at Syracuse University under the instruction of Prof. Andrew C.
+Lee, whose guidance on search algorithms, intelligent agent design, and
+knowledge representation shaped the methodology.</p>
+<p>The study area was selected based on extensive prior walking
+experience in the midtown Manhattan corridor. Multi-year familiarity
+with pedestrian patterns across the problem space informed the initial
+hypotheses regarding low-stress corridors along Park Avenue and 6-1/2
+Avenue.</p>
+<p>The NYC Department of Transportation maintains the traffic camera
+network used in this study. Camera imagery is publicly available through
+the NYC Open Data program.</p>
+<p>Computing resources were provided through Amazon Web Services (EC2
+GPU instances) and Google Cloud Platform (Cloud Run, Cloud Scheduler,
+Cloud Storage).</p>
+<h1 class="unnumbered" id="data-availability">Data Availability</h1>
+<h2 class="unnumbered" id="camera-imagery">Camera Imagery</h2>
+<p>NYC DOT traffic camera imagery is publicly available through the NYC
+Open Data portal. The specific camera manifest and collection timestamps
+are documented in the project repository.</p>
+<h2 class="unnumbered" id="processed-data">Processed Data</h2>
+<p>Extracted features and computed stress scores are available in the
+project repository.</p>
+<ul>
+<li><p>Camera manifest: <code>data/camera_manifest.json</code></p></li>
+<li><p>Feature extractions: <code>data/features/</code></p></li>
+<li><p>Stress scores: <code>data/stress_scores/</code></p></li>
+<li><p>Route comparisons: <code>docs/reports/</code></p></li>
+</ul>
+<h2 class="unnumbered" id="code">Code</h2>
+<p>Analysis code is provided in the <code>code/</code> directory of the
+supplementary materials. The complete codebase is available at</p>
+<p><a href="https://github.com/gjraitses/paxnyc"
+class="uri">https://github.com/gjraitses/paxnyc</a></p>
+<h2 class="unnumbered" id="phase-2-and-phase-3-data">Phase 2 and Phase 3
+Data</h2>
+<p>Collected imagery from Phase 2 (356 cameras) and Phase 3 (967
+cameras) is archived in cloud storage for future analysis.</p>
+</body>
+</html>
