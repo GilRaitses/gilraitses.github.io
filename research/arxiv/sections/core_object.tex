@@ -1,0 +1,64 @@
+\section{The Decision-Valued Map}
+
+The central object of study is a mapping
+\[
+f \colon \mathcal{R} \to \mathcal{D},
+\]
+where $\mathcal{R}$ denotes a family of representations over a fixed snapshot $s$ and $\mathcal{D}$ denotes a set of discrete decision identities. For each representation $r \in \mathcal{R}$, the engine $E$ produces raw output $E(r)$, and the equivalence policy $\pi$ extracts a decision identity $d = \pi(E(r))$.
+
+Three structural features of this map are observable through controlled variation of $\mathcal{R}$. Persistence regions are connected subsets of $\mathcal{R}$ over which $f$ is constant; within a persistence region, representational variation preserves the outcome. Boundaries are loci in $\mathcal{R}$ where $f$ changes value, separating two persistence regions with different decision identities. Fractures are boundaries where a small change in representation parameters induces a discrete identity change, indicating high sensitivity of the outcome to the representation.
+
+The purpose of DecisionDB is to \emph{materialize} $f$, evaluating it at declared points in $\mathcal{R}$, storing the results as immutable artifacts, then making the resulting map queryable, replayable and auditable. Figure~\ref{fig:pipeline} illustrates this protocol.
+
+\definecolor{erdHeader}{HTML}{e1d5e7}
+\definecolor{erdStroke}{HTML}{b5739d}
+\definecolor{arenaFill}{HTML}{f3eff7}
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[
+    box/.style={draw=erdStroke, rounded corners=4pt, align=center, inner sep=5pt, minimum height=13mm, font=\rmfamily\footnotesize, fill=erdHeader},
+    smallbox/.style={draw=erdStroke, rounded corners=3pt, align=center, inner sep=4pt, minimum height=10mm, font=\rmfamily\scriptsize, fill=erdHeader!40},
+    idbox/.style={draw=erdStroke, rounded corners=3pt, align=center, inner sep=3pt, minimum height=8mm, font=\rmfamily\scriptsize},
+    arrow/.style={-{Latex[length=2.5mm, width=2mm]}, thick, erdStroke},
+    eqlbl/.style={font=\rmfamily\scriptsize, erdStroke},
+    arenalbl/.style={font=\rmfamily\scriptsize, text=black}
+  ]
+
+  % Arena enclosure (equal padding around contents)
+  \draw[erdStroke!40, rounded corners=6pt, fill=arenaFill] (-0.8, 1.0) rectangle (4.6, -0.6);
+  \node[arenalbl, anchor=south west] at (-0.8, 1.05) {arena (invariant)};
+
+  % Arena components inside the enclosure
+  \node[box, text width=20mm] (snap) at (0.5, 0.2) {Snapshot $s$};
+  \node[box, text width=20mm] (eng) at (3.3, 0.2) {Engine $E$};
+
+  % Representation family (parallel, outside arena, feeding into engine)
+  \node[smallbox, text width=22mm] (r1) at (7.0, 1.6) {$r_1$};
+  \node[smallbox, text width=22mm] (r2) at (7.0, 0.2) {$r_2$};
+  \node[smallbox, text width=22mm] (r3) at (7.0, -1.2) {$r_3$};
+  \node[arenalbl, anchor=south] at (7.0, 2.2) {representation family $\mathcal{R}$};
+
+  % Arrows from arena engine to each representation evaluation
+  \draw[arrow] (eng.east) -- ++(0.4,0) |- (r1.west);
+  \draw[arrow] (eng.east) -- (r2.west);
+  \draw[arrow] (eng.east) -- ++(0.4,0) |- (r3.west);
+
+  % Decision identifiers (output) -- grouped by agreement
+  \draw[blue!8, rounded corners=4pt, fill=blue!6] (9.5, 2.1) rectangle (11.0, -0.3);
+  \node[idbox, fill=blue!12] (d1) at (10.2, 1.6) {$d_A$};
+  \node[idbox, fill=blue!12] (d2) at (10.2, 0.2) {$d_A$};
+  \node[idbox, fill=orange!18] (d3) at (10.2, -1.2) {$d_B$};
+
+  \draw[arrow] (r1.east) -- (d1.west);
+  \draw[arrow] (r2.east) -- (d2.west);
+  \draw[arrow] (r3.east) -- (d3.west);
+
+  % Output annotations
+  \node[arenalbl, anchor=west] at (11.2, 0.9) {persistence};
+  \node[arenalbl, anchor=west] at (11.2, -1.2) {boundary};
+
+  \end{tikzpicture}
+  \caption{Evaluation protocol for a decision-valued map. A single arena, consisting of a data snapshot and a computational engine, is reused across evaluation. Representations drawn from a declared family are varied within this arena and evaluated independently. Agreement of decision identifiers across representations indicates persistence of decision identity; a change in identifier indicates a boundary induced by representational variation alone.}
+  \label{fig:pipeline}
+\end{figure}

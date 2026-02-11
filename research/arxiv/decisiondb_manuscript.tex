@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, decorations.pathreplacing}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+
+% Raggedright paragraph column type for tables (prevents ugly hyphenation)
+\newcolumntype{R}[1]{>{\raggedright\arraybackslash}p{#1}}
+\usepackage[font=small]{caption}
+\captionsetup[table]{justification=centering}
+\captionsetup[figure]{justification=justified}
+\usepackage{hyperref}
+\urlstyle{same}
+\usepackage[numbers]{natbib}
+
+% Table styling: light sans-serif with alternating row shading
+\definecolor{tableShade}{RGB}{246, 243, 251}
+\newcommand{\tablestyle}{\rmfamily\small\renewcommand{\arraystretch}{1.35}}
+
+% Section and subsection headings in serif
+\usepackage{sectsty}
+\allsectionsfont{\rmfamily}
+
+% Prevent widows, orphans, and page breaks after hyphenated words
+\widowpenalty=10000
+\clubpenalty=10000
+\brokenpenalty=10000
+
+\title{On Decision-Valued Maps and Representational Dependence}
+\author{Gil Raitses}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\input{sections/abstract}
+
+\input{sections/introduction}
+
+\input{sections/problem_scope}
+
+\input{sections/core_object}
+
+\input{sections/protocol}
+
+\input{sections/system_design}
+
+\input{sections/empirical}
+
+\input{sections/related_work}
+
+\input{sections/limitations}
+
+\input{sections/conclusion}
+
+\small
+\setlength{\bibsep}{2pt plus 1pt minus 1pt}
+\bibliographystyle{plainnat}
+\bibliography{bibliography}
+
+\end{document}
