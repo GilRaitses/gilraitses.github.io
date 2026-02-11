@@ -1,0 +1,26 @@
+\section{Sweep Protocol}
+
+A \emph{representational sweep} evaluates the decision-valued map $f$ across a declared set of representations. The protocol proceeds through five stages, summarized in Table~\ref{tab:sweep-protocol}, that transform a frozen snapshot into a queryable decision map.
+
+A sweep begins by freezing a snapshot and assigning it a content-addressed identifier. A representation family is then declared via a deterministic factory, and a sweep plan specifies the parameter grid, engine and equivalence policy. The engine executes independently for each representation, producing raw outputs stored as immutable artifacts. The equivalence policy reduces each output to a decision identity, and the decision map table records the links from snapshot and representation through engine run to decision identity. All artifacts are versioned and linked through content-addressed identifiers, so the resulting materialized map supports reproducible replay and post-hoc analysis without re-executing the engine.
+
+\begin{table}[t]
+\centering
+\caption{Five-stage representational sweep protocol.}
+\label{tab:sweep-protocol}
+\smallskip
+\tablestyle
+\rowcolors{2}{tableShade}{white}
+\begin{tabular}{@{\hskip 6pt}c l R{40mm} R{42mm}@{\hskip 6pt}}
+\toprule
+\rowcolor{white}
+ & Stage & Inputs & Outputs \\
+\midrule
+1 & Freeze snapshot & World state, time window & Snapshot identifier \\
+2 & Declare representations & Snapshot ref, parameterization, factory version & Representation identifiers, one per parameter setting \\
+3 & Plan sweep & Parameter grid, engine name and version, equivalence policy & Sweep plan descriptor, itself content-addressed \\
+4 & Execute engine & Each representation independently & Run records, raw output artifacts stored as immutable files \\
+5 & Extract decisions & Raw outputs, equivalence policy $\pi$ & Decision identifiers, decision map entries linking representations and runs to decisions \\
+\bottomrule
+\end{tabular}
+\end{table}

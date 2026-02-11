@@ -1,0 +1,51 @@
+\section{Related Work}
+
+The sensitivity of analytical conclusions to representational and analytic choices has been documented across multiple disciplines. This section situates the decision-valued mapping framework relative to existing work on analytic flexibility, reproducibility infrastructure and provenance systems. Table~\ref{tab:comparison} summarizes the key distinctions.
+
+\subsection{Analytic Flexibility and Multiverse Methods}
+
+The dependence of statistical conclusions on analytic choices has been examined through several complementary lenses. Specification curve analysis~\cite{simonsohn2020specification} evaluates how reported effects vary across defensible analytic specifications. Multiverse analysis~\cite{steegen2016increasing} extends this by jointly varying data processing and model specification decisions to characterize the full space of results consistent with a dataset. The same instability appears even when researchers follow pre-registered protocols, through implicit degrees of freedom that shape findings absent deliberate p-hacking~\cite{gelman2013garden}. The scale of this effect in observational studies is substantial, with effect estimates fluctuating across model specifications~\cite{patel2015assessment}.
+
+Decision-valued mapping shares the premise that analytic conclusions depend on choices that are often left implicit. Specification curve and multiverse analyses operate on continuous effect estimates such as regression coefficients and p-values, then visualize their distribution. Decision-valued maps operate on discrete outcome identities and characterize the topology of representation space, identifying which regions preserve identity and where boundaries form, producing a partition rather than a distribution.
+
+\subsection{Sensitivity Analysis}
+
+Sensitivity analysis quantifies how variation in model inputs contributes to variation in model outputs, typically through variance decomposition or derivative-based indices over continuous output spaces~\cite{saltelli2008global}. Decision-valued mapping differs in that it does not decompose output variance or compute sensitivity indices. Instead, it directly observes whether a discrete outcome changes or persists under representation variation. Decision-valued mapping is compatible with sensitivity analysis, since sensitivity indices could be computed over a binarized decision map, but it does not require or assume a continuous output metric.
+
+\subsection{Reproducibility in Machine Learning}
+
+Pipelines satisfying identical training criteria can yield predictors with divergent behavior under distribution shift~\cite{damour2022underspecification}. Deep reinforcement learning results are sensitive to implementation details and hyperparameter choices in ways that standard reporting obscures~\cite{henderson2018deep}, and variance accounting across machine learning benchmarks has been formalized to quantify this effect~\cite{bouthillier2021accounting}. Reproducibility checklists~\cite{pineau2021improving} encourage reporting of experimental details but do not enforce content-addressed provenance or deterministic replay.
+
+Decision-valued mapping addresses a related but distinct problem. Rather than documenting variability in performance metrics across training runs or hyperparameter settings, it isolates representational variation as an independent variable and tracks its effect on discrete outcome identity under fixed snapshots and engines. Decision-valued mapping complements reproducibility checklists by providing a lower-level infrastructure for testing whether specific outcomes are stable under specific representational changes.
+
+\subsection{Provenance and Workflow Systems}
+
+General-purpose provenance vocabularies record the derivation history of computational artifacts~\cite{moreau2013prov}. Workflow provenance for scientific computations~\cite{freire2012provenance}, experiment tracking for machine learning pipelines~\cite{zaharia2018accelerating}, standardized workflow definitions for reproducible execution~\cite{amstutz2016common} and lineage tracking for fault-tolerant distributed computation~\cite{zaharia2012resilient} all address aspects of this problem.
+
+The diagnostic layer described here is narrower than these systems in scope and more specific in its invariants. Rather than managing arbitrary workflows or tracking general-purpose provenance graphs, it enforces a specific structure with immutable snapshots, declared representation families, fixed engines and equivalence policies that reduce raw output to discrete identities. The content-addressing scheme ensures that identical inputs always produce identical identifiers; replay verification checks end-to-end consistency of the provenance chain. This specificity enables the decision-valued map as a queryable diagnostic object, which general-purpose provenance systems do not directly support.
+
+\begin{table}[t]
+\centering
+\caption{Summary comparison between decision-valued mapping and related approaches.}
+\label{tab:comparison}
+\smallskip
+\tablestyle
+\rowcolors{2}{tableShade}{white}
+\begin{tabular}{@{\hskip 6pt}R{30mm} R{40mm} R{44mm}@{\hskip 6pt}}
+\toprule
+\rowcolor{white}
+Dimension & Typical approaches & Decision-valued mapping \\
+\midrule
+Object of analysis & Continuous effect estimates, variance, p-values & Discrete decision identities \\
+Variation source & Model specs, preprocessing, hyperparameters & Representation parameters under fixed snapshot and engine \\
+Output characterization & Distributions, sensitivity indices, specification curves & Persistence regions, boundaries, fractures \\
+Infrastructure & Logging, provenance metadata, workflow graphs & Content-addressed, replayable decision maps \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Infrastructural Precedents}
+
+The approach follows a pattern observed in the development of foundational abstractions. Abstract data types~\cite{liskov1974programming} separated representation from observable behavior, enabling systems to evolve internally without collapsing external guarantees. Write-ahead logging~\cite{gray1993transaction} transformed durability from an ad-hoc property into an auditable, replayable state transition protocol. In both cases, the contribution was not a novel computational procedure but a diagnostic layer that made structural dependence explicit and testable.
+
+Each decision occurs within an arena defined by a snapshot, an engine and a query. The protocol records how outcome identity evolves across representational variants within that arena. Methods that adapt model parameters during evaluation concentrate effort on producing stronger solutions within that arena. The present protocol instead addresses reuse, asking whether the recorded context is sufficient to justify carrying a discrete outcome across representations and downstream consumers. Decision-valued mapping extends this lineage to analytical pipelines whose outputs are discrete, consequential and contingent on representational choice.
