@@ -1272,6 +1272,155 @@
       }
     }
 
+    /* Research program preview gallery */
+    .program-preview-gallery {
+      margin-top: 2rem;
+      padding: 2rem 0;
+    }
+
+    .program-preview-gallery h2 {
+      text-align: center;
+      font-family: 'Didot', 'Bodoni MT', 'Cochin', 'Baskerville', serif;
+      font-weight: 400;
+      color: #f8d849;
+      text-shadow: 0 0 10px rgba(248, 216, 73, 0.5);
+      margin-bottom: 0.75rem;
+    }
+
+    .program-preview-intro {
+      max-width: 760px;
+      margin: 0 auto 2rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.6;
+    }
+
+    .program-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .program-preview-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(138, 238, 245, 0.3);
+      border-radius: 12px;
+      color: #fff;
+      cursor: pointer;
+      min-height: 230px;
+      padding: 1.2rem;
+      text-align: left;
+      transition: all 0.3s ease;
+    }
+
+    .program-preview-card:hover,
+    .program-preview-card:focus {
+      border-color: rgba(138, 238, 245, 0.75);
+      box-shadow: 0 0 25px rgba(138, 238, 245, 0.28);
+      outline: none;
+      transform: translateY(-4px);
+    }
+
+    .program-preview-card .eyebrow {
+      color: #8aeef5;
+      display: block;
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+    }
+
+    .program-preview-card h3 {
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .program-preview-card p {
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .program-modal {
+      align-items: center;
+      background: rgba(0, 0, 0, 0.72);
+      display: none;
+      inset: 0;
+      justify-content: center;
+      padding: 2rem;
+      position: fixed;
+      z-index: 2000;
+    }
+
+    .program-modal.active {
+      display: flex;
+    }
+
+    .program-modal-panel {
+      background: #20242f;
+      border: 1px solid rgba(138, 238, 245, 0.32);
+      border-radius: 16px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      height: min(84vh, 860px);
+      max-width: 920px;
+      overflow: hidden;
+      width: min(94vw, 920px);
+    }
+
+    .program-modal-header {
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      padding: 0.85rem 1rem;
+    }
+
+    .program-modal-header a {
+      color: #8aeef5;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .program-modal-close {
+      background: transparent;
+      border: 0;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+
+    #program-preview-frame {
+      border: 0;
+      flex: 1;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .program-preview-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .program-preview-grid {
+        grid-template-columns: 1fr;
+      }
+      .program-modal {
+        padding: 0.8rem;
+      }
+    }
+
     /* Project gallery styles */
     .project-gallery {
       margin-top: 3rem;
@@ -1824,6 +1973,35 @@
     </div>
   </section>
 
+  <section class="program-preview-gallery">
+    <h2>Research program gallery</h2>
+    <p class="program-preview-intro">
+      Clean previews from the broader aimez research program. Each card opens a local summary here and links to the deeper page on aimez.ai.
+    </p>
+    <div class="program-preview-grid">
+      <button class="program-preview-card" data-preview="research-program/route-quality-and-access.html" data-full="https://aimez.ai/notes/neighborhood-access-research.html">
+        <span class="eyebrow">Public demo</span>
+        <h3>Route quality and neighborhood access</h3>
+        <p>How map distance can miss walking burden, daily movement, street access, and lived accessibility.</p>
+      </button>
+      <button class="program-preview-card" data-preview="research-program/graph-field-research.html" data-full="https://aimez.ai/notes/research-program.html">
+        <span class="eyebrow">Research center</span>
+        <h3>Graph-field research</h3>
+        <p>Measured stress fields, directed edges, route cost, loop behavior, and graph-level structure.</p>
+      </button>
+      <button class="program-preview-card" data-preview="research-program/topological-modeling.html" data-full="https://aimez.ai/notes/topological-modeling-note.html">
+        <span class="eyebrow">Mathematical frame</span>
+        <h3>Topological modeling</h3>
+        <p>Paths, loops, residuals, and the limits of topology language for the Manhattan graph work.</p>
+      </button>
+      <button class="program-preview-card" data-preview="research-program/spatial-media-installation.html" data-full="https://aimez.ai/notes/guggenheim-installation-sketch.html">
+        <span class="eyebrow">Spatial media</span>
+        <h3>Installation and measured city fields</h3>
+        <p>How camera-derived fields, color, light, route traces, and room-scale movement can become a public installation.</p>
+      </button>
+    </div>
+  </section>
+
   <section class="project-gallery">
     <h2>Projects</h2>
 
@@ -2051,8 +2229,61 @@
     &copy; 2025 Gil Raitses
   </footer>
 
+  <div class="program-modal" id="program-modal" aria-hidden="true">
+    <div class="program-modal-panel" role="dialog" aria-modal="true" aria-label="Research program preview">
+      <div class="program-modal-header">
+        <a id="program-full-link" href="https://aimez.ai" target="_blank" rel="noopener noreferrer">Open full page on aimez.ai</a>
+        <button class="program-modal-close" id="program-modal-close" aria-label="Close preview">×</button>
+      </div>
+      <iframe id="program-preview-frame" title="Research program preview"></iframe>
+    </div>
+  </div>
+
 
   <script>
+    (function() {
+      const modal = document.getElementById('program-modal');
+      const frame = document.getElementById('program-preview-frame');
+      const fullLink = document.getElementById('program-full-link');
+      const close = document.getElementById('program-modal-close');
+      const cards = document.querySelectorAll('.program-preview-card');
+
+      if (!modal || !frame || !fullLink || !close || !cards.length) {
+        return;
+      }
+
+      function openPreview(card) {
+        frame.src = card.getAttribute('data-preview');
+        fullLink.href = card.getAttribute('data-full');
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      function closePreview() {
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        frame.src = '';
+      }
+
+      cards.forEach(function(card) {
+        card.addEventListener('click', function() {
+          openPreview(card);
+        });
+      });
+
+      close.addEventListener('click', closePreview);
+      modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+          closePreview();
+        }
+      });
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && modal.classList.contains('active')) {
+          closePreview();
+        }
+      });
+    })();
+
     // Global variable to control animations
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
