@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>magniphyq: a behavioral analysis framework</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #eef4f7; background: #20242f; margin: 0; padding: 1.5rem; }
+    main { max-width: 760px; margin: 0 auto; }
+    h1 { font-size: 1.75rem; line-height: 1.05; margin: 0 0 0.4rem; color: #c8fdff; font-weight: 300; }
+    .subtitle { color: #9ee7ef; margin: 0 0 1.2rem; font-size: 0.95rem; }
+    h2 { font-size: 1rem; margin: 1.6rem 0 0.5rem; color: #9ee7ef; }
+    p { margin: 0 0 1rem; color: #d7e3e8; }
+    .source { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.18); }
+    a { color: #9ee7ef; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>magniphyq</h1>
+  <p class="subtitle">A behavioral analysis framework for multi-animal tracking and mechanosensation, built in the Mihovilovic Skanata lab.</p>
+
+  <p>magniphyq is the umbrella for a MATLAB pipeline that takes recorded animal behavior from raw video through to quantitative shape and motion descriptors. It is organized as three layers, each of which can be run and inspected on its own. The framework was built, tested, and verified between June 2024 and August 2025, and is ready to ship.</p>
+
+  <h2>Layer one, track extraction</h2>
+  <p>The extraction layer turns video into per-animal tracks, keeping identity stable across frames so that downstream measures attach to the right individual.</p>
+
+  <h2>Layer two, behavioral segmentation</h2>
+  <p>The segmentation layer divides each track into behavioral states such as runs, reorientations, and head sweeps, and supports both manual review and unsupervised passes at multiple time scales.</p>
+
+  <h2>Layer three, contour analysis</h2>
+  <p>The contour layer measures body shape over time, which lets posture and bending enter the analysis alongside trajectory, useful for mechanosensation studies where the body is the signal.</p>
+
+  <h2>Annotation quality control</h2>
+  <p>Visualization tools display behavioral structure at multi-scale resolution and surface annotation quality, so a reviewer sees where labels are confident and where they need a second look.</p>
+
+  <h2>A related adopted pipeline</h2>
+  <p>The same lab adopted retrovibez, a focused pipeline that detects larval reverse-crawling and reports every event with visual summaries, which earned trust by making each detection easy to check by eye.</p>
+
+  <p class="source"><a href="https://github.com/GilRaitses/magniphyq" target="_blank" rel="noopener noreferrer">magniphyq on GitHub</a></p>
+</main>
+</body>
+</html>
