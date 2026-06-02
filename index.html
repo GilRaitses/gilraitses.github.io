@@ -10,106 +10,94 @@
   <meta property="og:type" content="website">
   <link rel="icon" href="favicon.ico" sizes="any">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
     :root {
-      --bg:#eef7fc; --card:#ffffff; --ink:#46566a; --muted:#8aa0b2;
-      --blue:#7ec8e3; --blue-deep:#4a90c2; --pink:#f3b6cd; --pink-deep:#e07a9f;
-      --cream:#fff4e0; --border:#d7ebf6; --shadow:0 6px 22px rgba(74,144,194,0.08);
+      --bg:#ffffff; --ink:#262b34; --muted:#737d8c; --line:#ececf0;
+      --accent:#3457d5; --accent-soft:#eef2fe; --panel:#fbfbfd;
+      --title:"Avenir Next","Avenir","Century Gothic","Helvetica Neue",Arial,sans-serif;
+      --body:"Helvetica Neue",Arial,system-ui,sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "Nunito", system-ui, -apple-system, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.6; }
-    a { color: var(--blue-deep); }
-    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 1.4rem; }
+    body { font-family: var(--body); color: var(--ink); background: var(--bg); line-height: 1.65; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 0 1.6rem; }
 
-    .topnav { position: sticky; top: 0; z-index: 50; background: rgba(238,247,252,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
-    .topnav .row { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap; padding: 0.7rem 1.4rem; max-width: 1040px; margin: 0 auto; }
-    .topnav .brand { font-weight: 800; color: var(--blue-deep); text-decoration: none; }
-    .topnav .brand::before { content:""; display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--pink); margin-right:0.45rem; vertical-align:middle; }
-    .topnav nav a { color: var(--ink); text-decoration: none; font-size: 0.86rem; margin-left: 1rem; }
-    .topnav nav a:hover { color: var(--blue-deep); }
+    .topnav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .topnav .row { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap; padding: 0.7rem 1.6rem; max-width: 900px; margin: 0 auto; }
+    .topnav .brand { font-family: var(--title); font-weight: 300; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.8rem; color: var(--ink); text-decoration: none; }
+    .topnav nav a { color: var(--muted); text-decoration: none; font-size: 0.84rem; margin-left: 1.1rem; }
+    .topnav nav a:hover { color: var(--accent); text-decoration: none; }
 
-    header.hero { text-align: center; padding: 3.4rem 0 2.2rem; }
-    header.hero h1 { font-size: 3rem; line-height: 1; color: var(--blue-deep); font-weight: 800; letter-spacing: -0.01em; }
-    header.hero .one-liner { font-size: 1.12rem; color: var(--ink); max-width: 640px; margin: 1rem auto 1.2rem; }
-    .rolelinks a { display: inline-block; color: var(--pink-deep); text-decoration: none; font-weight: 700; font-size: 0.92rem; padding: 0.3rem 0.7rem; border: 1px solid var(--pink); border-radius: 30px; margin: 0.25rem; transition: all 0.18s; }
-    .rolelinks a:hover { background: var(--pink); color: #fff; }
+    header.hero { padding: 3.6rem 0 2.2rem; }
+    header.hero h1 { font-family: var(--title); font-weight: 200; font-size: 3rem; line-height: 1.04; letter-spacing: 0.005em; margin: 0 0 0.6rem; color: var(--ink); }
+    header.hero .one-liner { font-family: var(--title); font-weight: 300; font-size: 1.2rem; line-height: 1.45; color: var(--accent); max-width: 660px; margin: 0 0 1.4rem; }
+    .rolelinks { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+    .rolelinks a { font-family: var(--title); font-weight: 400; color: var(--accent); text-decoration: none; font-size: 0.92rem; padding: 0.4rem 0.9rem; border: 1px solid var(--line); border-radius: 6px; }
+    .rolelinks a:hover { background: var(--accent-soft); text-decoration: none; }
 
     section { padding: 1.6rem 0; }
-    h2 { font-size: 1.5rem; color: var(--blue-deep); font-weight: 800; margin-bottom: 0.3rem; }
-    h2::before { content:""; display:inline-block; width:11px; height:11px; border-radius:50%; background:var(--pink); margin-right:0.55rem; vertical-align:middle; }
+    h2 { font-family: var(--title); font-weight: 300; font-size: 1.55rem; letter-spacing: 0.005em; margin: 0 0 0.5rem; padding-top: 1.6rem; border-top: 1px solid var(--line); color: var(--ink); }
     .section-intro { color: var(--muted); margin-bottom: 1.1rem; max-width: 720px; }
-    p { margin-bottom: 0.9rem; }
+    p { margin-bottom: 0.95rem; }
 
-    .cards3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.1rem 1.2rem; box-shadow: var(--shadow); }
-    .panel h3 { color: var(--blue-deep); font-size: 1.02rem; margin-bottom: 0.5rem; }
+    .cards3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.2rem; }
+    .panel h3 { font-family: var(--title); font-weight: 400; color: var(--accent); font-size: 1.02rem; margin-bottom: 0.5rem; }
     .panel ul { list-style: none; }
-    .panel li { position: relative; padding-left: 1.1rem; margin-bottom: 0.35rem; font-size: 0.93rem; }
-    .panel li::before { content:""; position:absolute; left:0; top:0.65em; width:6px; height:6px; border-radius:50%; background:var(--pink); }
+    .panel li { position: relative; padding-left: 1rem; margin-bottom: 0.35rem; font-size: 0.93rem; color: var(--ink); }
+    .panel li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 
-    .spec li { list-style: none; margin-bottom: 0.7rem; }
     .spec { list-style: none; }
-    .spec li strong { color: var(--blue-deep); }
-    .period { display:block; font-size:0.76rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--pink-deep); margin:1rem 0 0.5rem; font-weight:700; }
+    .spec li { list-style: none; margin-bottom: 0.7rem; }
+    .spec li strong { color: var(--accent); font-weight: 600; }
+    .period { display: block; font-family: var(--title); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 1.2rem 0 0.5rem; font-weight: 400; }
 
-    /* Project tiles: text overlaid on the preview image */
-    .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; }
-    .tile { position: relative; aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
+    .tile { position: relative; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
     .tile .bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.4s ease; }
-    .tile:hover .bg { transform: scale(1.05); }
-    .tile .scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(28,40,58,0.86) 0%, rgba(28,40,58,0.45) 42%, rgba(28,40,58,0.06) 100%); }
+    .tile:hover .bg { transform: scale(1.04); }
+    .tile .scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(24,28,36,0.88) 0%, rgba(24,28,36,0.45) 45%, rgba(24,28,36,0.05) 100%); }
     .tile .content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem 1.1rem; }
     .tile .tags { position: absolute; top: 0.7rem; left: 0.7rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
-    .tile .tag { background: rgba(255,255,255,0.85); color: #3f5161; font-size: 0.68rem; font-weight: 700; padding: 0.12rem 0.5rem; border-radius: 20px; }
-    .tile h3 { color: #fff; font-size: 1.08rem; margin-bottom: 0.25rem; }
-    .tile p { color: rgba(255,255,255,0.92); font-size: 0.84rem; margin-bottom: 0.5rem; }
-    .tile .explore { align-self: flex-start; background: var(--pink); color: #fff; text-decoration: none; font-weight: 700; font-size: 0.8rem; padding: 0.32rem 0.85rem; border-radius: 20px; }
-    .tile .explore:hover { background: var(--pink-deep); }
+    .tile .tag { background: rgba(255,255,255,0.9); color: #3a4250; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.04em; padding: 0.12rem 0.5rem; border-radius: 4px; }
+    .tile h3 { font-family: var(--title); font-weight: 400; color: #fff; font-size: 1.08rem; margin-bottom: 0.25rem; }
+    .tile p { color: rgba(255,255,255,0.92); font-size: 0.84rem; margin-bottom: 0.6rem; }
+    .tile .explore { align-self: flex-start; background: #fff; color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.78rem; padding: 0.32rem 0.85rem; border-radius: 5px; }
+    .tile .explore:hover { background: var(--accent-soft); }
 
-    /* Research program gallery: colored cards, hover bg shift + description tooltip */
-    .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; }
-    .pg { position: relative; display: block; text-decoration: none; border-radius: 16px; padding: 1.2rem 1.3rem; min-height: 150px; border: 1px solid var(--border); overflow: hidden; transition: background 0.28s ease, transform 0.16s ease, box-shadow 0.2s ease; }
-    .pg:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
-    .pg .eyebrow { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pink-deep); font-weight: 700; }
-    .pg h3 { color: var(--blue-deep); font-size: 1.1rem; margin: 0.3rem 0; }
-    .pg .tip { position: absolute; left: 0; right: 0; bottom: 0; background: rgba(74,144,194,0.95); color: #fff; font-size: 0.86rem; line-height: 1.45; padding: 0.9rem 1.1rem; opacity: 0; transform: translateY(8px); transition: opacity 0.2s ease, transform 0.2s ease; }
+    .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
+    .pg { position: relative; display: block; text-decoration: none; border-radius: 10px; padding: 1.2rem 1.3rem; min-height: 150px; background: var(--panel); border: 1px solid var(--line); overflow: hidden; transition: border-color 0.2s ease, transform 0.16s ease; }
+    .pg:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .pg .eyebrow { font-family: var(--title); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+    .pg h3 { font-family: var(--title); font-weight: 400; color: var(--accent); font-size: 1.1rem; margin: 0.3rem 0; }
+    .pg .tip { position: absolute; left: 0; right: 0; bottom: 0; background: var(--ink); color: #fff; font-size: 0.86rem; line-height: 1.45; padding: 0.9rem 1.1rem; opacity: 0; transform: translateY(8px); transition: opacity 0.2s ease, transform 0.2s ease; }
     .pg:hover .tip { opacity: 1; transform: none; }
-    .pg.c1 { background:#e6f4fb; } .pg.c1:hover { background:#cfeaf7; }
-    .pg.c2 { background:#fdeef4; } .pg.c2:hover { background:#f9d8e6; }
-    .pg.c3 { background:#fff4e0; } .pg.c3:hover { background:#ffe9c4; }
-    .pg.c4 { background:#eef0fb; } .pg.c4:hover { background:#dfe2f6; }
-    .pg.c5 { background:#e8f7f0; } .pg.c5:hover { background:#d3f0e2; }
-    .pg.c6 { background:#f3eafc; } .pg.c6:hover { background:#e7d6f7; }
 
-    /* Research papers */
-    .papers { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.1rem; }
-    .paper { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; }
-    .paper .thumb { height: 180px; background: #f4f9fc center top / cover no-repeat; border-bottom: 1px solid var(--border); }
+    .papers { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
+    .paper { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+    .paper .thumb { height: 170px; background: var(--panel) center top / cover no-repeat; border-bottom: 1px solid var(--line); }
     .paper .meta { padding: 0.9rem 1rem; flex: 1; display: flex; flex-direction: column; }
-    .paper h3 { font-size: 0.98rem; color: var(--blue-deep); margin-bottom: 0.3rem; }
+    .paper h3 { font-family: var(--title); font-weight: 400; font-size: 0.98rem; color: var(--ink); margin-bottom: 0.3rem; }
     .paper .authors { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.5rem; }
     .paper .plinks { margin-top: auto; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .paper .plinks a { font-size: 0.82rem; font-weight: 700; text-decoration: none; color: var(--blue-deep); border: 1px solid var(--blue); border-radius: 20px; padding: 0.22rem 0.7rem; }
-    .paper .plinks a:hover { background: var(--blue); color: #fff; }
+    .paper .plinks a { font-size: 0.82rem; font-weight: 500; text-decoration: none; color: var(--accent); border: 1px solid var(--line); border-radius: 5px; padding: 0.22rem 0.7rem; }
+    .paper .plinks a:hover { background: var(--accent-soft); }
 
     .textsection p { max-width: 760px; }
-    .linkrow-aimez a { color: var(--pink-deep); font-weight: 700; text-decoration: none; }
-    .linkrow-aimez a:hover { text-decoration: underline; color: var(--blue-deep); }
-    .linkrow-mq a { color: #2f9e8f; font-weight: 700; text-decoration: none; }
-    .linkrow-mq a:hover { text-decoration: underline; }
+    .linkrow-aimez a, .linkrow-mq a { color: var(--accent); font-weight: 500; text-decoration: none; }
+    .linkrow-aimez a:hover, .linkrow-mq a:hover { text-decoration: underline; }
 
-    /* Outreach form */
-    .outreach-form { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.3rem; box-shadow: var(--shadow); max-width: 620px; }
+    .outreach-form { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem 1.3rem; max-width: 620px; }
     .outreach-form .frow { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.7rem; }
-    .outreach-form input, .outreach-form textarea { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 10px; font: inherit; font-size: 0.95rem; color: var(--ink); background: #fbfdff; }
+    .outreach-form input, .outreach-form textarea { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 0.95rem; color: var(--ink); background: #fff; }
     .outreach-form textarea { min-height: 90px; resize: vertical; }
-    .outreach-form button { background: var(--blue-deep); color: #fff; border: none; border-radius: 10px; padding: 0.6rem 1.4rem; font: inherit; font-weight: 700; cursor: pointer; }
-    .outreach-form button:hover { background: #3b7bab; }
+    .outreach-form button { background: var(--accent); color: #fff; border: none; border-radius: 6px; padding: 0.6rem 1.4rem; font: inherit; font-weight: 600; cursor: pointer; }
+    .outreach-form button:hover { background: #2843b5; }
     .outreach-form button:disabled { background: #9fb3c6; cursor: default; }
     #outreach-status { font-size: 0.9rem; color: var(--muted); margin-top: 0.6rem; min-height: 1.2em; }
 
-    footer { border-top: 1px solid var(--border); margin-top: 2.4rem; padding: 1.6rem 0 2.6rem; text-align: center; color: var(--muted); font-size: 0.9rem; }
-    footer a { color: var(--blue-deep); text-decoration: none; margin: 0 0.4rem; }
+    footer { border-top: 1px solid var(--line); margin-top: 2.6rem; padding: 1.6rem 0 2.6rem; text-align: center; color: var(--muted); font-size: 0.9rem; }
+    footer a { color: var(--accent); text-decoration: none; margin: 0 0.4rem; }
     footer a:hover { text-decoration: underline; }
     @media (max-width: 620px) { header.hero h1 { font-size: 2.2rem; } }
   </style>
@@ -126,7 +114,7 @@
         <a href="#papers">Papers</a>
         <a href="#connect">Connect</a>
       </nav>
-    </div>
+  </div>
   </div>
 
   <a id="top"></a>
@@ -134,9 +122,9 @@
     <h1>Gil Raitses</h1>
     <p class="one-liner">I build software for research, from data pipelines and visual workspaces to the agent workflows that keep long, multi-repository projects coherent.</p>
     <div class="rolelinks">
-      <a href="forward-deployed.html">Forward deployment</a>
-      <a href="agent-evaluation.html">Agent evaluation</a>
-      <a href="developer-experience.html">Developer experience</a>
+      <a href="forward-deployed.html">Embedded delivery</a>
+      <a href="agent-evaluation.html">Measurement and evaluation</a>
+      <a href="developer-experience.html">Developer tooling</a>
     </div>
   </header>
 
@@ -159,7 +147,7 @@
             <li>Attention, learning and memory in adaptive behavior</li>
             <li>Cross-species behavioral modeling and trajectory analysis</li>
           </ul>
-        </div>
+          </div>
         <div class="panel">
           <h3>Theoretical neuroscience</h3>
           <ul>
@@ -175,8 +163,8 @@
             <li>Dynamic state-space modeling for behavioral transitions</li>
             <li>Multimodal representation of continuous signal patterns</li>
           </ul>
+          </div>
         </div>
-      </div>
     </section>
 
     <section id="frameworks">
@@ -185,12 +173,12 @@
         <div class="panel">
           <h3>aimez.ai</h3>
           <p>Applied research program that takes public traffic-camera frames through computer-vision models into a measured stress field and into pedestrian routing that respects lived burden. It carries the work from raw field data to a public site with notes, figures and validation briefs.</p>
-        </div>
+          </div>
         <div class="panel">
           <h3>Central Casting</h3>
           <p>Checkpoint-based orchestration and audit for long, multi-repository agent work. Agent homes act as role contracts, checkpoints are the unit of memory and an alignment check flags when the structured record and the human-readable views diverge.</p>
         </div>
-      </div>
+          </div>
     </section>
 
     <section id="current">
@@ -205,17 +193,17 @@
         <li><strong>Marine behavioral states:</strong> Lightweight recurrent modeling for humpback whale behavioral states from dive telemetry, targeting multi-scale segmentation and event detection.</li>
         <li><strong>INDYsim:</strong> Hierarchical simulation framework for behavior as the interface between perception and adaptation, using agent based and event driven modeling of transitions under constraints.</li>
       </ul>
-    </section>
+  </section>
 
     <section id="projects">
-      <h2>Projects</h2>
+    <h2>Projects</h2>
       <div class="tiles">
         <div class="tile">
-          <div class="bg" style="background-image:linear-gradient(135deg,#7ec8e3,#4a90c2 55%,#2f9e8f);"></div>
+          <div class="bg" style="background-image:linear-gradient(135deg,#3457d5,#1f2a44);"></div>
           <div class="scrim"></div>
           <div class="tags"><span class="tag">Agent Orchestration</span><span class="tag">2026</span></div>
           <div class="content"><h3>Central Casting</h3><p>Checkpoint-based orchestration and audit for long, multi-repository agent work.</p><a class="explore" href="https://gilraitses.github.io/central-casting/">Explore</a></div>
-        </div>
+          </div>
         <div class="tile">
           <div class="bg" style="background-image:url('retrovibez-cover.png');"></div>
           <div class="scrim"></div>
@@ -227,25 +215,25 @@
           <div class="scrim"></div>
           <div class="tags"><span class="tag">Data Pipeline</span><span class="tag">2025</span></div>
           <div class="content"><h3>magatfairy</h3><p>One-command bridge from legacy MATLAB analyzer data to HDF5 and Python, with validation and a CLI.</p><a class="explore" href="https://magatfairy.com">Explore</a></div>
-        </div>
+            </div>
         <div class="tile">
           <div class="bg" style="background-image:url('pax-topology.gif');"></div>
           <div class="scrim"></div>
           <div class="tags"><span class="tag">Spatial Computing</span><span class="tag">2025</span></div>
           <div class="content"><h3>pax-nyc</h3><p>Stress-aware pedestrian routing on a camera-derived field, with a live demo.</p><a class="explore" href="https://aimez.ai/notes/routing-demo.html">Explore</a></div>
-        </div>
+            </div>
         <div class="tile">
           <div class="bg" style="background-image:url('magniphyq-nodes.png');"></div>
           <div class="scrim"></div>
           <div class="tags"><span class="tag">Research Platform</span><span class="tag">2025</span></div>
           <div class="content"><h3>magniphyq</h3><p>Modular research visual workspace: a node graph wiring data, analysis and simulation, with a live demo.</p><a class="explore" href="https://gilraitses.github.io/magniphyq/">Explore</a></div>
-        </div>
+            </div>
         <div class="tile">
           <div class="bg" style="background-image:url('https://gilraitses.github.io/whale-behavior-analysis/assets/dive_overview.png');"></div>
           <div class="scrim"></div>
           <div class="tags"><span class="tag">Marine Biology</span><span class="tag">2024</span></div>
           <div class="content"><h3>whale behavior analysis</h3><p>Hierarchical classification of humpback foraging strategy from dive telemetry.</p><a class="explore" href="https://gilraitses.github.io/whale-behavior-analysis/">Explore</a></div>
-        </div>
+          </div>
         <div class="tile">
           <div class="bg" style="background-image:url('https://raw.githubusercontent.com/GilRaitses/orcast/main/assets/orcast_projGallery_image.png');"></div>
           <div class="scrim"></div>
@@ -259,31 +247,31 @@
       <h2>Research program gallery</h2>
       <p class="section-intro">Previews from the broader research program. Each card opens a deeper page. Hover for the description.</p>
       <div class="pgrid">
-        <a class="pg c2" href="https://github.com/GilRaitses/central-casting">
+        <a class="pg" href="https://github.com/GilRaitses/central-casting">
           <span class="eyebrow">Central Casting</span><h3>An agent-run practice</h3>
           <div class="tip">A recent method for keeping multi-repository agent work coherent: checkpoints as memory, agent homes as role contracts and a deliberate local and cloud boundary.</div>
         </a>
-        <a class="pg c1" href="https://gilraitses.github.io/magniphyq">
+        <a class="pg" href="https://gilraitses.github.io/magniphyq">
           <span class="eyebrow">magniphyq</span><h3>Modular research visual workspace</h3>
           <div class="tip">A node-based workspace that wires data, analysis and simulation into one runnable graph: track extraction, segmentation, contour analysis and a synapsin phase diagram.</div>
         </a>
-        <a class="pg c3" href="https://aimez.ai/notes/neighborhood-access-research.html">
+        <a class="pg" href="https://aimez.ai/notes/neighborhood-access-research.html">
           <span class="eyebrow">Public demo</span><h3>Route quality and neighborhood access</h3>
           <div class="tip">How map distance can miss walking burden, daily movement, street access and lived accessibility.</div>
         </a>
-        <a class="pg c5" href="https://aimez.ai/notes/research-program.html">
+        <a class="pg" href="https://aimez.ai/notes/research-program.html">
           <span class="eyebrow">Research center</span><h3>Graph-field research</h3>
           <div class="tip">Measured stress fields, directed edges, route cost, loop behavior and graph-level structure.</div>
         </a>
-        <a class="pg c4" href="https://aimez.ai/notes/topological-modeling-note.html">
+        <a class="pg" href="https://aimez.ai/notes/topological-modeling-note.html">
           <span class="eyebrow">Mathematical frame</span><h3>Topological modeling</h3>
           <div class="tip">Paths, loops, residuals and the limits of topology language for the Manhattan graph work.</div>
         </a>
-        <a class="pg c6" href="https://aimez.ai/notes/guggenheim-installation-sketch.html">
+        <a class="pg" href="https://aimez.ai/notes/guggenheim-installation-sketch.html">
           <span class="eyebrow">Spatial media</span><h3>Installation and measured city fields</h3>
           <div class="tip">How camera-derived fields, color, light, route traces and room-scale movement can become a public installation.</div>
         </a>
-      </div>
+          </div>
     </section>
 
     <section id="aimez" class="textsection">
@@ -323,8 +311,8 @@
             <h3>Septal GABAergic Timing in Entorhinal-Hippocampal Retrieval</h3>
             <p class="authors">Gil Raitses</p>
             <div class="plinks"><a href="research/neuro/raitses-septal-gabaergic-timing-2026.pdf" target="_blank">Read PDF</a></div>
-          </div>
         </div>
+      </div>
         <div class="paper">
           <div class="thumb" style="background-image:url('research/previews/decisiondb.png');"></div>
           <div class="meta">
@@ -339,15 +327,15 @@
             <h3>Quantitative Guidelines for Behavioral Phenotyping from Sparse Point-Process Data</h3>
             <p class="authors">Gil Raitses, Devindi Goonawardhana, Mirna Mihovilovic Skanata</p>
             <div class="plinks"><a href="research/manuscript2/main.html" target="_blank">Read</a><a href="research/manuscript2/supplement.html" target="_blank">Supplement</a></div>
-          </div>
         </div>
+      </div>
         <div class="paper">
           <div class="thumb" style="background-image:url('research/manuscript1-preview.png');"></div>
           <div class="meta">
             <h3>Temporal Dynamics of Mechanosensory Behavior in Drosophila Larvae</h3>
             <p class="authors">Gil Raitses, Devindi Goonawardhana, Mirna Mihovilovic Skanata</p>
             <div class="plinks"><a href="research/manuscript1/main.html" target="_blank">Read</a><a href="research/manuscript1/supplement.html" target="_blank">Supplement</a></div>
-          </div>
+    </div>
         </div>
         <div class="paper">
           <div class="thumb" style="background-image:url('research/pax-preview.png');"></div>
@@ -355,7 +343,7 @@
             <h3>pax nyc: Perceptual Stress Routing in Urban Environments</h3>
             <p class="authors">Gil Raitses</p>
             <div class="plinks"><a href="research/pax-manuscript/main.html" target="_blank">Read</a></div>
-          </div>
+        </div>
         </div>
       </div>
     </section>
@@ -379,8 +367,8 @@
       <a href="https://github.com/gilraitses">GitHub</a> &middot;
       <a href="mailto:gilraitses@gmail.com">Email</a> &middot;
       <a href="https://www.linkedin.com/in/gilraitses/">LinkedIn</a> &middot;
-      <a href="https://gilraitses.github.io/phdPrograms/_build/cv/Raitses_Gil_CV_2025.pdf">CV</a>
-    </div>
+        <a href="https://gilraitses.github.io/phdPrograms/_build/cv/Raitses_Gil_CV_2025.pdf">CV</a>
+  </div>
   </footer>
 
   <script>
