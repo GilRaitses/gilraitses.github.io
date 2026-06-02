@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gil Raitses: measurement, evaluation and feedback-loop infrastructure</title>
+  <meta name="description" content="How I build measurement, evaluation and feedback-loop infrastructure, shown through Central Casting and pax, and how it applies to making a core agent reliably better over time.">
+  <meta name="robots" content="noindex">
+  <style>
+    :root {
+      --bg:#ffffff; --ink:#262b34; --muted:#737d8c; --line:#ececf0;
+      --accent:#3457d5; --accent-soft:#eef2fe; --panel:#fbfbfd;
+      --title:"Avenir Next","Avenir","Century Gothic","Helvetica Neue",Arial,sans-serif;
+      --body:"Helvetica Neue",Arial,system-ui,sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: var(--body); color: var(--ink); background: var(--bg); margin: 0; line-height: 1.65; }
+    main { max-width: 760px; margin: 0 auto; padding: 3rem 1.6rem 3.5rem; }
+    .brand { font-family: var(--title); font-weight: 300; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.78rem; color: var(--muted); }
+    h1 { font-family: var(--title); font-weight: 200; font-size: 2.7rem; line-height: 1.06; letter-spacing: 0.005em; margin: 0.7rem 0 0.5rem; }
+    .lede { font-family: var(--title); font-weight: 300; font-size: 1.22rem; line-height: 1.4; color: var(--accent); margin: 0 0 0.4rem; }
+    .intro { color: var(--muted); font-size: 1rem; margin: 0 0 2rem; }
+    h2 { font-family: var(--title); font-weight: 300; font-size: 1.55rem; letter-spacing: 0.005em; margin: 2.6rem 0 0.3rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
+    h3 { font-family: var(--title); font-weight: 400; font-size: 1.05rem; margin: 1.2rem 0 0.3rem; color: var(--accent); }
+    p { margin: 0 0 1rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .maps { font-size: 0.97rem; }
+    ol.rn { list-style: none; counter-reset: rn; padding: 0; margin: 0.6rem 0 1.4rem; }
+    ol.rn > li { counter-increment: rn; position: relative; padding-left: 2.7rem; margin-bottom: 0.85rem; }
+    ol.rn > li::before { content: counter(rn, upper-roman); position: absolute; left: 0; top: 0.05rem; font-family: var(--title); font-weight: 300; font-size: 0.92rem; letter-spacing: 0.08em; color: var(--accent); }
+    .links { margin: 0.5rem 0 0.4rem; border-top: 1px solid var(--line); }
+    .link-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
+    .link-row .label { font-family: var(--title); font-weight: 400; min-width: 190px; color: var(--ink); }
+    .link-row .url { font-size: 0.9rem; word-break: break-all; }
+    .note { font-size: 0.85rem; color: var(--muted); }
+    footer { margin-top: 2.6rem; padding-top: 1.2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+<main>
+  <p class="brand">Gil Raitses</p>
+  <h1>Measurement, evaluation and feedback loops</h1>
+  <p class="lede">How I build the infrastructure that records what happened, judges it against an explicit standard and feeds corrections back, and how that makes a core agent reliably better over time.</p>
+  <p class="intro">Two programs show the pattern on two different subjects. Central Casting applies it to agent behavior, turning a run into an inspectable record with quality gates. pax applies it to a research objective, learning a metric from data and validating the result against ground truth. The same loop is what lets a coding agent improve under measurement, so each change rests on evidence.</p>
+
+  <h2>Central Casting: measurement and audit of agent behavior</h2>
+  <p>Central Casting runs agent work through a structured system. Every real state change becomes a checkpoint, so a run reads as a labeled event stream an evaluator can query. An alignment check compares the structured record against the human-readable views and flags divergence, which acts as a quality gate. Corrections land as superseding records on top of earlier ones, so the history stays auditable and a fix is recorded where the next session reads it.</p>
+  <p class="maps"><strong>Where it maps:</strong> this is evaluation infrastructure for agents. Checkpoints are the event log, the alignment check is an automated gate and superseding records are the feedback that prevents a repeat. The same surface lets a team see where an agent lost state, exceeded its role or diverged from intent.</p>
+
+  <h2>pax: a measurement-to-evaluation loop on real data</h2>
+  <p>pax is a bi-objective routing system for pedestrians. It learns a perceptual-stress signal from New York City camera data through a computer-vision pipeline, then scores every candidate route on an explicit metric that balances geometric distance against that measured stress, with a single tunable weight. It validates the result against an independent movement estimate, so the metric is checked against ground truth before it is trusted.</p>
+  <p class="maps"><strong>Where it maps:</strong> this is the full evaluation loop in miniature. A signal is measured from raw data, a metric scores candidates, an external source validates the score and the weight is tuned from evidence. That is the shape of an offline evaluation harness for agent outputs.</p>
+
+  <h2>Applied to the Cursor ecosystem</h2>
+  <p class="maps">Put together, here is how this makes the core agent reliably better over time.</p>
+  <ol class="rn maps">
+    <li><strong>Instrument every agent action as a structured event.</strong> A run becomes an inspectable record of state changes that an evaluator can query.</li>
+    <li><strong>Define quality gates that hard-fail on divergence.</strong> The alignment check flags a structured-versus-readable mismatch, in the same way the revision-gate linter I run on every public artifact hard-fails on a prose violation before it ships.</li>
+    <li><strong>Evaluate against a measured objective and validate against ground truth.</strong> The pax pattern of a learned metric, candidate scoring and an independent check transfers directly to scoring agent outputs against quality signals.</li>
+    <li><strong>Close the loop with corrections that stick.</strong> A regression is caught, recorded as a superseding decision and prevented next time, and a weight is retuned from new evidence.</li>
+  </ol>
+
+  <h2>Open the demos and artifacts</h2>
+  <div class="links">
+    <div class="link-row"><span class="label">Central Casting, demo</span><a class="url" href="https://gilraitses.github.io/central-casting/">gilraitses.github.io/central-casting</a></div>
+    <div class="link-row"><span class="label">Central Casting, in practice</span><a class="url" href="https://gilraitses.github.io/central-casting/aimez-program.html">central-casting/aimez-program.html</a></div>
+    <div class="link-row"><span class="label">Central Casting, method</span><a class="url" href="https://gilraitses.github.io/central-casting/walkthrough.html">central-casting/walkthrough.html</a></div>
+    <div class="link-row"><span class="label">pax, report</span><a class="url" href="https://aimez.ai/assets/gallery/documents/pax_report.pdf">aimez.ai/assets/gallery/documents/pax_report.pdf</a></div>
+    <div class="link-row"><span class="label">pax, routing and access note</span><a class="url" href="https://aimez.ai/notes/neighborhood-access-research.html">aimez.ai/notes/neighborhood-access-research.html</a></div>
+    <div class="link-row"><span class="label">pax, measurement pipeline figures</span><a class="url" href="https://aimez.ai/notes/figures.html">aimez.ai/notes/figures.html</a></div>
+    <div class="link-row"><span class="label">pax, research program note</span><a class="url" href="https://aimez.ai/notes/research-program.html">aimez.ai/notes/research-program.html</a></div>
+  </div>
+
+  <footer>
+    Gil Raitses &nbsp;&middot;&nbsp; gilraitses@gmail.com &nbsp;&middot;&nbsp; <a href="https://github.com/GilRaitses">github.com/GilRaitses</a> &nbsp;&middot;&nbsp; <a href="https://www.linkedin.com/in/gilraitses">linkedin.com/in/gilraitses</a>
+  </footer>
+</main>
+</body>
+</html>
