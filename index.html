@@ -41,7 +41,7 @@
     p { margin-bottom: 0.95rem; }
 
     .cards3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
-    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.2rem; }
+    .panel { border: 1px solid transparent; border-radius: 12px; padding: 1.1rem 1.2rem; background: linear-gradient(var(--panel),var(--panel)) padding-box, linear-gradient(135deg, rgba(52,87,213,0.22), rgba(107,87,213,0.10)) border-box; }
     .panel h3 { font-family: var(--title); font-weight: 400; color: var(--accent); font-size: 1.02rem; margin-bottom: 0.5rem; }
     .panel ul { list-style: none; }
     .panel li { position: relative; padding-left: 1rem; margin-bottom: 0.35rem; font-size: 0.93rem; color: var(--ink); }
@@ -53,7 +53,7 @@
     .period { display: block; font-family: var(--title); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 1.2rem 0 0.5rem; font-weight: 400; }
 
     .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
-    .tile { position: relative; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+    .tile { position: relative; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; border: 1px solid transparent; background: linear-gradient(135deg, rgba(52,87,213,0.30), rgba(107,87,213,0.12)) border-box; }
     .tile .bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.4s ease; }
     .tile:hover .bg { transform: scale(1.04); }
     .tile .scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(24,28,36,0.88) 0%, rgba(24,28,36,0.45) 45%, rgba(24,28,36,0.05) 100%); }
@@ -66,15 +66,21 @@
     .tile .explore:hover { background: var(--accent-soft); }
 
     .pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
-    .pg { position: relative; display: block; text-decoration: none; border-radius: 10px; padding: 1.2rem 1.3rem; min-height: 150px; background: var(--panel); border: 1px solid var(--line); overflow: hidden; transition: border-color 0.2s ease, transform 0.16s ease; }
-    .pg:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .pg { position: relative; display: block; text-decoration: none; border-radius: 12px; padding: 1.2rem 1.3rem; min-height: 150px; border: 1px solid transparent; overflow: hidden; transition: transform 0.16s ease, box-shadow 0.22s ease; background: linear-gradient(150deg,#ffffff,#f5f7fb) padding-box, linear-gradient(135deg, rgba(52,87,213,0.26), rgba(120,150,235,0.10)) border-box; }
+    .pg:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(38,43,52,0.07); }
+    .pg.g1 { background: linear-gradient(150deg,#ffffff,#f3f6ff) padding-box, linear-gradient(135deg, rgba(52,87,213,0.30), rgba(120,150,235,0.10)) border-box; }
+    .pg.g2 { background: linear-gradient(150deg,#ffffff,#f6f4fd) padding-box, linear-gradient(135deg, rgba(107,87,213,0.30), rgba(160,140,230,0.10)) border-box; }
+    .pg.g3 { background: linear-gradient(150deg,#ffffff,#f1faf7) padding-box, linear-gradient(135deg, rgba(47,158,143,0.28), rgba(120,200,185,0.10)) border-box; }
+    .pg.g4 { background: linear-gradient(150deg,#ffffff,#f1f8fd) padding-box, linear-gradient(135deg, rgba(58,160,213,0.28), rgba(130,195,230,0.10)) border-box; }
+    .pg.g5 { background: linear-gradient(150deg,#ffffff,#f6f5fa) padding-box, linear-gradient(135deg, rgba(96,110,140,0.26), rgba(150,170,195,0.10)) border-box; }
+    .pg.g6 { background: linear-gradient(150deg,#ffffff,#faf4fb) padding-box, linear-gradient(135deg, rgba(150,90,180,0.24), rgba(190,150,210,0.10)) border-box; }
     .pg .eyebrow { font-family: var(--title); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
     .pg h3 { font-family: var(--title); font-weight: 400; color: var(--accent); font-size: 1.1rem; margin: 0.3rem 0; }
     .pg .tip { position: absolute; left: 0; right: 0; bottom: 0; background: var(--ink); color: #fff; font-size: 0.86rem; line-height: 1.45; padding: 0.9rem 1.1rem; opacity: 0; transform: translateY(8px); transition: opacity 0.2s ease, transform 0.2s ease; }
     .pg:hover .tip { opacity: 1; transform: none; }
 
     .papers { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem; }
-    .paper { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+    .paper { border: 1px solid transparent; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(52,87,213,0.22), rgba(107,87,213,0.10)) border-box; }
     .paper .thumb { height: 170px; background: var(--panel) center top / cover no-repeat; border-bottom: 1px solid var(--line); }
     .paper .meta { padding: 0.9rem 1rem; flex: 1; display: flex; flex-direction: column; }
     .paper h3 { font-family: var(--title); font-weight: 400; font-size: 0.98rem; color: var(--ink); margin-bottom: 0.3rem; }
@@ -247,27 +253,27 @@
       <h2>Research program gallery</h2>
       <p class="section-intro">Previews from the broader research program. Each card opens a deeper page. Hover for the description.</p>
       <div class="pgrid">
-        <a class="pg" href="https://github.com/GilRaitses/central-casting">
+        <a class="pg g1" href="https://github.com/GilRaitses/central-casting">
           <span class="eyebrow">Central Casting</span><h3>An agent-run practice</h3>
           <div class="tip">A recent method for keeping multi-repository agent work coherent: checkpoints as memory, agent homes as role contracts and a deliberate local and cloud boundary.</div>
         </a>
-        <a class="pg" href="https://gilraitses.github.io/magniphyq">
+        <a class="pg g2" href="https://gilraitses.github.io/magniphyq">
           <span class="eyebrow">magniphyq</span><h3>Modular research visual workspace</h3>
           <div class="tip">A node-based workspace that wires data, analysis and simulation into one runnable graph: track extraction, segmentation, contour analysis and a synapsin phase diagram.</div>
         </a>
-        <a class="pg" href="https://aimez.ai/notes/neighborhood-access-research.html">
+        <a class="pg g3" href="https://aimez.ai/notes/neighborhood-access-research.html">
           <span class="eyebrow">Public demo</span><h3>Route quality and neighborhood access</h3>
           <div class="tip">How map distance can miss walking burden, daily movement, street access and lived accessibility.</div>
         </a>
-        <a class="pg" href="https://aimez.ai/notes/research-program.html">
+        <a class="pg g4" href="https://aimez.ai/notes/research-program.html">
           <span class="eyebrow">Research center</span><h3>Graph-field research</h3>
           <div class="tip">Measured stress fields, directed edges, route cost, loop behavior and graph-level structure.</div>
         </a>
-        <a class="pg" href="https://aimez.ai/notes/topological-modeling-note.html">
+        <a class="pg g5" href="https://aimez.ai/notes/topological-modeling-note.html">
           <span class="eyebrow">Mathematical frame</span><h3>Topological modeling</h3>
           <div class="tip">Paths, loops, residuals and the limits of topology language for the Manhattan graph work.</div>
         </a>
-        <a class="pg" href="https://aimez.ai/notes/guggenheim-installation-sketch.html">
+        <a class="pg g6" href="https://aimez.ai/notes/guggenheim-installation-sketch.html">
           <span class="eyebrow">Spatial media</span><h3>Installation and measured city fields</h3>
           <div class="tip">How camera-derived fields, color, light, route traces and room-scale movement can become a public installation.</div>
         </a>
