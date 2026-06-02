@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gil Raitses: developer experience, from magniphyq and the tools behind it</title>
+  <meta name="description" content="magniphyq and the tools it grew from (whale behavior classifier, indysim, retrovibez, magatfairy), and how that experience maps to a developer experience role at Cursor.">
+  <meta name="robots" content="noindex">
+  <style>
+    :root {
+      --bg:#ffffff; --ink:#262b34; --muted:#737d8c; --line:#ececf0;
+      --accent:#3457d5; --accent-soft:#eef2fe; --panel:#fbfbfd;
+      --title:"Avenir Next","Avenir","Century Gothic","Helvetica Neue",Arial,sans-serif;
+      --body:"Helvetica Neue",Arial,system-ui,sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: var(--body); color: var(--ink); background: var(--bg); margin: 0; line-height: 1.65; }
+    main { max-width: 760px; margin: 0 auto; padding: 3rem 1.6rem 3.5rem; }
+    .brand { font-family: var(--title); font-weight: 300; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.78rem; color: var(--muted); }
+    h1 { font-family: var(--title); font-weight: 200; font-size: 2.7rem; line-height: 1.06; letter-spacing: 0.005em; margin: 0.7rem 0 0.5rem; }
+    .lede { font-family: var(--title); font-weight: 300; font-size: 1.22rem; line-height: 1.4; color: var(--accent); margin: 0 0 0.4rem; }
+    .intro { color: var(--muted); font-size: 1rem; margin: 0 0 2rem; }
+    h2 { font-family: var(--title); font-weight: 300; font-size: 1.55rem; letter-spacing: 0.005em; margin: 2.6rem 0 0.3rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
+    h3 { font-family: var(--title); font-weight: 400; font-size: 1.05rem; margin: 1.2rem 0 0.3rem; color: var(--accent); }
+    p { margin: 0 0 1rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .maps { font-size: 0.97rem; }
+    ol.rn { list-style: none; counter-reset: rn; padding: 0; margin: 0.6rem 0 1.4rem; }
+    ol.rn > li { counter-increment: rn; position: relative; padding-left: 2.7rem; margin-bottom: 0.85rem; }
+    ol.rn > li::before { content: counter(rn, upper-roman); position: absolute; left: 0; top: 0.05rem; font-family: var(--title); font-weight: 300; font-size: 0.92rem; letter-spacing: 0.08em; color: var(--accent); }
+    .links { margin: 0.5rem 0 0.4rem; border-top: 1px solid var(--line); }
+    .link-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
+    .link-row .label { font-family: var(--title); font-weight: 400; min-width: 200px; color: var(--ink); }
+    .link-row .url { font-size: 0.9rem; word-break: break-all; }
+    .note { font-size: 0.85rem; color: var(--muted); }
+    footer { margin-top: 2.6rem; padding-top: 1.2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+<main>
+  <p class="brand">Gil Raitses</p>
+  <h1>Developer experience</h1>
+  <p class="lede">magniphyq is where a line of research tools I built converged into one workspace, and that instinct for showing what you can build and smoothing the path is what developer experience runs on.</p>
+  <p class="intro">Each tool below came from a real research need, and magniphyq is the node-based workspace that wires their kind of pipeline into one runnable graph. Taken together they are a record of building things, getting other people to use them and automating the work behind them, which is the same job a developer experience role does for a platform.</p>
+
+  <h2>The tools magniphyq grew from</h2>
+  <p class="maps">magniphyq is the umbrella. It integrates the kinds of pipelines these projects each solved in isolation.</p>
+  <ol class="rn maps">
+    <li><strong>whale behavior classifier.</strong> A minGRU model that classifies humpback dive strategies from cetacean tag data, with hierarchical annotation upstream.</li>
+    <li><strong>indysim.</strong> An individual-based simulation of larval turning under LED stimulation, with a fitted response kernel that lets a model be tested the way a real animal is measured.</li>
+    <li><strong>retrovibez.</strong> A larval reverse-crawl detection pipeline that a mechanosensation group adopted after a lab-meeting demo, with new researchers trained and install docs written.</li>
+    <li><strong>magatfairy.</strong> A one-command bridge that carries legacy MATLAB analyzer data into HDF5 and Python, with a MATLAB Engine wrapper, output validation and a CLI.</li>
+  </ol>
+
+  <h2>How this maps to developer experience</h2>
+  <ol class="rn maps">
+    <li><strong>Teach what developers can build.</strong> I have shipped CLIs, bridges and a node-based workspace, and I teach them the way I taught a lab to use retrovibez, through a live demo, trained users and written docs. The Central Casting walkthrough already reads as a demo deck for an API, an SDK, plugins and automations.</li>
+    <li><strong>Explore the fringes of AI models and coding agents.</strong> Central Casting is my standing experiment in multi-agent orchestration across repositories, with an external planner that keeps heavy reasoning off the in-editor token budget, and indysim pushes on simulation as a way to probe a model.</li>
+    <li><strong>Build relationships with developers and feed that back to product.</strong> retrovibez was shaped by the researchers who used it. I took in their resistance, answered it by visualizing every detected event so they could check the calls and folded their feedback into the tool.</li>
+    <li><strong>Automate your work with coding agents and increase leverage.</strong> magatfairy collapses a brittle multi-step setup into one command, gestele turns a whole codebase into a single document and Central Casting delegates heavy production passes to cloud agents while the audit layer stays local.</li>
+    <li><strong>Show up in the community.</strong> The public demos, the slide-ready walkthrough and the figure galleries are built to be shared and presented, which is the raw material for a meetup talk, a workshop or a thread.</li>
+  </ol>
+
+  <h2>Open the demos</h2>
+  <div class="links">
+    <div class="link-row"><span class="label">magniphyq, launcher</span><a class="url" href="https://gilraitses.github.io/magniphyq/">gilraitses.github.io/magniphyq</a></div>
+    <div class="link-row"><span class="label">magniphyq, phase-diagram monitor</span><a class="url" href="https://gilraitses.github.io/magniphyq/grid/">gilraitses.github.io/magniphyq/grid</a></div>
+    <div class="link-row"><span class="label">magniphyq, summary</span><a class="url" href="https://gilraitses.github.io/research-program/magniphyq.html">research-program/magniphyq.html</a></div>
+    <div class="link-row"><span class="label">whale behavior classifier</span><a class="url" href="https://gilraitses.github.io/whale-behavior-analysis/">gilraitses.github.io/whale-behavior-analysis</a></div>
+    <div class="link-row"><span class="label">indysim</span><a class="url" href="https://github.com/GilRaitses/indysim">github.com/GilRaitses/indysim</a></div>
+    <div class="link-row"><span class="label">retrovibez</span><a class="url" href="https://gilraitses.github.io/retrovibez/">gilraitses.github.io/retrovibez</a></div>
+    <div class="link-row"><span class="label">magatfairy</span><a class="url" href="https://magatfairy.com">magatfairy.com</a></div>
+    <div class="link-row"><span class="label">gestele, codebase to one document</span><a class="url" href="https://github.com/GilRaitses/gestele">github.com/GilRaitses/gestele</a></div>
+    <div class="link-row"><span class="label">Central Casting, demo deck</span><a class="url" href="https://gilraitses.github.io/central-casting/walkthrough.html">central-casting/walkthrough.html</a></div>
+  </div>
+
+  <footer>
+    Gil Raitses &nbsp;&middot;&nbsp; gilraitses@gmail.com &nbsp;&middot;&nbsp; <a href="https://github.com/GilRaitses">github.com/GilRaitses</a> &nbsp;&middot;&nbsp; <a href="https://www.linkedin.com/in/gilraitses">linkedin.com/in/gilraitses</a>
+  </footer>
+</main>
+</body>
+</html>
