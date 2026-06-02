@@ -25,7 +25,7 @@
 <body>
 <main>
   <h1>magniphyq</h1>
-  <p class="subtitle">A modular research visual workspace where data, analysis, and simulation are wired together as a node graph that researchers can run, inspect, and clone.</p>
+  <p class="subtitle">A modular research workspace for data, analysis and simulation.</p>
 
   <p>magniphyq is a node-based workspace for behavioral and biophysical research, built so that a whole pipeline lives as a graph of connected modules a researcher can see at once. A researcher loads data into a node, connects it to analysis and visualization nodes, and watches results update as the graph runs. It was built and verified in the Mihovilovic Skanata lab between June 2024 and August 2025.</p>
 
@@ -46,10 +46,10 @@
   <p>The workspace connects analysis to simulation, so that a measured model can be run forward and compared against data inside the same graph. Two simulation programs feed it.</p>
 
   <h3>Synapsin phase diagram</h3>
-  <p>The synapsin program runs a molecular-dynamics sweep that maps where synapsin condensates form as a function of interaction strength and temperature. The campaign covers 135 conditions with 109 completed runs of 500 chains each, and the live monitor tracks campaign progress on the workspace machine.</p>
+  <p>The synapsin program runs a molecular-dynamics sweep that maps where synapsin condensates form as a function of interaction strength and temperature. The campaign covers 135 conditions with 109 completed runs of 500 chains each, and a fleet monitor shows the campaign laid out as a 3D model with per-stage progress.</p>
   <figure>
     <img src="figures/synapsin_phase_diagram.png" alt="Synapsin condensate phase diagram across temperature and interaction strength for two molecular architectures">
-    <figcaption>Condensate partition coefficient (log10 K) across temperature and interaction strength (epsilon), for two synapsin architectures, A4B20 and A8B16. Brighter points partition more strongly into the condensate phase. <a href="http://34.196.131.228:8000/api/lammps/dashboard" target="_blank" rel="noopener noreferrer">Live campaign monitor</a>.</figcaption>
+    <figcaption>Condensate partition coefficient (log10 K) across temperature and interaction strength (epsilon), for two synapsin architectures, A4B20 and A8B16. Brighter points partition more strongly into the condensate phase. <a href="https://gilraitses.github.io/magniphyq/fleet/" target="_blank" rel="noopener noreferrer">Open the simulation fleet monitor</a>.</figcaption>
   </figure>
 
   <h3>indysim</h3>
