@@ -3,41 +3,79 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>magniphyq: a behavioral analysis framework</title>
+  <title>magniphyq: a modular research visual workspace</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; line-height: 1.6; color: #eef4f7; background: #20242f; margin: 0; padding: 1.5rem; }
-    main { max-width: 760px; margin: 0 auto; }
+    main { max-width: 820px; margin: 0 auto; }
     h1 { font-size: 1.75rem; line-height: 1.05; margin: 0 0 0.4rem; color: #c8fdff; font-weight: 300; }
-    .subtitle { color: #9ee7ef; margin: 0 0 1.2rem; font-size: 0.95rem; }
-    h2 { font-size: 1rem; margin: 1.6rem 0 0.5rem; color: #9ee7ef; }
+    .subtitle { color: #9ee7ef; margin: 0 0 1rem; font-size: 0.95rem; }
+    h2 { font-size: 1.05rem; margin: 1.8rem 0 0.5rem; color: #9ee7ef; }
+    h3 { font-size: 0.95rem; margin: 1.2rem 0 0.4rem; color: #c8fdff; font-weight: 500; }
     p { margin: 0 0 1rem; color: #d7e3e8; }
-    .source { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.18); }
     a { color: #9ee7ef; }
+    .demo { display: inline-block; margin: 0.2rem 0 0.6rem; padding: 0.55rem 0.9rem; border: 1px solid rgba(158,231,239,0.5); border-radius: 8px; color: #c8fdff; text-decoration: none; }
+    figure { margin: 0.8rem 0 1.2rem; }
+    figure img { width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); background: #fff; }
+    figcaption { font-size: 0.82rem; color: #9fb0b6; margin-top: 0.4rem; }
+    ul { color: #d7e3e8; margin: 0 0 1rem; padding-left: 1.2rem; }
+    li { margin-bottom: 0.4rem; }
+    .source { margin-top: 1.6rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.18); }
   </style>
 </head>
 <body>
 <main>
   <h1>magniphyq</h1>
-  <p class="subtitle">A behavioral analysis framework for multi-animal tracking and mechanosensation, built in the Mihovilovic Skanata lab.</p>
+  <p class="subtitle">A modular research visual workspace where data, analysis, and simulation are wired together as a node graph that researchers can run, inspect, and clone.</p>
 
-  <p>magniphyq is the umbrella for a MATLAB pipeline that takes recorded animal behavior from raw video through to quantitative shape and motion descriptors. It is organized as three layers, each of which can be run and inspected on its own. The framework was built, tested, and verified between June 2024 and August 2025, and is ready to ship.</p>
+  <p>magniphyq is a node-based workspace for behavioral and biophysical research, built so that a whole pipeline lives as a graph of connected modules a researcher can see at once. A researcher loads data into a node, connects it to analysis and visualization nodes, and watches results update as the graph runs. It was built and verified in the Mihovilovic Skanata lab between June 2024 and August 2025.</p>
 
-  <h2>Layer one, track extraction</h2>
-  <p>The extraction layer turns video into per-animal tracks, keeping identity stable across frames so that downstream measures attach to the right individual.</p>
+  <a class="demo" href="http://34.196.131.228:8000/workspace" target="_blank" rel="noopener noreferrer">Open the live workspace</a>
 
-  <h2>Layer two, behavioral segmentation</h2>
+  <h2>The analysis layers</h2>
+
+  <h3>Track extraction</h3>
+  <p>The extraction layer turns recorded video into per-animal tracks and keeps identity stable across frames, so that every downstream measure attaches to the correct individual.</p>
+
+  <h3>Behavioral segmentation</h3>
   <p>The segmentation layer divides each track into behavioral states such as runs, reorientations, and head sweeps, and supports both manual review and unsupervised passes at multiple time scales.</p>
 
-  <h2>Layer three, contour analysis</h2>
-  <p>The contour layer measures body shape over time, which lets posture and bending enter the analysis alongside trajectory, useful for mechanosensation studies where the body is the signal.</p>
+  <h3>Contour analysis</h3>
+  <p>The contour layer measures body shape over time, which lets posture and bending enter the analysis alongside trajectory, useful for mechanosensation studies where the body itself carries the signal.</p>
+
+  <h2>Simulations</h2>
+  <p>The workspace connects analysis to simulation, so that a measured model can be run forward and compared against data inside the same graph. Two simulation programs feed it.</p>
+
+  <h3>Synapsin phase diagram</h3>
+  <p>The synapsin program runs a molecular-dynamics sweep that maps where synapsin condensates form as a function of interaction strength and temperature. The campaign covers 135 conditions with 109 completed runs of 500 chains each, and the live monitor tracks campaign progress on the workspace machine.</p>
+  <figure>
+    <img src="figures/synapsin_phase_diagram.png" alt="Synapsin condensate phase diagram across temperature and interaction strength for two molecular architectures">
+    <figcaption>Condensate partition coefficient (log10 K) across temperature and interaction strength (epsilon), for two synapsin architectures, A4B20 and A8B16. Brighter points partition more strongly into the condensate phase. <a href="http://34.196.131.228:8000/api/lammps/dashboard" target="_blank" rel="noopener noreferrer">Live campaign monitor</a>.</figcaption>
+  </figure>
+
+  <h3>indysim</h3>
+  <p>The indysim program is an individual-based simulation of larval navigation that turns a hypothesis about sensory-driven turning into a forward model whose output can be measured the same way real animals are. A peri-stimulus turn-rate readout compares the model against recorded behavior.</p>
+  <figure>
+    <img src="figures/indysim_model.png" alt="indysim design model schematic">
+    <figcaption>The indysim design model: the structure that maps a stimulus to a turning response in the simulated animal.</figcaption>
+  </figure>
+  <figure>
+    <img src="figures/indysim_turn_rate.png" alt="indysim peri-stimulus turn-rate figure">
+    <figcaption>Peri-stimulus turn rate from the simulation, the readout that places the model alongside measured larval behavior.</figcaption>
+  </figure>
 
   <h2>Annotation quality control</h2>
-  <p>Visualization tools display behavioral structure at multi-scale resolution and surface annotation quality, so a reviewer sees where labels are confident and where they need a second look.</p>
+  <p>Visualization nodes display behavioral structure at multi-scale resolution and surface annotation quality, so that a reviewer sees where labels are confident and where they need a second look.</p>
 
-  <h2>A related adopted pipeline</h2>
-  <p>The same lab adopted retrovibez, a focused pipeline that detects larval reverse-crawling and reports every event with visual summaries, which earned trust by making each detection easy to check by eye.</p>
+  <h2>What comes next</h2>
+  <p>The workspace is built and verified, and the next moves carry it toward a shared, browser-native tool.</p>
+  <ul>
+    <li>A browser-native canvas in the spirit of Miro and TouchDesigner, so the graph is the primary interface.</li>
+    <li>Shared workspaces, so collaborators open the same graph and pick up where another left off.</li>
+    <li>A Slack path for shipping and sharing a run, so results leave the workspace where the team already talks.</li>
+    <li>A Cursor path for building new modules and cloning a pipeline, so the graph extends through agent work.</li>
+  </ul>
 
-  <p class="source"><a href="https://github.com/GilRaitses/magniphyq" target="_blank" rel="noopener noreferrer">magniphyq on GitHub</a></p>
+  <p class="source"><a href="https://github.com/GilRaitses/magniphyq" target="_blank" rel="noopener noreferrer">magniphyq on GitHub</a> &middot; <a href="https://gilraitses.github.io/magniphyq" target="_blank" rel="noopener noreferrer">demo launcher</a></p>
 </main>
 </body>
 </html>
