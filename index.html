@@ -15,6 +15,7 @@
       --accent:#3457d5; --accent-soft:#eef2fe; --panel:#fbfbfd;
       --title:"Avenir Next","Avenir","Century Gothic","Helvetica Neue",Arial,sans-serif;
       --body:"Helvetica Neue",Arial,system-ui,sans-serif;
+      color-scheme: light dark;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: var(--body); color: var(--ink); background: var(--bg); line-height: 1.65; }
@@ -106,6 +107,28 @@
     footer a { color: var(--accent); text-decoration: none; margin: 0 0.4rem; }
     footer a:hover { text-decoration: underline; }
     @media (max-width: 620px) { header.hero h1 { font-size: 2.2rem; } }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#0f1218; --ink:#e6e9f0; --muted:#98a2b3; --line:#262c38;
+        --accent:#7e9bff; --accent-soft:rgba(126,155,255,0.14); --panel:#161b24;
+      }
+      .topnav { background: rgba(15,18,24,0.9); }
+      .tile .tag { background: rgba(230,233,240,0.92); color:#1b2230; }
+      .pg { background: linear-gradient(150deg,#171c26,#12161f) padding-box, linear-gradient(135deg, rgba(126,155,255,0.30), rgba(126,155,255,0.10)) border-box; }
+      .pg.g1 { background: linear-gradient(150deg,#171c26,#12161f) padding-box, linear-gradient(135deg, rgba(126,155,255,0.34), rgba(126,155,255,0.10)) border-box; }
+      .pg.g2 { background: linear-gradient(150deg,#181722,#13121d) padding-box, linear-gradient(135deg, rgba(150,130,235,0.34), rgba(150,130,235,0.10)) border-box; }
+      .pg.g3 { background: linear-gradient(150deg,#141f1d,#101a18) padding-box, linear-gradient(135deg, rgba(90,200,180,0.30), rgba(90,200,180,0.10)) border-box; }
+      .pg.g4 { background: linear-gradient(150deg,#141d26,#101820) padding-box, linear-gradient(135deg, rgba(110,180,235,0.30), rgba(110,180,235,0.10)) border-box; }
+      .pg.g5 { background: linear-gradient(150deg,#171a22,#13161d) padding-box, linear-gradient(135deg, rgba(150,165,195,0.28), rgba(150,165,195,0.10)) border-box; }
+      .pg.g6 { background: linear-gradient(150deg,#1c1622,#16121d) padding-box, linear-gradient(135deg, rgba(190,140,215,0.28), rgba(190,140,215,0.10)) border-box; }
+      .pg:hover { box-shadow: 0 10px 26px rgba(0,0,0,0.45); }
+      .pg .tip { background:#05070d; color:#e8ebf2; }
+      .paper { background: linear-gradient(#161b24,#161b24) padding-box, linear-gradient(135deg, rgba(126,155,255,0.24), rgba(150,130,235,0.12)) border-box; }
+      .outreach-form input, .outreach-form textarea { background:#11151d; color:var(--ink); }
+      .outreach-form button { color:#0d1017; }
+      .outreach-form button:hover { background:#9db4ff; }
+    }
   </style>
 </head>
 <body>
@@ -122,7 +145,7 @@
       </nav>
   </div>
   </div>
-
+  
   <a id="top"></a>
   <header class="hero wrap">
     <h1>Gil Raitses</h1>
