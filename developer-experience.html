@@ -12,6 +12,7 @@
       --accent:#3457d5; --accent-soft:#eef2fe; --panel:#fbfbfd;
       --title:"Avenir Next","Avenir","Century Gothic","Helvetica Neue",Arial,sans-serif;
       --body:"Helvetica Neue",Arial,system-ui,sans-serif;
+      color-scheme: light dark;
     }
     * { box-sizing: border-box; }
     body { font-family: var(--body); color: var(--ink); background: var(--bg); margin: 0; line-height: 1.65; }
@@ -36,6 +37,13 @@
     .note { font-size: 0.85rem; color: var(--muted); }
     footer { margin-top: 2.6rem; padding-top: 1.2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
     footer a { color: var(--accent); }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#0f1218; --ink:#e6e9f0; --muted:#98a2b3; --line:#262c38;
+        --accent:#7e9bff; --accent-soft:rgba(126,155,255,0.14); --panel:#161b24;
+      }
+    }
   </style>
 </head>
 <body>
