@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gil Raitses: durable behavior, learned by simulation</title>
+  <meta name="description" content="How I build the sandbox substrate, simulation fleets and audit layers that let an agent practice and improve, work that converges with studying what makes a behavior durable.">
+  <meta name="robots" content="noindex">
+  <style>
+    :root {
+      --bg:#ffffff; --ink:#262b34; --muted:#737d8c; --line:#ececf0;
+      --accent:#3457d5; --accent-soft:#eef2fe; --panel:#fbfbfd;
+      --title:"Avenir Next","Avenir","Century Gothic","Helvetica Neue",Arial,sans-serif;
+      --body:"Helvetica Neue",Arial,system-ui,sans-serif;
+      color-scheme: light dark;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: var(--body); color: var(--ink); background: var(--bg); margin: 0; line-height: 1.65; }
+    main { max-width: 760px; margin: 0 auto; padding: 3rem 1.6rem 3.5rem; }
+    .brand { font-family: var(--title); font-weight: 300; letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.78rem; color: var(--muted); }
+    h1 { font-family: var(--title); font-weight: 200; font-size: 2.7rem; line-height: 1.06; letter-spacing: 0.005em; margin: 0.7rem 0 0.5rem; }
+    .lede { font-family: var(--title); font-weight: 300; font-size: 1.22rem; line-height: 1.4; color: var(--accent); margin: 0 0 0.4rem; }
+    .intro { color: var(--muted); font-size: 1rem; margin: 0 0 2rem; }
+    h2 { font-family: var(--title); font-weight: 300; font-size: 1.55rem; letter-spacing: 0.005em; margin: 2.6rem 0 0.3rem; padding-top: 1.6rem; border-top: 1px solid var(--line); }
+    h3 { font-family: var(--title); font-weight: 400; font-size: 1.05rem; margin: 1.2rem 0 0.3rem; color: var(--accent); }
+    p { margin: 0 0 1rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .maps { font-size: 0.97rem; }
+    ol.rn { list-style: none; counter-reset: rn; padding: 0; margin: 0.6rem 0 1.4rem; }
+    ol.rn > li { counter-increment: rn; position: relative; padding-left: 2.7rem; margin-bottom: 0.85rem; }
+    ol.rn > li::before { content: counter(rn, upper-roman); position: absolute; left: 0; top: 0.05rem; font-family: var(--title); font-weight: 300; font-size: 0.92rem; letter-spacing: 0.08em; color: var(--accent); }
+    .links { margin: 0.5rem 0 0.4rem; border-top: 1px solid var(--line); }
+    .link-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; padding: 0.6rem 0; border-bottom: 1px solid var(--line); }
+    .link-row .label { font-family: var(--title); font-weight: 400; min-width: 190px; color: var(--ink); }
+    .link-row .url { font-size: 0.9rem; word-break: break-all; }
+    .note { font-size: 0.85rem; color: var(--muted); }
+    footer { margin-top: 2.6rem; padding-top: 1.2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+    footer a { color: var(--accent); }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:#0f1218; --ink:#e6e9f0; --muted:#98a2b3; --line:#262c38;
+        --accent:#7e9bff; --accent-soft:rgba(126,155,255,0.14); --panel:#161b24;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <p class="brand">Gil Raitses</p>
+  <h1>Durable behavior, learned by simulation</h1>
+  <p class="lede">How I build the substrate that lets an agent practice inside a sandbox, records every move it makes and measures whether the behavior held.</p>
+  <p class="intro">Two threads of my work meet here. From the neuroscience side I study behavior as a dynamical system, how internal state shapes the next action and how a learned response persists or extinguishes. From the engineering side I build the sandboxes, simulation fleets and audit layers that let an agent practice and improve. The question underneath both is the same, what makes a behavior durable and what makes it brittle.</p>
+
+  <h2>A sandbox substrate for practice</h2>
+  <p>Central Casting runs agent work as bounded workers with their state externalized to disk. Every real change is a typed checkpoint, so a worker can be killed and respawned from a few KB and the whole run replays as a record. Over one five-week run it logged 175 checkpoints across 7 lanes and 14 task homes, with 30 pre-write inventories and 16 logged self-corrections.</p>
+  <p class="maps"><strong>Where it maps.</strong> Deterministic resets, captured state and replay are what a simulation and reinforcement-learning loop needs to train an agent by doing. The same surface gives a clean improvement signal across attempts and a place where a failure surfaces as an event.</p>
+
+  <h2>Simulation at scale</h2>
+  <p>I ran a 135-condition molecular-dynamics campaign on an AWS EC2 fleet, owning it from provisioning through completion under a zero-warning acceptance gate, with status beacons and in-flight error recovery, then rebuilt the monitoring after a costly fleet loss.</p>
+  <p class="maps"><strong>Where it maps.</strong> Running many conditions in parallel, catching failures in flight and holding a hard acceptance gate is the daily operation of a training environment that has to stay correct while it stays cheap.</p>
+
+  <h2>Behavior as the object of study</h2>
+  <p>As a research associate in the NRT EmIRGE-Bio program at Syracuse I study how internal state drives the next action and how a learned response holds or fades. That is the durable-behavior question stated in its original form, before it is an agent question.</p>
+  <p class="maps"><strong>Where it maps.</strong> Enterprise customers want an agent that holds a consistent, correct behavioral profile under edge cases and regulatory pressure, the right personality for their domain, every time. That is durability of behavior, measured.</p>
+
+  <h2>Applied to training agents in simulation</h2>
+  <p class="maps">Put together, here is how I would build a loop that trains durable behavior and proves it.</p>
+  <ol class="rn maps">
+    <li><strong>Run the agent in a bounded sandbox</strong> where it can practice and fail safely, with state captured at every step.</li>
+    <li><strong>Reset deterministically and replay</strong>, so each attempt is comparable and the improvement signal stays clean.</li>
+    <li><strong>Score behavior against an explicit standard</strong> and validate against an independent estimate before the result is trusted.</li>
+    <li><strong>Feed corrections back as superseding records</strong>, so a regression is caught once and not repeated.</li>
+  </ol>
+  <p class="maps">I ship the backend this runs on too, a Python and FastAPI service live on AWS behind API Gateway, with container-image deploys, monitoring and cost tuning.</p>
+
+  <h2>Open the demos and artifacts</h2>
+  <div class="links">
+    <div class="link-row"><span class="label">Central Casting, method</span><a class="url" href="https://gilraitses.github.io/central-casting/walkthrough.html">central-casting/walkthrough.html</a></div>
+    <div class="link-row"><span class="label">Central Casting, demo</span><a class="url" href="https://gilraitses.github.io/central-casting/">gilraitses.github.io/central-casting</a></div>
+    <div class="link-row"><span class="label">Central Casting, in practice</span><a class="url" href="https://gilraitses.github.io/central-casting/aimez-program.html">central-casting/aimez-program.html</a></div>
+    <div class="link-row"><span class="label">Live FastAPI backend, routing</span><a class="url" href="https://aimez.ai/notes/routing-demo.html">aimez.ai/notes/routing-demo.html</a></div>
+    <div class="link-row"><span class="label">Applied research program</span><a class="url" href="https://aimez.ai">aimez.ai</a></div>
+  </div>
+
+  <footer>
+    Gil Raitses &nbsp;&middot;&nbsp; gilraitses@gmail.com &nbsp;&middot;&nbsp; <a href="https://github.com/GilRaitses">github.com/GilRaitses</a> &nbsp;&middot;&nbsp; <a href="https://www.linkedin.com/in/gilraitses">linkedin.com/in/gilraitses</a>
+  </footer>
+</main>
+</body>
+</html>
