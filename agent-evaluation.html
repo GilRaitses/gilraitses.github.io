@@ -58,7 +58,7 @@
   <p class="maps"><strong>Where it maps:</strong> this is evaluation infrastructure for agents. Checkpoints are the event log, the alignment check is an automated gate and superseding records are the feedback that prevents a repeat. The same surface lets a team see where an agent lost state, exceeded its role or diverged from intent.</p>
 
   <h2>pax: a measurement-to-evaluation loop on real data</h2>
-  <p>pax is a bi-objective routing system for pedestrians. It learns a perceptual-stress signal from New York City camera data through a computer-vision pipeline, then scores every candidate route on an explicit metric that balances geometric distance against that measured stress, with a single tunable weight. It validates the result against an independent movement estimate, so the metric is checked against ground truth before it is trusted.</p>
+  <p>pax routes the full Manhattan island walk graph (4,567 nodes, 15,788 edges) with five comfort cost encodings (crowd-avoiding, shade-seeking, comfort-aware, adaptive) and documents the world-model-to-cost gap between precomputed physical models and live sensor inputs.</p>
   <p class="maps"><strong>Where it maps:</strong> this is the full evaluation loop in miniature. A signal is measured from raw data, a metric scores candidates, an external source validates the score and the weight is tuned from evidence. That is the shape of an offline evaluation harness for agent outputs.</p>
 
   <h2>Applied to the Cursor ecosystem</h2>
@@ -75,9 +75,9 @@
     <div class="link-row"><span class="label">Central Casting, demo</span><a class="url" href="https://gilraitses.github.io/central-casting/">gilraitses.github.io/central-casting</a></div>
     <div class="link-row"><span class="label">Central Casting, in practice</span><a class="url" href="https://gilraitses.github.io/central-casting/aimez-program.html">central-casting/aimez-program.html</a></div>
     <div class="link-row"><span class="label">Central Casting, method</span><a class="url" href="https://gilraitses.github.io/central-casting/walkthrough.html">central-casting/walkthrough.html</a></div>
-    <div class="link-row"><span class="label">pax, report</span><a class="url" href="https://aimez.ai/assets/gallery/documents/pax_report.pdf">aimez.ai/assets/gallery/documents/pax_report.pdf</a></div>
+    <div class="link-row"><span class="label">pax, report</span><a class="url" href="https://gilraitses.github.io/research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf">gilraitses.github.io/research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf</a></div>
     <div class="link-row"><span class="label">pax, routing and access note</span><a class="url" href="https://aimez.ai/notes/neighborhood-access-research.html">aimez.ai/notes/neighborhood-access-research.html</a></div>
-    <div class="link-row"><span class="label">pax, measurement pipeline figures</span><a class="url" href="https://aimez.ai/notes/figures.html">aimez.ai/notes/figures.html</a></div>
+    <div class="link-row"><span class="label">pax, measurement pipeline figures</span><a class="url" href="https://aimez.ai/public/figure-walkthrough.html">aimez.ai/public/figure-walkthrough.html</a></div>
     <div class="link-row"><span class="label">pax, research overview</span><a class="url" href="https://aimez.ai/public/graph-field-research.html">aimez.ai/public/graph-field-research.html</a></div>
   </div>
 
