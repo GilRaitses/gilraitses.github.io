@@ -34,6 +34,9 @@
   <h2>A deliberate local and cloud boundary</h2>
   <p>The memory and audit layer stays local. Production work such as formatting, packaging and cross-repository assembly can be delegated. Keeping that boundary explicit is a design choice. The connective tissue stays under local control, while heavier production steps can run elsewhere.</p>
 
+  <h2>Dispatching a waveset</h2>
+  <p>The newest layer lets one orchestrator run a whole campaign without doing the work itself. The orchestrator holds the map and writes a charter for the campaign, a waveset, then dispatches that charter to a fresh orchestrator, a background session or a separate thread. That dispatched orchestrator runs the campaign as waves of parallel subagents, where a subagent is the same kind of worker a part of the work already spawns. Each subagent owns one bounded task and one separate set of files. The dispatched orchestrator reports each wave back and answers to the orchestrator that sent it, not to the operator, so escalation stays inside the method as a safety property. This reuses the existing roles rather than adding new machinery. It is the most recent part of the practice and the least settled, so the honest claim stays modest.</p>
+
   <h2>What is still hard</h2>
   <p>Context still drifts across long sessions, and a change in one repository reaches another only when it is carried there by hand. The checkpoint discipline reduces these failures while leaving some in place, and it leans on care more than on automation. Because the method is recent, the honest claim is modest. It helps, and it is still being proven.</p>
 
