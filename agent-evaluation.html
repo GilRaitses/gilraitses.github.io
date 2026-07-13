@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gil Raitses: measurement, evaluation and feedback-loop infrastructure</title>
-  <meta name="description" content="How I build measurement, evaluation and feedback-loop infrastructure, shown through Central Casting and pax, and how it applies to making a core agent reliably better over time.">
+  <meta name="description" content="How I build measurement, evaluation and feedback-loop infrastructure, shown through Central Casting and Klosr, and how it applies to making a core agent reliably better over time.">
   <meta name="robots" content="noindex">
   <style>
     :root {
@@ -51,14 +51,14 @@
   <p class="brand">Gil Raitses</p>
   <h1>Measurement, evaluation and feedback loops</h1>
   <p class="lede">How I build the infrastructure that records what happened, judges it against an explicit standard and feeds corrections back, and how that makes a core agent reliably better over time.</p>
-  <p class="intro">Two programs show the pattern on two different subjects. Central Casting applies it to agent behavior, turning a run into an inspectable record with quality gates. pax applies it to a research objective, learning a metric from data and validating the result against ground truth. The same loop is what lets a coding agent improve under measurement, so each change rests on evidence.</p>
+  <p class="intro">Two programs show the pattern on two different subjects. Central Casting applies it to agent behavior, turning a run into an inspectable record with quality gates. Klosr applies it to a research objective, learning a metric from data and validating the result against ground truth. The same loop is what lets a coding agent improve under measurement, so each change rests on evidence.</p>
 
   <h2>Central Casting: measurement and audit of agent behavior</h2>
   <p>Central Casting runs agent work through a structured system. Every real state change becomes a checkpoint, so a run reads as a labeled event stream an evaluator can query. An alignment check compares the structured record against the human-readable views and flags divergence, which acts as a quality gate. Corrections land as superseding records on top of earlier ones, so the history stays auditable and a fix is recorded where the next session reads it.</p>
   <p class="maps"><strong>Where it maps:</strong> this is evaluation infrastructure for agents. Checkpoints are the event log, the alignment check is an automated gate and superseding records are the feedback that prevents a repeat. The same surface lets a team see where an agent lost state, exceeded its role or diverged from intent.</p>
 
-  <h2>pax: a measurement-to-evaluation loop on real data</h2>
-  <p>pax routes the full Manhattan island walk graph (4,567 nodes, 15,788 edges) with five comfort cost encodings (crowd-avoiding, shade-seeking, comfort-aware, adaptive) and documents the world-model-to-cost gap between precomputed physical models and live sensor inputs.</p>
+  <h2>Klosr: a measurement-to-evaluation loop on real data</h2>
+  <p>Klosr is a city-scale evidence model for pedestrian conditions. Comfort-aware routing on the Manhattan walk graph is one application. Five cost encodings (crowd-avoiding, shade-seeking, comfort-aware, adaptive) document the world-model-to-cost gap between precomputed physical models and live sensor inputs.</p>
   <p class="maps"><strong>Where it maps:</strong> this is the full evaluation loop in miniature. A signal is measured from raw data, a metric scores candidates, an external source validates the score and the weight is tuned from evidence. That is the shape of an offline evaluation harness for agent outputs.</p>
 
   <h2>Applied to the Cursor ecosystem</h2>
@@ -66,7 +66,7 @@
   <ol class="rn maps">
     <li><strong>Instrument every agent action as a structured event.</strong> A run becomes an inspectable record of state changes that an evaluator can query.</li>
     <li><strong>Define quality gates that hard-fail on divergence.</strong> The alignment check flags a structured-versus-readable mismatch, in the same way the revision-gate linter I run on every public artifact hard-fails on a prose violation before it ships.</li>
-    <li><strong>Evaluate against a measured objective and validate against ground truth.</strong> The pax pattern of a learned metric, candidate scoring and an independent check transfers directly to scoring agent outputs against quality signals.</li>
+    <li><strong>Evaluate against a measured objective and validate against ground truth.</strong> The Klosr pattern of a learned metric, candidate scoring and an independent check transfers directly to scoring agent outputs against quality signals.</li>
     <li><strong>Close the loop with corrections that stick.</strong> A regression is caught, recorded as a superseding decision and prevented next time, and a weight is retuned from new evidence.</li>
   </ol>
 
@@ -75,10 +75,10 @@
     <div class="link-row"><span class="label">Central Casting, demo</span><a class="url" href="https://gilraitses.github.io/central-casting/">gilraitses.github.io/central-casting</a></div>
     <div class="link-row"><span class="label">Central Casting, in practice</span><a class="url" href="https://gilraitses.github.io/central-casting/aimez-program.html">central-casting/aimez-program.html</a></div>
     <div class="link-row"><span class="label">Central Casting, method</span><a class="url" href="https://gilraitses.github.io/central-casting/walkthrough.html">central-casting/walkthrough.html</a></div>
-    <div class="link-row"><span class="label">pax, report</span><a class="url" href="https://gilraitses.github.io/research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf">gilraitses.github.io/research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf</a></div>
-    <div class="link-row"><span class="label">pax, routing and access note</span><a class="url" href="https://aimez.ai/notes/neighborhood-access-research.html">aimez.ai/notes/neighborhood-access-research.html</a></div>
-    <div class="link-row"><span class="label">pax, measurement pipeline figures</span><a class="url" href="https://aimez.ai/public/figure-walkthrough.html">aimez.ai/public/figure-walkthrough.html</a></div>
-    <div class="link-row"><span class="label">pax, research overview</span><a class="url" href="https://aimez.ai/public/graph-field-research.html">aimez.ai/public/graph-field-research.html</a></div>
+    <div class="link-row"><span class="label">Klosr, report</span><a class="url" href="https://gilraitses.github.io/research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf">gilraitses.github.io/research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf</a></div>
+    <div class="link-row"><span class="label">Klosr, routing and access note</span><a class="url" href="https://aimez.ai/notes/neighborhood-access-research.html">aimez.ai/notes/neighborhood-access-research.html</a></div>
+    <div class="link-row"><span class="label">Klosr, measurement pipeline figures</span><a class="url" href="https://aimez.ai/public/figure-walkthrough.html">aimez.ai/public/figure-walkthrough.html</a></div>
+    <div class="link-row"><span class="label">Klosr, research overview</span><a class="url" href="https://aimez.ai/public/graph-field-research.html">aimez.ai/public/graph-field-research.html</a></div>
   </div>
 
   <footer>
