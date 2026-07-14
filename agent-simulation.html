@@ -54,7 +54,7 @@
   <p class="intro">Two threads of my work meet here. From the neuroscience side I study behavior as a dynamical system, how internal state shapes the next action and how a learned response persists or extinguishes. From the engineering side I build the sandboxes, simulation fleets and audit layers that let an agent practice and improve. The question underneath both is the same, what makes a behavior durable and what makes it brittle.</p>
 
   <h2>A sandbox substrate for practice</h2>
-  <p>Central Casting runs agent work as bounded workers with their state externalized to disk. Every real change is a typed checkpoint, so a worker can be killed and respawned from a few KB and the whole run replays as a record. Over one five-week run it logged 175 checkpoints across 7 lanes and 14 task homes, with 30 pre-write inventories and 16 logged self-corrections. A recent waveset layer runs many of these bounded workers as waves of parallel subagents under a fresh orchestrator, so the same externalized state supports fan-out across many workers at once.</p>
+  <p>wavves runs agent work as bounded workers with their state externalized to disk. Every real change is a typed checkpoint, so a worker can be killed and respawned from a few KB and the whole run replays as a record. Over one five-week run it logged 175 checkpoints across 7 lanes and 14 task homes, with 30 pre-write inventories and 16 logged self-corrections. A recent waveset layer runs many of these bounded workers as waves of parallel subagents under a fresh orchestrator, so the same externalized state supports fan-out across many workers at once.</p>
   <p class="maps"><strong>Where it maps.</strong> Deterministic resets, captured state and replay are what a simulation and reinforcement-learning loop needs to train an agent by doing. The same surface gives a clean improvement signal across attempts and a place where a failure surfaces as an event.</p>
 
   <h2>Simulation at scale</h2>
@@ -77,9 +77,7 @@
 
   <h2>Open the demos and artifacts</h2>
   <div class="links">
-    <div class="link-row"><span class="label">Central Casting, method</span><a class="url" href="https://gilraitses.github.io/central-casting/walkthrough.html">central-casting/walkthrough.html</a></div>
-    <div class="link-row"><span class="label">Central Casting, demo</span><a class="url" href="https://gilraitses.github.io/central-casting/">gilraitses.github.io/central-casting</a></div>
-    <div class="link-row"><span class="label">Central Casting, in practice</span><a class="url" href="https://gilraitses.github.io/central-casting/aimez-program.html">central-casting/aimez-program.html</a></div>
+    <div class="link-row"><span class="label">wavves, method repo</span><a class="url" href="https://github.com/GilRaitses/wavves">github.com/GilRaitses/wavves</a></div>
     <div class="link-row"><span class="label">Live FastAPI backend, routing</span><a class="url" href="https://aimez.ai/notes/routing-demo.html">aimez.ai/notes/routing-demo.html</a></div>
     <div class="link-row"><span class="label">Applied research program</span><a class="url" href="https://aimez.ai">aimez.ai</a></div>
   </div>
