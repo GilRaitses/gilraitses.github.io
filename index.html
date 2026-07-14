@@ -455,37 +455,30 @@
 
   <script>
     (function () {
-      var OUTREACH = "https://s2ao4uale0.execute-api.us-east-1.amazonaws.com";
+      /* Public client no longer posts to a production API Gateway URL.
+         Compose a mailto so contact works without exposing the endpoint. */
       var form = document.getElementById("outreach-form");
       var status = document.getElementById("outreach-status");
-      var btn = document.getElementById("o-submit");
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var email = document.getElementById("o-email").value.trim();
         if (!email) { status.textContent = "Please enter your email."; return; }
-        btn.disabled = true; status.textContent = "Sending...";
-        fetch(OUTREACH, {
-          method: "POST", headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            email: email,
-            name: document.getElementById("o-name").value.trim(),
-            message: document.getElementById("o-message").value.trim(),
-            pax_early_access: document.getElementById("o-klosr-access").checked,
-            klosr_early_access: document.getElementById("o-klosr-access").checked,
-            orcast_early_access: document.getElementById("o-orcast-access").checked
-          })
-        }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
-          .then(function (res) {
-            if (!res.ok || res.j.error) { throw new Error(res.j.error || "could not send"); }
-            var klosr = document.getElementById("o-klosr-access").checked;
-            var orcast = document.getElementById("o-orcast-access").checked;
-            status.textContent = (klosr || orcast)
-              ? "Signed up for early access. I will be in touch."
-              : "Thank you. I will be in touch.";
-            form.reset();
-          })
-          .catch(function (err) { status.textContent = "Sorry, that did not go through (" + err.message + "). You can also email gilraitses@gmail.com."; })
-          .finally(function () { btn.disabled = false; });
+        var name = document.getElementById("o-name").value.trim();
+        var message = document.getElementById("o-message").value.trim();
+        var klosr = document.getElementById("o-klosr-access").checked;
+        var orcast = document.getElementById("o-orcast-access").checked;
+        var body = [
+          "From: " + (name || "(no name)") + " <" + email + ">",
+          "Klosr early access: " + (klosr ? "yes" : "no"),
+          "orcast early access: " + (orcast ? "yes" : "no"),
+          "",
+          message || "(no message)"
+        ].join("\n");
+        var href = "mailto:gilraitses@gmail.com?subject=" +
+          encodeURIComponent("aimez outreach") +
+          "&body=" + encodeURIComponent(body);
+        status.textContent = "Opening your email client…";
+        window.location.href = href;
       });
     })();
   </script>
