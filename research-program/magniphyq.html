@@ -50,19 +50,20 @@
   <p>The extraction layer turns recorded video into per-animal tracks and keeps identity stable across frames, so that every downstream measure attaches to the correct individual.</p>
 
   <h3>Behavioral segmentation</h3>
-  <p>The segmentation layer divides each track into behavioral states such as runs, reorientations and head sweeps, and supports both manual review and unsupervised passes at multiple time scales.</p>
+  <p>The segmentation layer divides each track into behavioral states such as runs, reorientations and head sweeps, while it supports both manual review and unsupervised passes at multiple time scales.</p>
 
   <h3>Contour analysis</h3>
   <p>The contour layer measures body shape over time, which lets posture and bending enter the analysis alongside trajectory, useful for mechanosensation studies where the body itself carries the signal.</p>
 
   <h2>Simulations</h2>
-  <p>The workspace connects analysis to simulation, so that a measured model can be run forward and compared against data inside the same graph. Two simulation programs feed it.</p>
+  <p>The workspace connects analysis to simulation, so that a measured model can be run forward and compared against data inside the same graph. Two simulation programs currently feed that shared workspace loop from live campaign runs.</p>
 
   <h3>Synapsin phase diagram</h3>
   <p>The synapsin program runs a molecular-dynamics sweep that maps where synapsin condensates form as a function of interaction strength and temperature. The campaign covers 135 conditions with 109 completed runs of 500 chains each, laid out as a coarse grid where each collected cell carries its measured partition coefficient.</p>
   <figure>
     <img src="figures/synapsin_phase_diagram.png" alt="Synapsin condensate phase diagram across temperature and interaction strength for two molecular architectures">
-    <figcaption>Condensate partition coefficient (log10 K) across temperature and interaction strength (epsilon), for two synapsin architectures, A4B20 and A8B16. Brighter points partition more strongly into the condensate phase. <a href="https://gilraitses.github.io/magniphyq/grid/" target="_blank" rel="noopener noreferrer">Open the interactive phase-diagram monitor</a>.</figcaption>
+    <figcaption>Condensate partition coefficient (log10 K) across temperature and interaction strength (epsilon), for two synapsin architectures, A4B20 and A8B16. Brighter points on the grid partition more strongly into the condensate phase across the sweep. Use the linked interactive phase-diagram monitor to inspect live cells on the same campaign layout.</figcaption>
+    <p><a href="https://gilraitses.github.io/magniphyq/grid/" target="_blank" rel="noopener noreferrer">Open the interactive phase-diagram monitor for the live synapsin campaign grid</a>.</p>
   </figure>
 
   <h3>indysim</h3>
@@ -80,7 +81,7 @@
   <p>Visualization nodes display behavioral structure at multi-scale resolution and surface annotation quality, so that a reviewer sees where labels are confident and where they need a second look.</p>
 
   <h2>What comes next</h2>
-  <p>The workspace is built and verified, and the next moves carry it toward a shared, browser-native tool.</p>
+  <p>The workspace is built and verified today, while the next moves carry it toward a shared, browser-native tool.</p>
   <ul>
     <li>A browser-native canvas in the spirit of Miro and TouchDesigner, so the graph is the primary interface.</li>
     <li>Shared workspaces, so collaborators open the same graph and pick up where another left off.</li>
