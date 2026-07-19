@@ -220,7 +220,7 @@
       <ul class="spec">
         <li><strong>Drosophila sensory circuit analysis</strong> provides pipelines and visualization tools for sensory integration across gustatory, olfactory, mechanosensory and visual modalities, with temporal pattern extraction from trajectory data.</li>
         <li><strong>Marine behavioral states</strong> uses lightweight recurrent modeling for humpback whale behavioral states from dive telemetry, targeting multi-scale segmentation and event detection.</li>
-        <li><strong>INDYsim</strong> is a hierarchical simulation framework for behavior as the interface between perception and adaptation, using agent based and event driven modeling of transitions under constraints.</li>
+        <li>Event-hazard simulation of stimulus-driven behavior under partial observability, with temporal kernels for sensory transduction and adaptation.</li>
       </ul>
   </section>
 
@@ -237,7 +237,7 @@
           <div class="bg" style="background-image:url('retrovibez-cover.png');"></div>
           <div class="scrim"></div>
           <div class="tags"><span class="tag">Behavioral Detection</span><span class="tag">2025</span></div>
-          <div class="content"><h3>retrovibez</h3><p>Larval reverse-crawl detection adopted by a mechanosensation group. Klein et al. 2015 method.</p><a class="explore" href="https://gilraitses.github.io/retrovibez/">Explore</a></div>
+          <div class="content"><h3>retrovibez</h3><p>Larval reverse-crawl detection adopted by a mechanosensation group. Klein et al. 2015 method.</p><a class="explore" href="https://github.com/GilRaitses/retrovibez">Explore</a></div>
         </div>
         <div class="tile">
           <div class="bg" style="background-image:url('magatfairy-cover.png');"></div>
@@ -249,7 +249,7 @@
           <div class="bg" style="background-image:url('pax-island-topology.png');"></div>
           <div class="scrim"></div>
           <div class="tags"><span class="tag">Spatial Computing</span><span class="tag">2026</span></div>
-          <div class="content"><h3>Klosr</h3><p>City-scale evidence model for comfort-aware pedestrian routing on Manhattan. Sparse observations fuse onto a walk graph before route costs combine. Field-JEPA forecasts the next half-hour crowding field.</p><a class="explore" href="https://aimez.ai/#field-jepa">Explore</a></div>
+          <div class="content"><h3>Klosr</h3><p>City-scale evidence model for comfort-aware pedestrian routing on Manhattan. Sparse observations fuse onto a walk graph before route costs combine. Field-JEPA forecasts next crowding fields as a research result, not a deployed routing feature.</p><a class="explore" href="https://aimez.ai/#field-jepa">Explore</a></div>
             </div>
         <div class="tile">
           <div class="bg" style="background-image:url('https://gilraitses.github.io/whale-behavior-analysis/assets/dive_overview.png');"></div>
@@ -284,22 +284,6 @@
           <span class="eyebrow">orcast</span><h3>Encounter forecasting research tools</h3>
           <div class="tip">Evidence-gated encounter forecasting for Southern Resident killer whales, with a biologging workbench and modular architecture for validation against real sightings.</div>
         </a>
-        <a class="pg g3" href="https://aimez.ai/notes/neighborhood-access-research.html">
-          <span class="eyebrow">Public demo</span><h3>Route quality and neighborhood access</h3>
-          <div class="tip">How map distance can miss walking burden, daily movement, street access and lived accessibility.</div>
-        </a>
-        <a class="pg g4" href="https://aimez.ai/public/graph-field-research.html">
-          <span class="eyebrow">Research center</span><h3>Graph-field research</h3>
-          <div class="tip">Measured crowd pressure fields, directed edges, route cost, loop behavior and graph-level structure.</div>
-        </a>
-        <a class="pg g5" href="https://aimez.ai/public/graph-field-research.html#topology">
-          <span class="eyebrow">Mathematical frame</span><h3>Topological modeling</h3>
-          <div class="tip">Paths, loops, residuals and the limits of topology language for the Manhattan graph work.</div>
-        </a>
-        <a class="pg g6" href="https://aimez.ai/public/spatial-media-installation.html">
-          <span class="eyebrow">Spatial media</span><h3>Installation and measured city fields</h3>
-          <div class="tip">How camera-derived fields, color, light, route traces and room-scale movement can become a public installation.</div>
-        </a>
         <a class="pg g4" href="https://bash.tv/aimez/orca-strike">
           <span class="eyebrow">orcast</span><h3>Evidence-gated encounter forecasting</h3>
           <div class="tip">Southern Resident encounter forecasting pairs validation gates with a biologging workbench for a wider public launch this summer, while Orca Strike stays online now as the live Bash module.</div>
@@ -317,8 +301,11 @@
       <p class="linkrow-aimez">
         <a href="https://aimez.ai">aimez.ai</a> &nbsp;&middot;&nbsp;
         <a href="https://aimez.ai/#field-jepa">Klosr</a> &nbsp;&middot;&nbsp;
-        <a href="research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf">whitepaper (PDF)</a> &nbsp;&middot;&nbsp;
         <a href="https://github.com/GilRaitses/aimez">repo</a>
+      </p>
+      <p class="linkrow-aimez archive-links">
+        <span class="archive-label">Research archive</span>
+        <a href="research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf">Klosr routing paper (PDF)</a>
       </p>
     </section>
 
@@ -389,7 +376,7 @@
             <h3>Physical-World-Model-Driven Adaptive Routing with Orchestrated Agent Mediation</h3>
             <p class="authors">Gil Raitses · 2026</p>
             <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem;">Five comfort routing cost encodings run on the Manhattan island walk graph, where comfort and adaptive routes use per-bin MRT from a precomputed SOLWEIG model. The remaining gap to live weather data is documented with closure paths, while the product name for the live surface is Klosr.</p>
-            <div class="plinks"><a href="research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf" target="_blank">Read PDF</a><a href="https://aimez.ai/#field-jepa" target="_blank">Field-JEPA forecast</a></div>
+            <div class="plinks"><a href="https://aimez.ai/#field-jepa" target="_blank">Field-JEPA forecast</a><a href="research/pax-comfort-routing/Raitses_PhysicalWorldRoutingAgents_2026.pdf" target="_blank">Archive PDF</a></div>
           </div>
         </div>
         <div class="paper">
@@ -398,7 +385,7 @@
             <h3>orcast, Evidence-Bounded Encounter Forecasting</h3>
             <p class="authors">Gil Raitses · aimez.ai · 2026</p>
             <p style="font-size:0.82rem;color:var(--muted);margin-bottom:0.5rem;">Evidence-gated encounter forecasting for Southern Resident killer whales in the Salish Sea keeps displayed confidence tied to held-out skill through validation gates. A biologging workbench and public 3D surface prepare a wider launch this summer, while Orca Strike remains the live public module on Bash.</p>
-            <div class="plinks"><a href="research/orcast/orcast-whitepaper-1.pdf" target="_blank">Whitepaper 1 (PDF)</a><a href="research/orcast/orcast-whitepaper-2-grounding.pdf" target="_blank">Whitepaper 2 (PDF)</a><a href="https://bash.tv/aimez/orca-strike" target="_blank">Orca Strike</a></div>
+            <div class="plinks"><a href="https://bash.tv/aimez/orca-strike" target="_blank">Orca Strike</a><a href="research/orcast/orcast-whitepaper-1.pdf" target="_blank">Archive PDF 1</a><a href="research/orcast/orcast-whitepaper-2-grounding.pdf" target="_blank">Archive PDF 2</a></div>
           </div>
         </div>
       </div>
